@@ -1,0 +1,100 @@
+---
+title: HPFP / LPFP / Port Injection — N54 Fueling System
+description: >-
+  N54 fuel system deep dive: how the HPFP and LPFP work, when they become
+  the limiting factor, upgrade options, and port injection kits.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# HPFP / LPFP / Port Injection
+
+The N54 uses a **dual-pressure direct injection fuel system**. Understanding how it works — and where it limits your build — is essential for any build beyond Stage 2.
+
+---
+
+## How the N54 Fuel System Works
+
+### Low-Pressure Fuel Pump (LPFP)
+The LPFP is an **in-tank electric pump** that draws fuel from the tank and supplies it to the HPFP at low pressure (typically 5–7 bar, roughly 70–100 psi). The LPFP is a high-volume, low-pressure unit.
+
+- Controls fuel flow volume
+- Becomes a bottleneck at high ethanol content (ethanol has lower energy density than gasoline, requiring more volume for the same power)
+- Located inside the fuel tank
+
+### High-Pressure Fuel Pump (HPFP)
+The HPFP is a **cam-driven piston pump** mounted on the engine and driven by the intake camshaft lobe. It takes low-pressure fuel from the LPFP and pressurizes it to high-pressure rail pressure (typically 50–200 bar depending on demand).
+
+- Controls fuel pressure
+- Driven at cam speed — output is RPM-dependent
+- Bosch HPFP on early N54s is a known failure item (extended BMW warranty applied to many vehicles)
+- The HPFP is the fuel system component most directly affecting drivability and WOT fuel delivery
+
+### Fuel Rail and Injectors
+The high-pressure rail distributes fuel to the six piezoelectric direct injectors. Injectors spray directly into the combustion chamber.
+
+---
+
+## HPFP Failure Symptoms
+
+- Hard start or crank-no-start when hot
+- Misfires or hesitation under boost
+- Fuel pressure drop logged at WOT (actual pressure drops below commanded)
+- Fault code: **30FF** (high-pressure fuel system pressure too low)
+
+### Diagnosing HPFP Health
+Log **HPFP actual pressure vs. commanded pressure** on a WOT pull. A healthy pump holds actual pressure within a close margin of commanded. A drop of more than a few bar under load, or a sharp dive at high RPM, indicates the pump is struggling.
+
+---
+
+## HPFP Upgrade Options
+
+| Option | Notes |
+|---|---|
+| BMW OEM replacement | Reliable; same spec as original |
+| Bosch/Siemens OEM supply | The actual manufacturer; same part |
+| Vargas Turbo HPFP upgrade | Upgraded internals for higher flow capacity; popular for high-power builds |
+| MHD HPFP kit | Aftermarket option with community validation |
+
+For most Stage 1–Stage 2+ builds, a healthy stock HPFP is adequate. Upgraded HPFPs become relevant when pushing the fueling system hard (high boost, high ethanol content, or large injectors).
+
+---
+
+## LPFP Upgrade
+
+The stock LPFP (typically a Bosch unit in the ~220–260 LPH range) is adequate for pump gas through Stage 2. At E30+, the increased fuel volume demand on higher-power builds can exceed its capacity.
+
+### When to upgrade:
+- Running E50 or higher ethanol content
+- Running a high-power single-turbo build
+- LPFP showing signs of fatigue (hard starts, erratic fuel pressure at idle)
+
+### Common LPFP upgrades:
+- **AEM 320 LPH** — popular, well-documented N54 fitment
+- **Walbro 450 LPH** — higher output for very high fuel demand builds
+- **Titan Motorsports LPFP** — another well-regarded option
+
+Always use a quality fuel pump installation kit with a new strainer/filter sock.
+
+---
+
+## Port Injection
+
+The N54 is a **direct injection (DI) only** engine from the factory. At high power levels, particularly with high ethanol content, the DI system can reach its flow limits. Port injection (PI) adds a supplementary low-pressure injection system that sprays fuel into the intake port, **before** the intake valve.
+
+### Benefits of port injection:
+- Additional fuel volume capacity beyond DI limits
+- Intake valve cleaning (port injection wets the valves, helping prevent carbon buildup)
+- More consistent fuel distribution at high loads
+
+### Port injection kits:
+- **MHD Port Injection Kit** — designed specifically for the N54; integrates with MHD tune
+- **BEF (Back-End Flash) / JB4 port injection** — available through Burger Motorsports ecosystem
+- Custom fabrication for one-off builds
+
+### When is PI needed?
+Port injection is generally not required until you are pushing a build with very high fuel demand — typically high-power single-turbo builds on heavy ethanol content. Most hybrid twin builds do not require PI unless targeting extreme power numbers.
+
+---
+
+<CTABox variant="tune" />

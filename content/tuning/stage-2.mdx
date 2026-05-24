@@ -1,0 +1,105 @@
+---
+title: Stage 2 — N54 Tuning
+description: >-
+  N54 Stage 2 tuning: downpipe, FMIC, intake, and a custom tune. Hardware
+  requirements, power expectations, and critical log channels.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Stage 2
+
+Stage 2 is the most popular tuning tier for the N54. It combines **a catless or high-flow catted downpipe, a front-mount intercooler (FMIC), and optionally an intake** with a custom ECU tune to extract significantly more power from the stock turbos.
+
+---
+
+## What Stage 2 Adds Over Stage 1
+
+| Change | Why it matters |
+|---|---|
+| Downpipe (catless or HFC) | Reduces exhaust backpressure; allows turbos to spool faster and higher |
+| Front-mount intercooler (FMIC) | Drops charge air temps dramatically; protects against heat soak and knock |
+| Intake | Improves airflow to the turbos; minor contribution but adds to overall package |
+| Custom tune | Calibrated specifically for your hardware, fuel, and boost targets |
+
+---
+
+## Hardware Requirements
+
+| Component | Stage 2 Requirement |
+|---|---|
+| Downpipe | Catless (maximum flow) or high-flow catted |
+| Intercooler | **FMIC required** — TMIC becomes a bottleneck at higher power |
+| Charge pipes | Aluminum — required at Stage 2 boost levels |
+| Intake | Aftermarket recommended |
+| Spark plugs | Iridium, gapped 0.018–0.022" (tighter at higher boost) |
+| HPFP | Must be healthy; replace if suspect |
+| Boost solenoids | Inspect and replace if worn — critical for stable boost at Stage 2 |
+
+### On the Downpipe
+A catless downpipe will throw CEL codes for rear O2 sensors. A software delete (O2 simulator) or hardware bung cap handles this. A high-flow catted (HFC) downpipe eliminates the CEL at a slight power cost.
+
+---
+
+## Expected Power Range (93 Octane)
+
+General community ranges for a properly tuned Stage 2 build on 93 octane:
+
+- Wheel horsepower: approximately 380–430 whp (varies significantly by tune and hardware)
+- Wheel torque: approximately 380–440 wtq
+
+On E30–E40 blends: additional power headroom. See [Fueling](/fueling) for ethanol guidance.
+
+> These are **general community ranges** based on commonly shared dyno results. Your car's output depends on the quality of the tune, ambient conditions, fuel, and hardware choices.
+
+---
+
+## Intercooler Selection
+
+The FMIC is the most impactful single hardware change for Stage 2. Key considerations:
+
+- **Size:** Larger cores provide better cooling but may require longer charge pipe runs
+- **Common choices:** Wagner, Mishimoto, Active Autowerke, Chargepipe.de — all have community validation
+- **Charge pipes:** Most FMIC kits include charge pipe replacements; verify fitment and pipe material (aluminum preferred)
+
+A good FMIC should keep IAT (Intake Air Temperature) within a reasonable range of ambient even on repeated pulls. Log IAT before and after FMIC installation to quantify the improvement.
+
+---
+
+## Critical Log Channels for Stage 2
+
+| Channel | What to watch |
+|---|---|
+| Timing corrections | Must be near 0° — any consistent pull means the tune needs adjustment |
+| HPFP pressure | Should track commanded rail pressure through full WOT |
+| Boost actual vs. target | Should match target; oscillation means solenoid or wastegate issue |
+| IAT | Should stay reasonable (well under 120°F in most conditions with a good FMIC) |
+| Lambda / AFR | Should be slightly rich at WOT; lean spikes are a concern |
+
+---
+
+## Next Steps
+
+Stage 2 is a mature, well-understood build on the N54. Once comfortable here, paths forward include:
+
+- **[Stage 2+](/tuning/stage-2-plus)** — methanol injection or more aggressive ethanol for more timing headroom
+- **[Hybrid Turbos](/tuning/hybrid-twins)** — upgraded twin-scroll turbos for higher flow on the stock location
+- **[Single Turbo](/tuning/single-turbo)** — the high-power conversion path
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Is your car ready for Stage 2? | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Fuel choice for Stage 2 | [Fuel Grades: 91 / 93 / E30 / E50 / E85](/fueling) |
+| Reading IAT and boost logs | [Boost Control / WGDC](/datalogging/boost-wgdc) |
+| HPFP and LPFP at Stage 2 | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Next level | [Stage 2+](/tuning/stage-2-plus) · [Hybrid Turbos](/tuning/hybrid-twins) |

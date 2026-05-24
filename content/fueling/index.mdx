@@ -1,0 +1,112 @@
+---
+title: Fuel Grades — 91 / 93 / E30 / E50 / E85
+description: >-
+  N54 fuel grade guide: 91 vs 93 octane, ethanol blending (E30, E50, E85),
+  tune compatibility, and how fuel quality affects power and reliability.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Fuel Grades: 91 / 93 / E30 / E50 / E85
+
+Fuel is the foundation of your tune. The N54's ability to make power safely is directly tied to fuel quality and octane. Understanding your fuel options is essential before choosing a tune map or ethanol blend.
+
+---
+
+## Octane and Why It Matters
+
+**Octane rating** measures a fuel's resistance to autoignition (knock). Higher octane allows the ECU to advance ignition timing further and maintain higher cylinder pressure before detonation occurs.
+
+On the N54:
+- More timing = more power and efficiency
+- Detonation (knock) = rapid engine damage
+- The tune is calibrated for a specific fuel; running lower octane than the tune expects will cause the knock correction system to retard timing
+
+---
+
+## Pump Gas: 91 vs 93 Octane
+
+### 91 Octane (most of western US, some regions)
+91 octane is the minimum practical fuel for a tuned N54. The ECU has enough headroom to run safely, but timing targets are more conservative. Expect modestly lower power than a 93-octane tune would produce.
+
+### 93 Octane (most of eastern US, Canada)
+The N54 tuning baseline. The majority of MHD base maps and custom tunes target 93 octane. More timing headroom means more power and better efficiency.
+
+### 91 vs 93 in Practice
+If you live in a 91-octane region, your tuner should calibrate for 91 as the base. Running a 93 tune on 91 octane will cause timing corrections — the ECU will compensate, but you're pushing a tune designed for fuel you don't have.
+
+---
+
+## Ethanol Blends
+
+Ethanol (ethyl alcohol) has two key properties that make it attractive for performance tuning:
+
+1. **High octane equivalency** — ethanol's research octane number (RON) is approximately 109; pump E85 blends vary but consistently outperform premium pump gas in octane resistance
+2. **High latent heat of vaporization** — ethanol absorbs significantly more heat as it evaporates in the intake tract, cooling the charge air and reducing knock tendency
+
+### E30 (30% ethanol, 70% gasoline)
+E30 is the most popular ethanol strategy for N54 daily drivers. It offers:
+- Meaningful octane improvement over 93 pump gas
+- Charge cooling benefit
+- Compatible with stock HPFP and most Stage 1–2 builds
+- Requires a specific E30 tune (not a 93-octane map)
+
+### E50 (50% ethanol)
+More aggressive than E30. Requires:
+- LPFP upgrade on most N54 builds (stock LPFP struggles to supply sufficient volume at E50+)
+- Confirmed HPFP health
+- A custom tune calibrated for E50
+
+### E85 (approximately 70–85% ethanol — pump E85 varies)
+E85 pump fuel varies in ethanol content seasonally and regionally (typically 51–83%). For precise tuning:
+- A flex-fuel sensor is ideal to measure actual content
+- All fueling hardware must be rated for high ethanol (check injectors, lines, and pump compatibility)
+- High fuel flow demand: LPFP upgrade required, port injection may be necessary on higher power builds
+
+---
+
+## Mixing Your Own Blend
+
+Many N54 owners mix their own ethanol blends by adding E85 to premium pump gas. Use the **[E30 / E50 Blend Calculator](/fueling/blend-calculator)** to get the exact number of gallons to add based on your current fuel level and E85 source — no guessing.
+
+- **Always shake a sample after mixing** to confirm even mixture
+- **Measure with a flex-fuel tester or ethanol content tester** before the first WOT pull on a new batch
+- **Fill the tank at least halfway** before adding ethanol to ensure proper mixing
+
+---
+
+## Tune Compatibility Summary
+
+| Fuel | Requires specific tune? | Hardware changes? |
+|---|---|---|
+| 91 octane | Yes — calibrated for 91 | None |
+| 93 octane | Yes — standard baseline | None |
+| E30 | Yes | None on most builds |
+| E50 | Yes | LPFP upgrade |
+| E85 | Yes — flex or E85-specific | LPFP + possible port injection |
+
+---
+
+## Fuel and Knock
+
+Regardless of fuel, you must **monitor timing corrections in your datalogs**. If the ECU is pulling timing on what should be a well-calibrated blend, you may have:
+- Lower octane than expected (bad E85 batch, stale ethanol content)
+- Carbon deposits causing hot spots
+- A tune that needs revision
+
+See [Timing Corrections / Knock](/datalogging/timing-knock) for log interpretation guidance.
+
+---
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| HPFP, LPFP, and port injection | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Monitoring fuel in datalogs | [AFR / Lambda / Fuel Trims](/datalogging/afr-lambda-fuel-trims) |
+| Fuel quality and timing corrections | [Timing Corrections & Knock](/datalogging/timing-knock) |
+| Pre-tune fuel system checks | [Tune Readiness Checklist](/checklist/tune-readiness) |

@@ -1,0 +1,100 @@
+---
+title: Boost Control / WGDC — N54 Datalogging
+description: >-
+  How N54 boost control works, what WGDC means, how to read boost logs,
+  and common boost control issues.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Boost Control / WGDC
+
+Understanding how the N54 manages boost pressure — and how to read that data in your logs — is essential for diagnosing boost-related issues.
+
+---
+
+## How N54 Boost Control Works
+
+The N54 uses **wastegate duty cycle (WGDC) solenoids** to control boost pressure. Here's the system flow:
+
+1. Boost pressure builds as the turbos spool
+2. The ECU compares actual boost to the target (setpoint)
+3. A **boost control solenoid** on each turbo receives a PWM signal from the ECU
+4. The solenoid regulates pressure to the wastegate actuator
+5. Higher duty cycle = more pressure holds the wastegate closed = more boost
+6. Lower duty cycle = wastegate opens = boost bleeds off
+
+The N54 runs **two wastegate solenoids** — one for each turbo (front and rear). They are controlled independently.
+
+---
+
+## WGDC Log Channels
+
+In MHD, the relevant channels are:
+
+- `WGDC front (%)` — duty cycle for the front turbo wastegate solenoid
+- `WGDC rear (%)` — duty cycle for the rear turbo wastegate solenoid
+- `Charge air pressure actual` — actual boost reading
+- `Charge air pressure setpoint` — ECU boost target
+
+---
+
+## Reading Boost Logs
+
+### Healthy boost trace
+A clean boost log shows:
+- Rapid spool from part throttle
+- Actual pressure closely tracks the setpoint (within ~50–100 mbar)
+- Stable hold at peak boost through the pull
+- Gradual decline near redline as exhaust energy drops
+
+### Common problems visible in boost logs
+
+#### Underboost (actual below setpoint)
+Boost actual consistently below target. Possible causes:
+- **Worn WGDC solenoids** — cannot hold sufficient pressure on wastegate actuator; WGDC climbs high trying to compensate
+- **Boost leak** — check all charge pipe connections, BOV, and intercooler couplers
+- **Failing wastegate actuator** — spring too weak, diaphragm torn
+- **Boost map calibration** — if the tune is too aggressive for what the car can deliver
+
+#### Overboost (actual above setpoint)
+Boost exceeds target. Causes:
+- **Stuck wastegate** — actuator not opening when commanded
+- **Solenoid failure in closed position** — holds WG shut regardless of command
+- **Atmospheric reference leak** — uncommon but possible
+
+Overboost causes the ECU to enter overboost protection, often resulting in a power cut and fault codes (30B9, 2FBC series).
+
+#### Boost oscillation
+Actual boost bounces above and below setpoint in a wave pattern. Usually indicates:
+- Worn or failing boost solenoid(s) — inconsistent PWM response
+- PID control fighting an unstable system
+- Boost leak that appears and disappears based on pressure level
+
+---
+
+## WGDC Solenoid Replacement
+
+The stock N54 boost solenoids are a known wear item. WGDC values climbing higher over time (to achieve the same boost target) is a classic sign of solenoid wear.
+
+### N63 Solenoid Upgrade
+Many N54 owners replace the stock boost solenoids with units from the BMW N63 (V8 twin-turbo), which are available OEM and considered more robust. Confirm fitment with your specific N54 application.
+
+### Replacement interval
+There's no fixed interval, but if your car is showing inconsistent boost or high WGDC readings for a given boost target, inspect and consider replacing the solenoids.
+
+---
+
+## Typical WGDC Values
+
+WGDC values depend on the tune, turbo condition, solenoid condition, and target boost level. No single number applies universally. What matters is:
+
+- **Consistency**: WGDC should be stable at a given RPM and boost target
+- **Headroom**: If WGDC is at or near 100% trying to hit target and still underboosing, the system cannot deliver that boost reliably
+- **Symmetry**: Front and rear WGDC should be relatively similar. Large asymmetry may indicate a hardware issue on one side
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

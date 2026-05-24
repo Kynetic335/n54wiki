@@ -1,0 +1,97 @@
+---
+title: Stage 2+ — N54 Tuning
+description: >-
+  N54 Stage 2+ tuning: pushing the stock turbos further with methanol injection,
+  higher ethanol blends, and aggressive tune calibration.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Stage 2+
+
+Stage 2+ represents the upper end of what the stock N54 turbos can produce. This tier typically adds **methanol injection (meth/water-methanol injection, WMI)** or uses **higher ethanol blends (E40–E50)** alongside the Stage 2 hardware package to squeeze additional power without stepping up to hybrid turbos.
+
+---
+
+## What Stage 2+ Adds Over Stage 2
+
+| Addition | Benefit |
+|---|---|
+| Methanol injection | Dramatically lowers IAT; adds octane equivalency; allows more timing and boost |
+| Higher ethanol content (E40–E50) | More fuel octane headroom; cooler charge temps via ethanol's high latent heat |
+| Aggressive tune calibration | Higher boost targets, more timing, revised fueling — requires review of every log pull |
+
+---
+
+## Methanol Injection (WMI)
+
+### How it works
+A methanol/water mixture is sprayed into the intake tract (typically post-FMIC). The liquid absorbs heat as it evaporates, lowering charge air temperature. Methanol also acts as an octane improver, giving the ECU more room for timing advance.
+
+### Common systems
+- **Snow Performance** (Stage 2+, Boost Cooler kits)
+- **AEM Water-Methanol Injection**
+- **Aquamist** (more precise, adjustable)
+
+### What to log with meth
+You must log IAT with and without methanol to confirm the system is functioning. A meth system that's low on fluid, clogged, or malfunctioning reverts your tune to running conditions it wasn't calibrated for — a lean, hot, high-boost condition that causes knock.
+
+**Always run a failsafe:** configure your meth controller to pull boost or trigger a safe mode if the nozzle fails to spray.
+
+---
+
+## Ethanol at Stage 2+
+
+Running E40–E50 at Stage 2+ hardware levels is a common and effective strategy. Ethanol's high octane rating and high latent heat of vaporization give the ECU more headroom for:
+
+- More ignition timing advance
+- Higher boost targets
+- Richer WOT calibration for cooler combustion
+
+### Fueling system requirements at E40–E50
+At E40+, the stock LPFP begins to limit fuel delivery on some builds. An upgraded in-tank pump (AEM 320, Walbro 450, or a port injection kit) is recommended before running E50 or higher.
+
+See [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection) for fuel pump upgrade guidance.
+
+---
+
+## What the Stock Turbos Can Realistically Support
+
+The stock IHI twin turbos have limits. General community understanding:
+
+- Beyond a certain boost level (varies by turbo condition and back pressure), the stock turbos lose efficiency and exhaust gas temperatures (EGT) climb
+- Spinning the stock turbos past their efficiency island increases heat rather than power
+- The stock turbos are generally considered to top out somewhere in the neighborhood of their peak flow capacity — running them beyond this point is where you see diminishing returns and increased risk
+
+> **Note:** Exact limits depend on your turbo condition, ambient temp, fuel, and tune calibration. Stock turbos that have seen 80,000–100,000 miles may have degraded seals and wheel condition.
+
+---
+
+## Stage 2+ Checklist
+
+Before going Stage 2+:
+
+- [ ] FMIC installed and charge pipes aluminum
+- [ ] HPFP confirmed healthy under load (log it)
+- [ ] Spark plugs fresh, iridium, gapped tightly
+- [ ] LPFP upgraded if running E40+
+- [ ] Methanol system installed, tested, and failsafe configured
+- [ ] Boost solenoids fresh
+- [ ] Tuner is aware of all hardware and fuel changes
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Pre-tune readiness | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Methanol and ethanol fueling | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Monitoring WMI in datalogs | [AFR / Lambda / Fuel Trims](/datalogging/afr-lambda-fuel-trims) |
+| Next level upgrades | [Hybrid Turbos](/tuning/hybrid-twins) · [Single Turbo](/tuning/single-turbo) |

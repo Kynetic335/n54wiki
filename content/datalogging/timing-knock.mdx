@@ -1,0 +1,106 @@
+---
+title: Timing Corrections / Knock — N54 Datalogging
+description: >-
+  How to read N54 timing correction logs, what knock means, normal vs dangerous
+  correction levels, and how to respond to knock events.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Timing Corrections / Knock
+
+Timing corrections are the most critical data point in any N54 log. They are the ECU's direct feedback that something is wrong in the combustion chamber — and they require your immediate attention.
+
+---
+
+## What Is Knock?
+
+**Knock** (also called detonation) occurs when the air-fuel mixture in the cylinder ignites before the spark plug fires, or in multiple locations simultaneously. This uncontrolled combustion creates a pressure wave that hammers the piston crown and can cause rapid catastrophic damage.
+
+Knock can happen in a single event or as sustained detonation. Either is serious.
+
+---
+
+## How the N54 Detects Knock
+
+The N54 has **knock sensors** on the engine block — piezoelectric sensors that detect vibration frequencies associated with detonation. When the ECU detects knock on a cylinder, it **retards ignition timing** on that cylinder to bring combustion under control.
+
+This is the knock correction (also called knock retard or timing pull).
+
+---
+
+## Reading Timing Corrections in Logs
+
+MHD logs show timing correction per cylinder: `Ignition correction cyl 1` through `Ignition correction cyl 6`.
+
+Values are in degrees of crankshaft rotation, always zero or negative (timing is only ever retarded, never advanced by this system).
+
+### What the numbers mean
+
+| Reading | Interpretation |
+|---|---|
+| `0.0°` | No correction — ideal |
+| `–0.5° to –1.0°` | Minor correction; common on first pull in new conditions |
+| `–1.5° to –2.5°` | Moderate correction; review carefully; tune may need revision |
+| `–3.0° to –4.5°` | Significant correction; do not continue WOT pulls; submit logs for review |
+| `–5.0°` or more | Severe correction; stop immediately; inspect hardware |
+
+### Pattern matters as much as magnitude
+- **Single cylinder, single event:** May be a plug, coil, or injector issue on that cylinder
+- **Multiple cylinders, consistent:** Tune calibration issue, fuel quality problem, or intake/fueling issue
+- **All cylinders on first pull, clears up:** Can be normal ECU adaptation on a first drive after a flash
+- **Persistent negative across all cylinders:** Fuel is wrong, tune is too aggressive, or hardware is degraded
+
+---
+
+## Timing Correction vs. Timing Advance
+
+Do not confuse timing *correction* with timing *advance*:
+
+- **Timing correction** is a penalty applied when knock is detected — always negative
+- **Ignition timing (advance)** is the scheduled timing the ECU targets — a positive number representing degrees before TDC
+
+Some MHD log views show actual timing advance (the resulting value after corrections are applied). A lower-than-expected timing advance for a given operating point means corrections are active.
+
+---
+
+## What Causes Timing Corrections
+
+### Tune is too aggressive for the fuel
+The most common cause. Running a 93-octane tune on 91, running a stale E30 batch, or running poor-quality pump gas will cause consistent corrections.
+
+### Worn spark plugs
+Old or improperly gapped plugs don't fire cleanly. The ECU may interpret the resulting combustion variation as knock. Replace plugs if they haven't been changed recently.
+
+### Carbon deposits / hot spots
+Heavy carbon buildup on piston crowns or valves creates hot spots that can initiate pre-ignition. Walnut blasting resolves this.
+
+### Overheated charge air
+High IAT causes the ECU to pull timing as a safety measure. This appears in logs as corrections coinciding with elevated IAT. FMIC or methanol injection addresses this.
+
+### Genuine detonation under load
+The tune has too much timing advance for the actual conditions (fuel, boost, temperature). The knock sensor is detecting real detonation. This needs a tune revision.
+
+---
+
+## What to Do When You See Corrections
+
+1. **Stop WOT pulls immediately** if corrections are –3° or more
+2. **Export the log** from MHD and review each cylinder
+3. **Check fuel quality** — confirm you have the correct blend in the tank
+4. **Check spark plugs** — if due for replacement or suspect, pull and inspect
+5. **Submit logs to your tuner** — they need to see the data in context
+
+<CTABox variant="log" />
+
+---
+
+## A Note on the ECU's Knock Protection
+
+The N54 knock correction system is reactive — it responds to knock that has already begun. It is a safety net, not a substitute for correct calibration. Relying on it to "handle" a tune that's too aggressive is a path to engine damage.
+
+The goal is always **zero corrections** under normal conditions. Occasional minor corrections on the first pull in new conditions are acceptable, but they should resolve and stay near zero.
+
+---
+
+<CTABox variant="tune" />

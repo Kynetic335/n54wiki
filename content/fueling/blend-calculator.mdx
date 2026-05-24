@@ -1,0 +1,85 @@
+---
+title: E30 / E50 Blend Calculator
+description: >-
+  Interactive flex fuel blend calculator for N54 owners. Calculate how many gallons of E85
+  to add to your tank to hit E30, E50, or any custom ethanol target.
+---
+
+import BlendCalculator from '../../components/BlendCalculator'
+import { CTABox } from '../../components/CTABox'
+
+# E30 / E50 Blend Calculator
+
+Mixing your own ethanol blend is common on N54 builds — but getting the math right matters. Too little E85 and you're not seeing the charge-cooling benefit; too much and you're running a map that wasn't calibrated for your actual blend.
+
+This calculator tells you exactly how many gallons of E85 to pump based on your current fuel level, your E85 pump's ethanol content, and your target blend.
+
+---
+
+<BlendCalculator />
+
+---
+
+## How the Math Works
+
+The calculator solves for **gallons of E85 to add** (`x`) using a simple mixture equation:
+
+```
+x = current_fuel × (target% − current%) ÷ (E85_source% − target%)
+```
+
+**Example:** 7 gallons of E10 in a 15.9-gallon tank, targeting E30, using a 75% E85 pump:
+
+```
+x = 7 × (30 − 10) ÷ (75 − 30) = 7 × 20 ÷ 45 ≈ 3.11 gallons
+```
+
+Add 3.11 gal of E85, top off with 5.79 gal of 93 octane, done.
+
+---
+
+## Assumptions and Variables
+
+### E85 Pump Ethanol Content
+
+Pump E85 varies significantly — the ASTM standard allows 51–83% ethanol, and seasonal blending (more ethanol in summer, less in winter) means the same pump can swing 10–15 points between fills.
+
+**The default of 75% is a reasonable mid-range estimate**, but if you want precision:
+- Use an **ethanol content tester** (inline or handheld) to measure your actual blend after filling
+- Many tuners require a measured baseline before the first WOT pull on a new batch
+
+### Current Ethanol % in Your Tank
+
+If you're on E10 pump gas, use **10%**. If you're filling from empty, use **10%** (residual fuel). If you already have an ethanol blend in the tank from a previous fill, measure it with a tester and enter that number.
+
+### Tank Capacity
+
+Common N54 tank sizes:
+- **E90/91/92/93 335i, 135i** — 15.9 gal
+- **E82/88 128i** — 14.9 gal
+- **Z4 E89 35i** — 15.6 gal
+- **F30 335i** — 15.6 gal
+
+---
+
+## Before Your First WOT Pull
+
+1. **Verify your blend.** An ethanol tester costs $20–40 and removes all guesswork. Don't rely solely on the calculator if your E85 pump content is unknown.
+2. **Have the right tune.** E30 and E50 require maps calibrated for those blends — running an E30 tune on E10 or vice versa will cause timing issues. See [Fuel Grades & Tune Compatibility](/fueling).
+3. **Check your fuel system.** E50+ demands a healthy LPFP. See [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection).
+4. **Log your first WOT pull.** Monitor timing corrections, lambda, and fuel trims after any blend change. See [AFR / Lambda / Fuel Trims](/datalogging/afr-lambda-fuel-trims).
+
+---
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Fuel grades: 91 / 93 / E30 / E50 / E85 | [Fuel Grades Overview](/fueling) |
+| HPFP, LPFP, and port injection for ethanol | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Reading AFR and fuel trims after a blend change | [AFR / Lambda / Fuel Trims](/datalogging/afr-lambda-fuel-trims) |
+| Monitoring timing after fueling changes | [Timing Corrections & Knock](/datalogging/timing-knock) |

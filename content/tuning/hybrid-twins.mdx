@@ -1,0 +1,96 @@
+---
+title: Hybrid Turbo Upgrades — N54
+description: >-
+  N54 hybrid twin-turbo upgrades: what they are, popular options like the
+  MHD HTK, expected power gains, and hardware requirements.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Hybrid Turbos
+
+Hybrid turbos retain the N54's **stock-location twin-turbo setup** but replace the stock IHI units with upgraded compressor and turbine wheels. The result is meaningfully higher airflow capability without the complexity of a single-turbo conversion.
+
+---
+
+## Why Hybrid Turbos?
+
+The stock IHI turbos are good but have a defined ceiling. Once the stock turbo wheels are flowing at their peak efficiency, adding more boost produces heat, not power. Hybrid turbos address this by:
+
+- **Larger compressor wheels** — more airflow capacity at lower pressure ratios
+- **Improved turbine designs** — better exhaust gas energy extraction
+- **Same footprint** — bolt-on to the stock exhaust manifolds and charge piping (with possible adaptations)
+
+Hybrid turbos offer a significant power step over a maxed-out Stage 2+ without the packaging and plumbing complexity of a single-turbo conversion.
+
+---
+
+## Popular Hybrid Options
+
+### MHD Hybrid Turbo Kit (HTK)
+MHD offers a hybrid turbo kit specifically designed for the N54. Key features:
+
+- Drop-in fitment on stock manifolds
+- Upgraded compressor and turbine wheel specs
+- MHD provides corresponding base map support
+
+### Pure Turbos (PT)
+Pure Turbos offers N54 hybrid units in multiple stages (Pure Stage 1, Pure Stage 2, etc.). Widely used in the community with documented power numbers.
+
+### BQ Motorsport, EFR-based kits, and others
+Various boutique suppliers offer N54 hybrid solutions. Research community reports on longevity and spool characteristics before purchasing.
+
+---
+
+## Hardware Requirements
+
+Hybrid turbos make more power and therefore require supporting hardware that Stage 2 does not always demand:
+
+| Component | Hybrid Requirement |
+|---|---|
+| FMIC | Required — higher airflow = more heat to reject |
+| Charge pipes | Aluminum — required |
+| HPFP | Must be strong; consider upgraded unit for higher power targets |
+| LPFP | Upgrade required for E30+ fueling |
+| Spark plugs | Fresh iridium, tight gap (0.018–0.020") |
+| Fuel injectors | Check flow capacity at target power level |
+| Boost solenoids | Fresh, functional |
+| Exhaust manifold | Inspect for cracks — thermal cycling from higher EGT increases risk |
+
+---
+
+## Expected Power Range
+
+Hybrid turbos open up considerably more power than Stage 2+. General community ranges vary widely by specific turbo choice and build:
+
+- Lower-spec hybrid kits: meaningful improvement over Stage 2+
+- Higher-spec hybrid kits: approach single-turbo territory in peak power
+
+> Specific numbers vary significantly by turbo selection, tune quality, fuel, and supporting hardware. Work with a tuner who has direct experience with your specific hybrid kit.
+
+---
+
+## Spool and Response
+
+Hybrid turbos are generally designed to maintain spool characteristics close to stock, since the twin-turbo arrangement with short exhaust paths is inherently responsive. Larger hybrid units may have a slight increase in spool lag, but most community builds retain strong low-RPM boost compared to single-turbo setups.
+
+---
+
+## Tune Requirements
+
+Hybrid turbos require a **custom tune specifically calibrated for the hybrid units**. Do not run a Stage 2 map on hybrid turbos — the fueling, boost targets, and boost control calibration will not be correct.
+
+---
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Pre-hybrid tune checklist | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Fueling at higher hybrid power | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Reading hybrid turbo logs | [Boost Control / WGDC](/datalogging/boost-wgdc) |
+| Next level | [Single Turbo Conversion](/tuning/single-turbo) |

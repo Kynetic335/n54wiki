@@ -1,0 +1,132 @@
+---
+title: MHD Log Channel Guide — N54
+description: >-
+  Complete reference for MHD Flasher N54 log channels: what each channel means,
+  normal ranges, and warning signs.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# MHD Log Channel Guide
+
+This reference covers the most important MHD logging channels for N54 builds. Use it to set up your log profiles and interpret what your data means.
+
+---
+
+## Essential Channels (Always Log)
+
+These channels should be in every log, every pull.
+
+### Timing Corrections (Cylinder 1–6)
+`Ignition correction cyl 1` through `Ignition correction cyl 6`
+
+**What it is:** The degree of timing retard the ECU applies to each cylinder in response to detected knock or borderline detonation.
+
+| Reading | Meaning |
+|---|---|
+| 0° to –1° | Normal; expected on first few pulls |
+| –2° to –3° | Monitor closely; may be within tolerance but worth review |
+| –4° or more | Concern — pull over, review logs, do not continue WOT pulls |
+| Persistent –1° or more on same cyl | Address the cause before continuing |
+
+Consistent corrections on a specific cylinder often indicate a plug, coil, or injector issue on that cylinder.
+
+### HPFP Pressure Actual vs. Requested
+`High pressure fuel pump actual (bar)` and `High pressure fuel pump requested (bar)`
+
+**What it is:** Commanded vs. actual rail pressure. A healthy pump tracks the requested value closely.
+
+| Reading | Meaning |
+|---|---|
+| Actual ≈ Requested | Pump healthy |
+| Actual drops 5–10 bar below requested under load | Pump fatigue; monitor |
+| Actual drops 15+ bar or sharp dive | Pump failing; do not continue WOT pulls |
+
+See [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection) for pump replacement guidance.
+
+### Boost Pressure Actual vs. Requested
+`Charge air pressure actual` and `Charge air pressure setpoint`
+
+**What it is:** Target boost vs. actual boost pressure (typically in mbar or bar absolute/relative depending on MHD version).
+
+| Pattern | Meaning |
+|---|---|
+| Actual matches setpoint | Boost control functioning correctly |
+| Actual oscillates around setpoint | Possible wastegate or solenoid issue |
+| Actual undershoots significantly | Underboost — check solenoids, check for boost leaks |
+| Actual overshoots setpoint | Overboost — stop pulling; can trigger underboost protection codes |
+
+### Intake Air Temperature (IAT)
+`Intake air temperature` or `Charge air temperature`
+
+**What it is:** Temperature of the air entering the engine (post-intercooler). High IAT causes the ECU to reduce timing and boost as a self-protection measure.
+
+| Reading | Meaning |
+|---|---|
+| Within ~10–15°C of ambient | Intercooler functioning well |
+| 20–30°C above ambient | Some heat soak; acceptable |
+| 40°C+ above ambient | Significant heat soak; intercooler upgrade warranted |
+
+---
+
+## Fuel System Channels
+
+### Low Pressure Fuel Pump Supply
+`Low pressure fuel pump feedback` or `Fuel pressure low side`
+
+Monitors the supply side to the HPFP. If LPFP output drops, the HPFP cannot maintain rail pressure regardless of pump condition.
+
+### Lambda / Air-Fuel Ratio
+`Lambda actual` (or `AFR actual` if your MHD version shows it)
+
+| Range | Meaning |
+|---|---|
+| 0.85–0.90 λ (12.5–13.2 AFR) at WOT | Normal, slightly rich — expected under boost |
+| 0.80 λ or richer | Very rich; may indicate fueling calibration issue |
+| 0.95 λ or leaner at WOT | Lean at WOT — stop pulling; this is dangerous |
+
+---
+
+## Knock and Combustion
+
+### Engine Knock Sensor (Raw Signal)
+`Knock signal cyl 1–6` — raw sensor signal, used in conjunction with corrections to understand where the knock event is occurring.
+
+---
+
+## RPM and Load
+
+### Engine RPM
+`Engine speed (RPM)`
+
+Essential context for all other channels. Always log this.
+
+### Throttle Pedal Position
+`Throttle pedal position (%)`
+
+Confirms the driver is actually at full throttle during a pull. Reviewing logs from a "WOT pull" where TPS was at 95% rather than 100% explains lower than expected boost or power.
+
+---
+
+## Additional Useful Channels
+
+| Channel | Why log it |
+|---|---|
+| `Oil temperature` | Confirms engine at operating temp; high oil temp under sustained load is a concern |
+| `Coolant temperature` | Overtemperature immediately stops pulls |
+| `WGDC duty cycle front/rear` | Helps diagnose boost control issues |
+| `Torque reduction active` | Shows when DSC/DME is pulling power |
+| `Misfires (cyl 1–6)` | Confirms misfire events and which cylinder |
+
+---
+
+## Setting Up an MHD Log Profile
+
+1. In MHD → Logs → Custom Profile
+2. Add all channels from the essential list above
+3. For a standard road log, 10 Hz sample rate is generally sufficient
+4. Save the profile and load it before every pull session
+
+---
+
+<CTABox variant="log" />

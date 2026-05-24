@@ -1,0 +1,103 @@
+---
+title: AFR / Lambda / Fuel Trims — N54 Datalogging
+description: >-
+  How to read N54 air-fuel ratio, lambda, and fuel trim logs. What normal values
+  look like and how to spot lean or rich conditions.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# AFR / Lambda / Fuel Trims
+
+Understanding your N54's fueling data is essential for safe tuning. This page covers lambda, AFR, and fuel trim channels — what they mean and what to look for.
+
+---
+
+## Lambda vs. AFR
+
+**Lambda (λ)** and **Air-Fuel Ratio (AFR)** both describe the air-to-fuel mixture, just in different units.
+
+- **Lambda = 1.0** = stoichiometric (perfect chemical combustion) — 14.7:1 AFR for gasoline
+- **Lambda < 1.0** = rich (more fuel than air)
+- **Lambda > 1.0** = lean (less fuel than air)
+
+| Lambda | AFR (gasoline) | Condition |
+|---|---|---|
+| 1.00 | 14.7:1 | Stoichiometric |
+| 0.85 | 12.5:1 | Slightly rich — normal WOT target |
+| 0.80 | 11.8:1 | Rich — fuel economy/emission mode |
+| 1.05 | 15.4:1 | Slightly lean |
+| 1.10+ | 16.2:1+ | Dangerously lean under boost |
+
+> For ethanol blends, stoichiometric AFR is different (E85 ≈ 9.8:1 AFR at stoich). Lambda still works universally since it normalizes for fuel type.
+
+---
+
+## WOT Lambda Targets on N54
+
+A well-calibrated N54 under full load should be running **slightly rich** for charge cooling and safety margin:
+
+| Fuel | Target WOT lambda range |
+|---|---|
+| 91/93 octane | 0.83–0.88 λ (approximately 12.2–12.9 AFR) |
+| E30 blend | 0.82–0.87 λ |
+| E50+ | 0.80–0.85 λ (lower stoich AFR; appears different in raw AFR) |
+
+These are general community targets. Exact calibration varies by tuner, boost level, and operating conditions.
+
+### What to watch for at WOT
+- **Lean spike**: Lambda climbs above 0.92–0.95 at WOT — stop pulling immediately. This is dangerous and indicates a fueling system issue.
+- **Sustained lean condition**: Lambda consistently above target. Check HPFP, injectors, or fuel supply.
+- **Rich condition (0.75 and below)**: Generally less dangerous to the engine but indicates overly rich calibration — reduced efficiency and potential plug fouling.
+
+---
+
+## Short-Term and Long-Term Fuel Trims (STFT / LTFT)
+
+Fuel trims are the ECU's self-correction system for fuel delivery. They operate at **idle and part throttle**, not at WOT (where the ECU runs in open-loop mode based on the tune map).
+
+### Short-Term Fuel Trim (STFT)
+Rapid, immediate adjustment the ECU makes based on current O2 sensor feedback.
+
+- **Normal range:** –5% to +5%
+- **Values outside this range** at idle indicate an underlying fueling issue
+
+### Long-Term Fuel Trim (LTFT)
+A learned, accumulated correction stored in ECU memory to compensate for persistent fueling offset.
+
+- **Normal range:** –5% to +5%
+- **LTFT significantly positive (+8% to +10% or more):** ECU is adding fuel — the car is running lean in part-throttle operation. Possible causes: boost leaks, mass air flow (MAF) sensor issue, vacuum leaks, or fuel delivery problems.
+- **LTFT significantly negative (–8% or more):** ECU is removing fuel — the car is running rich. Possible causes: leaking injectors, MAF overcounting, boost leaks in the intake tract affecting pressure readings.
+
+### Diagnosing with fuel trims
+
+| Trim behavior | Likely cause |
+|---|---|
+| Both banks positive LTFT | Lean condition — check MAF, vacuum leaks, fuel supply |
+| Both banks negative LTFT | Rich condition — check injectors, MAF, PCV |
+| One bank positive, one negative | Imbalance — wiring issue, failed O2 sensor, manifold leak |
+| High STFT, low LTFT | Intermittent issue not yet learned |
+
+---
+
+## O2 Sensor Health
+
+The N54's upstream (pre-cat) O2 sensors provide the signal the ECU uses for fuel trim correction. If an upstream O2 sensor is slow or degraded:
+
+- Fuel trims will be inaccurate
+- Part-throttle fueling will be off
+- Misfire codes may appear
+
+Replace O2 sensors at high mileage or if fuel trim analysis points to erratic sensor behavior.
+
+---
+
+## Fuel Trims After a Flash
+
+After a new tune or after clearing adaptation data, the ECU restarts LTFT learning from zero. Expect trims to fluctuate for the first few hours of normal driving as the ECU learns. Avoid making fueling judgments based on LTFT data from the first day of driving on a new flash.
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

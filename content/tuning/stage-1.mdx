@@ -1,0 +1,102 @@
+---
+title: Stage 1 — N54 Tuning
+description: >-
+  N54 Stage 1 tuning overview: what hardware is needed, expected power ranges,
+  and what to watch in your logs.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Stage 1
+
+Stage 1 is the entry point for N54 tuning. It typically refers to a **software tune with no or minimal bolt-on hardware modifications** — the goal is extracting power that the stock hardware can safely support.
+
+---
+
+## What "Stage 1" Means on the N54
+
+There's no universal industry standard for stage definitions. On the N54, Stage 1 most commonly refers to:
+
+- ECU tune (via MHD Flasher or equivalent) **with stock hardware** or minor additions
+- No downpipe replacement required
+- Stock turbochargers, intercooler, and fueling
+
+Some tuners define Stage 1 as allowing an intake, while others reserve that for Stage 2. Clarify with your tuner.
+
+---
+
+## Typical Hardware Baseline (Stage 1)
+
+| Component | Requirement |
+|---|---|
+| Downpipe | Stock catted acceptable |
+| Intercooler | Stock TMIC acceptable |
+| Charge pipes | **Aluminum highly recommended** |
+| Fuel pump | Stock HPFP acceptable (must be healthy) |
+| Spark plugs | **Iridium required**, gapped to 0.020–0.022" |
+| Boost solenoids | Should be functional; replace if worn |
+
+---
+
+## Expected Power Range
+
+Power output at Stage 1 depends heavily on fuel quality, ambient conditions, and the specific tune. General community expectations on **93 octane**:
+
+- Crank power increase: meaningful improvement over stock
+- Typical wheel power range (93 oct): ~320–360 whp / ~340–380 wtq
+
+> These are **general community ranges**, not guarantees. Exact numbers depend on your specific car, tune file, and conditions. Dyno numbers vary by type (Dynajet vs. Mustang, etc.).
+
+On **91 octane**, expect the tune to pull more timing and deliver modestly less power. On **E30 or higher ethanol blends**, Stage 1 power increases considerably — the ECU has more headroom for timing and boost.
+
+---
+
+## Fuel Compatibility
+
+| Fuel | Stage 1 viability | Notes |
+|---|---|---|
+| 91 octane | Viable, limited gains | Tune will be conservative |
+| 93 octane | Standard baseline | Most Stage 1 tunes target 93 |
+| E30 blend | Excellent | More timing headroom, more power |
+| E85 | Advanced | Requires fueling hardware check |
+
+---
+
+## What to Watch in Datalogs
+
+After a Stage 1 tune, log every WOT pull for the first 5–10 pulls:
+
+- **Timing corrections (cyl 1–6):** Should be close to 0°. Consistent negative corrections mean knock — pull over immediately.
+- **HPFP actual vs. requested pressure:** Should track closely. A drop under load indicates pump stress.
+- **Boost:** Should hit target consistently. Spikes followed by drops suggest solenoid or wastegate issues.
+- **Intake air temperature (IAT):** High IAT causes the ECU to retard timing. Log IAT to understand heat soak.
+
+See [Timing Corrections / Knock](/datalogging/timing-knock) and [Boost Control / WGDC](/datalogging/boost-wgdc) for detailed guidance.
+
+---
+
+## Next Steps
+
+Stage 1 is often a starting point, not a destination. Once you're comfortable with Stage 1 and have reviewed logs, the natural progression is:
+
+- **[Stage 2](/tuning/stage-2)** — downpipe, intake, FMIC for more aggressive gains
+- **[Fueling upgrade](/fueling/hpfp-lpfp-port-injection)** — if you want to run higher ethanol content
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Is your car ready for Stage 1? | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Maintenance before flashing | [Maintenance Before Tuning](/maintenance/before-tuning) |
+| What to log after Stage 1 | [Datalogging Guide](/datalogging/guide) |
+| Reading timing corrections | [Timing Corrections & Knock](/datalogging/timing-knock) |
+| Fuel grade selection | [Fuel Grades: 91 / 93 / E30 / E50 / E85](/fueling) |
+| Upgrade path | [Stage 2](/tuning/stage-2) |

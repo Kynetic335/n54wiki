@@ -1,0 +1,182 @@
+---
+title: Tune Readiness Checklist — N54
+description: >-
+  Complete pre-tune checklist for the BMW N54. Covers ignition, fueling, cooling,
+  boost leaks, HPFP/LPFP health, and when not to tune yet. Run every item before flashing.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Tune Readiness Checklist
+
+This is the single most important page in this wiki for anyone about to tune their N54 for the first time. Run through every item. If you cannot honestly check it off, address it before proceeding.
+
+**Tuning a car with deferred maintenance is expensive. Tuning a healthy car is satisfying.**
+
+Related guides: [Maintenance Before Tuning](/maintenance/before-tuning) · [Datalogging Guide](/datalogging/guide) · [HPFP / LPFP Deep Dive](/fueling/hpfp-lpfp-port-injection)
+
+---
+
+## Ignition System
+
+- [ ] Spark plugs replaced with **NGK 97506 (iridium)**, properly gapped for build level
+- [ ] Spark plug gap verified: ___" (Stage 1–2: 0.018–0.022", tighter gap at higher boost)
+- [ ] Ignition coils inspected; any coil with misfire history has been replaced
+- [ ] No active P030x (misfire) codes at time of tuning
+
+**Why this matters:** Worn plugs are the #1 cause of timing corrections and misfires on tuned N54s. A tune calibrated for healthy ignition will knock on worn plugs.
+
+See [Spark Plugs / Coils / Injectors](/hardware/spark-plugs-coils-injectors) for full spec guidance.
+
+---
+
+## Fuel System
+
+### HPFP Health Check
+
+The High Pressure Fuel Pump (HPFP) is the most failure-prone component in the N54 fuel system. Before tuning:
+
+- [ ] Logged **actual vs. requested HPFP rail pressure** on a 3rd gear WOT pull
+- [ ] Actual pressure holds at or above commanded target through the full pull — no drop
+- [ ] No active **30FF** (HPFP pressure too low) codes
+
+**How to check:** In MHD, log `HP Fuel Pressure Actual` and `HP Fuel Pressure Requested`. On a healthy pump, actual tracks commanded within a few bar. A drop of 10+ bar under load at high RPM indicates a failing pump.
+
+A pump that drops pressure under load will cause lean conditions, misfires, and knock under a tune. **Do not tune a car with a suspect HPFP.**
+
+### LPFP Health Check
+
+The Low Pressure Fuel Pump (LPFP) feeds the HPFP. It becomes the bottleneck on higher ethanol builds.
+
+- [ ] LPFP function verified (no fuel supply symptoms at idle or cruise)
+- [ ] If running **E40 or higher**: LPFP upgraded to AEM 320, Walbro 450, or equivalent
+- [ ] No fuel delivery symptoms (stumble, hesitation, high fuel trims at WOT)
+
+### Injectors
+
+- [ ] Fuel injectors cleaned or verified functional if mileage is above 80,000–100,000 miles
+- [ ] Running the fuel grade the tune is calibrated for: ___
+- [ ] No active 30FF codes
+
+See [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection) for replacement and upgrade options.
+
+---
+
+## Boost Leak Test
+
+A boost leak is one of the most common causes of underboost, excessive timing corrections, and poor tune response. **Test for leaks before tuning** — not after.
+
+- [ ] Boost leak test performed with a DIY pressure tester or shop
+- [ ] All charge pipe couplers and clamps inspected and tightened
+- [ ] Intercooler inlet/outlet connections confirmed leak-free
+- [ ] Turbo outlet pipes (from each turbo to the intercooler) confirmed tight
+- [ ] Throttle body inlet confirmed sealed
+- [ ] No boost leak codes (2A97 underboost) present at current tune or stock map
+
+**How to test:** A simple pressure tester (rubber bung, quick connect, bicycle pump) pressurizes the intake system to ~20 PSI with the engine off. Spray soapy water on all connections and watch for bubbles. Alternatively, smoke test the charge piping.
+
+**Charge pipe upgrade:** The factory plastic charge pipes are prone to blowing off under boost. **Aluminum charge pipes are required before tuning** for anything above mild Stage 1 levels.
+
+- [ ] Charge pipes upgraded to aluminum (or confirmed to be aluminum aftermarket)
+
+---
+
+## Cooling System
+
+- [ ] Coolant system inspected for leaks (hoses, expansion tank, water pump housing)
+- [ ] Water pump confirmed functional — no overheating under load
+- [ ] Thermostat confirmed working (car reaches and holds normal operating temperature)
+- [ ] Expansion tank inspected — no cracks or seeping (replace if car is 7+ years old)
+- [ ] Fresh coolant or documented recent service
+
+**Note:** The N54 uses an electric water pump (EWP). Failure is silent — no belt to break. Test pump operation via ISTA or verify coolant temps remain stable under sustained load.
+
+---
+
+## Engine Health
+
+- [ ] Oil changed within the last 5,000 miles (3,000 miles on a performance-driven car)
+- [ ] Oil spec confirmed: **BMW LL-01 compliant, full synthetic** (0W-30 or 5W-30)
+- [ ] No active coolant or oil temperature warnings
+- [ ] No abnormal noises at idle or under light load (ticking, rattles, knocking)
+- [ ] No active fault codes beyond known cosmetic items (O2 deletes, etc.)
+
+---
+
+## Boost and Charge System
+
+- [ ] **Charge pipes upgraded to aluminum** (covered above — listed again for emphasis)
+- [ ] All charge pipe couplers and clamps inspected for cracks or looseness
+- [ ] Intercooler confirmed installed and appropriate for the build stage:
+  - Stage 1: Stock TMIC acceptable
+  - Stage 2 and above: **FMIC required** — TMIC becomes a bottleneck
+- [ ] WGDC solenoids inspected; replaced if car shows inconsistent boost or solenoid codes
+- [ ] No active underboost (2A97) or overboost (30B9 / 2FBC) codes
+
+See [Boost Control / WGDC](/datalogging/boost-wgdc) for how to read boost logs and diagnose solenoid wear.
+
+---
+
+## Exhaust (Stage 2 and Above)
+
+- [ ] Downpipe installed (catless or HFC) and confirmed leak-free
+- [ ] Rear O2 sensor codes addressed (O2 delete or bung-cap solution)
+- [ ] No exhaust leaks — cracked exhaust manifolds are common on high-mileage N54s
+
+---
+
+## Software and Logging Setup
+
+- [ ] MHD Flasher (or equivalent) installed and confirmed connecting
+- [ ] OBD2 adapter compatible and confirmed to connect (no dropout under load)
+- [ ] Log profile created with essential channels (see [MHD Log Channel Guide](/datalogging/mhd-channels))
+- [ ] Adaptation data cleared before first tune flash (recommended)
+- [ ] You know how to export and send logs from MHD
+
+---
+
+## Documentation
+
+- [ ] Full modification list documented and ready to share with tuner
+- [ ] Vehicle mileage noted
+- [ ] Fuel blend to be used specified
+- [ ] Any previous fault code history noted
+
+---
+
+## When NOT to Tune the Car Yet
+
+Skip the tune until the following are resolved:
+
+| Condition | Why it disqualifies |
+|---|---|
+| Active P030x misfire codes | The tune will be calibrated to a broken ignition system |
+| 30FF HPFP code or pressure drop in logs | Lean conditions under tune will cause knock or engine damage |
+| Boost leak present | Underboost and lean conditions — the tune won't work correctly |
+| Overheating history not resolved | A tune increases heat load; unresolved cooling issues will get worse |
+| Plastic charge pipes still installed | They will blow at Stage 2 boost levels — guaranteed |
+| LPFP insufficient for target ethanol blend | Fuel starvation at high load is catastrophic |
+| Active codes you haven't diagnosed | Unknown faults become known failures under power |
+| Car has not had oil changed in 7,000+ miles | Dirty oil at higher combustion temps degrades faster and offers less protection |
+
+**If any of these apply: address them first.** A tune that goes wrong on a neglected car is expensive, sometimes irreversible, and always avoidable.
+
+---
+
+## Before Your First WOT Pull on the New Tune
+
+1. Drive normally for 20–30 minutes to confirm no basic issues (idle, part throttle, shifting)
+2. Confirm operating temperature is fully stabilized (coolant and oil)
+3. Do a 40–60% throttle pull in 3rd gear to confirm no obvious issues before WOT
+4. Log every WOT pull for the first week — minimum 3–5 pulls per session
+5. Submit logs to your tuner after the first session
+
+See [Datalogging Guide](/datalogging/guide) for logging procedure and [Timing Corrections / Knock](/datalogging/timing-knock) for how to read what the logs are telling you.
+
+---
+
+<CTABox variant="readiness" />
+
+<CTABox variant="log" />
+
+<CTABox variant="contact" />

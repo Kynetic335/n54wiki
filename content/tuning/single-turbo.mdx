@@ -1,0 +1,119 @@
+---
+title: Single Turbo Conversion — N54
+description: >-
+  N54 single-turbo conversion guide: manifold options, turbo selection, supporting
+  mods, fueling, and what a custom tune requires.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Single Turbo
+
+A single-turbo conversion replaces the N54's twin IHI turbos with a single large turbocharger. This is the highest-power path for the N54 platform and typically requires significant supporting modifications.
+
+---
+
+## Why Single Turbo?
+
+Single turbo conversions are chosen when:
+
+- The target power level exceeds what hybrid twins can produce
+- The builder wants the simplicity and tuning flexibility of a single large turbo
+- The specific power band (more top-end, sustained boost) suits the application
+
+Single-turbo builds generally have more top-end power than twin setups but sacrifice some low-RPM response and spool time.
+
+---
+
+## System Overview
+
+A typical N54 single-turbo conversion involves:
+
+- **Custom or kit exhaust manifold** — combines all 6 cylinders to a single collector for the turbo
+- **Downpipe** — custom or kit
+- **Charge piping** — new intercooler plumbing, often with a larger FMIC
+- **Oil and coolant lines** — turbo requires oil feed/return and ideally coolant lines
+- **BOV / recirculation valve** — BOV or compressor bypass valve
+- **Turbo manifold adapter / V-band** — flanges to the turbo
+
+---
+
+## Popular Manifold Options
+
+### Vargas Turbo Technologies (VTT)
+VTT offers an N54 single-turbo manifold kit with fitment for a range of turbocharger sizes. Widely used in the community with documented results.
+
+### Active Autowerke
+AAW offers a single-turbo manifold kit with various turbo options. Good community support.
+
+### Custom fabrication
+Some builders fabricate custom manifolds for specific turbo orientations or clearance requirements. Requires a competent fabricator familiar with N54 packaging.
+
+---
+
+## Turbo Selection
+
+Turbo selection depends entirely on your power target, RPM range, and fuel strategy. Key considerations:
+
+- **Frame size:** Larger turbos make more peak power but spool later
+- **Compressor map:** Should cover your target flow range efficiently
+- **Turbine sizing:** Must pass exhaust flow without excessive back pressure
+- **Bearing type:** Ball bearing turbos spool faster; journal bearing units are cheaper and durable
+- **Wastegate:** Internal or external. External wastegate gives more precise boost control at high power
+- **Popular frame sizes used on N54:** GTX3076, GTX3582, GTX3071, Borg Warner EFR series, Precision Turbo units — selection varies widely by power goal
+
+> **Always involve your tuner in turbo selection.** Power goals, fuel availability, and cam/fueling limitations all affect what's appropriate for your build.
+
+---
+
+## Bottom End Considerations
+
+The N54's closed-deck block and stock forged internals are reasonably strong. However:
+
+- At higher power levels, the risk of engine damage from boost spikes, lean conditions, or knock increases dramatically
+- A **built bottom end** (forged pistons, rods, or a stroker kit) is recommended at aggressive power targets
+- Head gasket upgrades and head studs become relevant at higher boost and cylinder pressure
+
+There is no universal "safe" power limit for a stock bottom end. This depends on tune quality, fuel, tune file, and how the car is driven. Work with a tuner who understands your goals.
+
+---
+
+## Fueling for Single Turbo
+
+Higher power demands higher fuel flow. Common single-turbo fueling strategies:
+
+| Strategy | When used |
+|---|---|
+| Upgraded HPFP + LPFP | Lower-power single-turbo builds |
+| Port injection (PI) kit | High power with ethanol; bypasses DI limitations |
+| Flex fuel sensor | Allows the tune to adapt between pump gas and ethanol |
+
+See [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection) for fueling system detail.
+
+---
+
+## Tune Requirements
+
+Single-turbo builds require a **fully custom tune** from a tuner with N54 single-turbo experience. Key areas that differ from twin-turbo calibration:
+
+- Boost control strategy (external wastegate requires different WGDC approach)
+- Fueling at higher power — may require PI calibration
+- Spool ramp targets
+- Throttle body and torque model adjustments
+
+Do not run any twin-turbo map on a single-turbo car.
+
+---
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Pre-single-turbo readiness | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Fueling for single-turbo builds | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Reading boost logs | [Boost Control / WGDC](/datalogging/boost-wgdc) |
+| Professional single-turbo tuning | [Synergy Tuning Services](/synergy/services) |

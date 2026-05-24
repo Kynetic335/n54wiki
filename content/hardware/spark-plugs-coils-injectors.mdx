@@ -1,0 +1,109 @@
+---
+title: Spark Plugs / Coils / Injectors — N54 Hardware Guide
+description: >-
+  N54 ignition and injector hardware reference: spark plug specs, coil upgrades,
+  injector flow, and when to replace each component.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Spark Plugs / Coils / Injectors
+
+The ignition system and fuel injectors are consumables on the N54 that become more critical — and wear faster — under tuned conditions. This page covers what to run, when to replace, and what to watch for.
+
+---
+
+## Spark Plugs
+
+### Why plugs matter more on a tuned N54
+Higher cylinder pressure from increased boost creates a more demanding environment for spark plugs. A worn or incorrectly gapped plug causes misfires, especially under load, which trigger knock correction and can cause real engine damage.
+
+### Recommended plug: NGK 97506 (ILZKBR8DS8S)
+The NGK 97506 is the widely accepted standard for tuned N54 applications. It is a ruthenium or laser iridium fine-wire plug that handles elevated cylinder pressures reliably.
+
+| Parameter | Value |
+|---|---|
+| NGK Part # | 97506 |
+| Heat range | 8 (factory-equivalent) |
+| Electrode | Laser iridium / ruthenium |
+| Thread | M12 × 1.25 |
+
+### Gap specification by build level
+
+| Build level | Recommended gap |
+|---|---|
+| Stock / Stage 1 (mild) | 0.022–0.024" |
+| Stage 1 (aggressive) | 0.020–0.022" |
+| Stage 2 / Stage 2+ | 0.018–0.020" |
+| Hybrid turbos / higher boost | 0.016–0.018" |
+
+> Tighter gaps reduce the chance of the spark being blown out under high cylinder pressure. Gaps that are too wide cause misfires; gaps that are too narrow can cause other combustion issues. Verify with your tuner.
+
+### Replacement interval (tuned car)
+- **Every 15,000–20,000 miles** on a Stage 1–2 build (versus 30,000–40,000 on stock)
+- Inspect at every major service for electrode wear and deposits
+- After any significant knock event, pull and inspect all plugs
+
+### Installation torque
+~18–22 Nm (13–16 lb-ft). Do not overtighten — aluminum head threads strip easily. Use a plug socket with the correct rubber insert to protect the ceramic insulator.
+
+---
+
+## Ignition Coils
+
+### N54 coil overview
+The N54 uses individual coil-on-plug (COP) units. Each cylinder has its own coil (six total). Coil failures are common, particularly at higher boost pressures that increase the demand on the ignition system.
+
+### Symptoms of a failing coil
+- **Misfire** at idle, part throttle, or WOT
+- **Fault code** P0301–P0306 (cylinder-specific misfires) or P0300 (random misfire)
+- Rough idle that clears after warmup
+- Hesitation under boost
+
+### Swapping coils to diagnose
+If you have a cylinder-specific misfire, swap the suspect coil with a coil from another cylinder and see if the misfire code follows the coil. If it does, the coil is faulty.
+
+### Replacement options
+
+| Option | Notes |
+|---|---|
+| Genuine BMW / Bosch OEM | Best longevity; direct replacement |
+| Delphi aftermarket | Widely used; good quality |
+| Upgraded coil kits | AEM, MSD, and others offer higher-output coils — relevant for high-boost builds |
+
+### Proactive replacement
+On higher-mileage N54s being tuned for the first time, replacing all six coils at once is a common preventative measure. Coils are inexpensive relative to a misfire-caused knock event.
+
+---
+
+## Fuel Injectors
+
+### N54 factory injectors
+The N54 uses **Bosch piezoelectric direct injection injectors** with a specified flow rate that supports stock power levels and through most Stage 2 builds.
+
+- 6 injectors total
+- Piezo actuators respond in microseconds — precise, fast response
+- Sensitive to fuel quality; poor fuel or extended use causes deposits and varnishing
+
+### When injectors become the limiting factor
+The stock injectors have a defined maximum flow rate. At very high power levels (particularly on single-turbo or high-ethanol builds), the injectors may reach duty cycle limits. Port injection is the typical solution at this level.
+
+### Injector cleaning
+If your car shows evidence of rough idle, lean conditions at idle, or fuel trim concerns on an otherwise healthy car, injector cleaning (professional ultrasonic cleaning service) can restore flow and spray pattern.
+
+### Replacement injectors
+For most N54 builds, genuine BMW/Bosch replacement injectors are the correct choice. Upgraded injectors for very high power applications exist but require custom injector characterization data for the tune. Do not install upgraded injectors without involving your tuner.
+
+---
+
+## Summary Checklist
+
+| Item | When to act |
+|---|---|
+| Spark plugs | Before any tune; at 15–20k mi intervals on tuned car |
+| Ignition coils | Replace any that have shown misfire; consider all-six replacement on high-mileage cars |
+| Injectors | Clean at high mileage; replace if leaking or failed flow test |
+
+---
+
+<CTABox variant="readiness" />

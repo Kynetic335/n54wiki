@@ -1,0 +1,69 @@
+---
+title: MSD80 vs MSD81 — N54 ECU Differences
+description: >-
+  What's the difference between the MSD80 and MSD81 ECUs on the BMW N54?
+  Which one your car has matters for tuning software compatibility.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# MSD80 vs MSD81
+
+The BMW N54 was produced with two different ECU variants: the **MSD80** and the **MSD81**. Understanding which one your car has is the first step in choosing tuning software and understanding your car's capabilities.
+
+---
+
+## Quick Reference
+
+| Feature | MSD80 | MSD81 |
+|---|---|---|
+| Manufacturer | Bosch | Bosch |
+| Used on | 2007–2010 models | 2010–2013 models |
+| Primary tuning platform | MHD, JB4, BEF | MHD, BEF |
+| Flash support | Full ECU flash | Full ECU flash |
+| MHD compatibility | Full support | Full support |
+| On-the-fly map switching | Yes (MHD) | Yes (MHD) |
+| E-throttle | Yes | Yes |
+| Typical flash method | OBD2 via MHD | OBD2 via MHD |
+
+---
+
+## How to Tell Which ECU You Have
+
+### By model year
+- **2007–2009** N54: Almost always MSD80
+- **2010** N54: Can be either — check the ECU directly
+- **2011–2013** N54: Usually MSD81
+
+### Via MHD or INPA
+Connect MHD Flasher or BMW diagnostic software (INPA/ISTA) and read the ECU part number. The ECU type will be displayed in the hardware identification screen.
+
+### Physical inspection
+The ECU is located in the glove box area on most E90/E9x platforms. The label on the ECU will show the Bosch part number, which can be cross-referenced.
+
+---
+
+## Tuning Implications
+
+### MHD Flasher
+MHD supports both ECU types for full flash tuning. The maps, logging channels, and base tunes are generally compatible between the two, though specific calibration tables may differ. Always confirm with your tuner.
+
+### JB4 Piggyback
+The JB4 by Burger Motorsports works on both ECU types as a piggyback intercept device. JB4 does not reflash the ECU; it intercepts sensor signals to request more boost and modify fueling requests. Integration with MHD flash is available via JB4 BEF (Back-End Flash).
+
+### Differences in Behavior
+In practice, MSD80 and MSD81 are very similar from a tuning standpoint. MSD81 has some revised internal calibration tables and slightly different default parameters, but a skilled tuner treats them the same in terms of approach.
+
+---
+
+## What Actually Matters
+
+The ECU hardware revision matters less than:
+
+1. **The tune quality** — a proper custom tune on either ECU will dramatically outperform an off-the-shelf map
+2. **Your hardware list** — the ECU supports what the hardware allows
+3. **Your datalogging** — both ECUs expose the same critical channels via MHD
+
+---
+
+<CTABox variant="tune" />

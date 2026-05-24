@@ -1,0 +1,126 @@
+---
+title: N54 Datalogging Guide
+description: >-
+  How to datalog your N54 with MHD Flasher: setup, essential channels, logging
+  procedure, and how often to submit logs for review.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Datalogging Guide
+
+Datalogging is how you verify that your car is running correctly. On a modified N54, it is the difference between catching a problem early and paying for an engine rebuild.
+
+**Log every WOT (wide-open throttle) pull. Review logs before adding more power. This is not optional.**
+
+---
+
+## Why Datalogging Matters
+
+The N54's ECU has a knock correction system that retards timing when it detects borderline detonation. This protects the engine in the short term but is not a substitute for proper calibration. Persistent knock corrections mean:
+
+- Your tune is too aggressive for your current fuel or hardware
+- Your hardware has degraded (worn plugs, failing HPFP, heat soak)
+- You need to revisit the calibration
+
+Without logs, you are guessing. With logs, you have evidence.
+
+---
+
+## Logging Software Options
+
+### MHD Flasher (iOS / Android)
+MHD is the primary flash tuning and logging tool for the N54. It connects via Bluetooth OBD2 adapter (BIMMERCODE/OBD2 BT4.0 compatible) and logs directly from the ECU.
+
+- Best-in-class channel depth for N54
+- Overlay on phone screen while driving
+- Exportable logs for tuner review
+
+### BimmerLink
+BimmerLink can log many of the same channels without requiring a flash. Useful for diagnosing stock or lightly modified cars but lacks some N54-specific channels available via MHD.
+
+### INPA / ISTA
+OEM BMW diagnostic software provides live data but is less practical for driving logs. Used more for diagnostic inspection than road data capture.
+
+---
+
+## Required OBD2 Adapter
+
+MHD requires a **compatible Bluetooth 4.0 OBD2 adapter**. Not all cheap adapters work reliably. Recommended:
+
+- **BIMMERCODE/MHD-recommended BT adapters** — verified to work without dropout
+- Avoid ELM327 clones — they often lose connection under load
+
+The OBD2 port is under the dashboard, driver's side.
+
+---
+
+## Setting Up MHD Logging
+
+1. Open MHD → **Logs** tab
+2. Select **New Log Profile** or use an existing N54 profile
+3. Add channels (see [MHD Log Channel Guide](/datalogging/mhd-channels) for essential channels)
+4. Start the car, connect the adapter
+5. Drive normally to operating temperature before logging WOT pulls
+
+---
+
+## Logging Procedure
+
+### Before every WOT pull:
+- Car at full operating temperature (oil temp, coolant temp at normal range)
+- Transmission in appropriate gear (3rd gear on manual, or consistent gear for automatic)
+- Roll-on from ~2,000 RPM to redline (or desired pull range)
+- Do not shift during a pull if possible — one uninterrupted log segment is most readable
+
+### How many pulls:
+- On a fresh tune: minimum 3–5 WOT pulls from the same conditions (same gear, similar speed)
+- Reviewers need repeated pulls to distinguish one-off anomalies from consistent patterns
+
+### When to stop and review:
+- Any timing correction more negative than approximately –2° to –3° on a consistent basis
+- Fuel pressure drop under load
+- Boost spike followed by sharp cut
+- IAT above ~55–60°C (check with your tuner for their threshold)
+
+---
+
+## Sending Logs to Your Tuner
+
+MHD saves logs in `.csv` format. Export and send them to your tuner via email or their submission system. Include:
+
+- **Fuel being used** (octane, blend percentage if ethanol)
+- **Weather conditions** (hot day? Cold start?)
+- **Any symptoms** you noticed during or after the pull
+- **Hardware changes** since the last log session
+
+<CTABox variant="log" />
+
+---
+
+## How Often Should You Log?
+
+| Situation | Frequency |
+|---|---|
+| Fresh tune | Every WOT pull for first 2 weeks |
+| New hardware added | Every WOT pull until confirmed good |
+| Fuel batch changed | First pull on new fuel |
+| Normal maintenance interval | At least monthly on a regularly driven tuned car |
+| Before any power increase | Confirm current stage is clean first |
+
+---
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| MHD channel-by-channel reference | [MHD Log Channel Guide](/datalogging/mhd-channels) |
+| Reading timing corrections and knock | [Timing Corrections & Knock](/datalogging/timing-knock) |
+| Reading boost and WGDC | [Boost Control / WGDC](/datalogging/boost-wgdc) |
+| Fuel trims and lambda interpretation | [AFR / Lambda / Fuel Trims](/datalogging/afr-lambda-fuel-trims) |
+| Pre-tune checklist | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Professional log review | [Synergy Tuning Services](/synergy/services) |

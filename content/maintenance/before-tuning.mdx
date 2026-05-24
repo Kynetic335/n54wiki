@@ -1,0 +1,127 @@
+---
+title: Maintenance Before Tuning
+description: >-
+  The essential pre-tune maintenance checklist for the BMW N54. Service these
+  items before flashing — skipping them is the leading cause of tune-related problems.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Maintenance Before Tuning
+
+A custom tune extracts more from every component in your engine. If those components are worn or marginal, more power means faster failure. **Complete this checklist before putting any tune on the car.**
+
+This isn't optional — it's the difference between a tune that makes power for 50,000 miles and one that causes a parts failure within the first 500.
+
+---
+
+## Ignition System
+
+### Spark Plugs
+The N54 is hard on spark plugs. Iridium plugs (NGK 97506 or equivalent) are required for tuned applications. Stock copper-tipped plugs will foul quickly under elevated boost.
+
+- **Gap:** 0.020–0.022" for tuned Stage 1–2 applications (tighten the gap from stock 0.028")
+- **Interval:** Replace at or before 20,000–25,000 miles on a tuned car (vs. 30,000–40,000 miles stock)
+- **Signs of worn plugs:** Misfires under boost, rough idle, P0300-series codes
+
+See [Spark Plugs / Coils / Injectors](/hardware/spark-plugs-coils-injectors) for full detail.
+
+### Ignition Coils
+N54 coils are known to fail, especially under elevated boost. Symptoms include hard misfires (P0301–P0306), hesitation, and rough running.
+
+- Replace any coil that has shown misfire history
+- Upgraded aftermarket coils (Delphi, OEM-spec replacements) are a recommended pre-tune step on higher-mileage cars
+
+---
+
+## Fuel System
+
+### HPFP Health
+Log your **High Pressure Fuel Pump (HPFP) pressure** at wide-open throttle before tuning. On a healthy pump, high-side fuel pressure should hold steady at or above the ECU's commanded rail pressure target. A pressure drop under load is a failing pump.
+
+- Minimum pre-tune check: log HPFP pressure on a hard pull in 3rd gear
+- A pump showing pressure drop should be replaced before tuning
+
+See [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection) for HPFP replacement guidance.
+
+### Injectors
+Stock N54 injectors are generally adequate through Stage 2+. If your injectors are original at 100,000+ miles, consider having them cleaned or tested. Weak injectors contribute to lean conditions and knock.
+
+### Low-Pressure Fuel Pump (LPFP)
+The in-tank LPFP feeds the HPFP. On ethanol blends above E30, the stock LPFP can become a bottleneck. If you're planning to run E30 or higher, upgrade the LPFP before tuning.
+
+---
+
+## Cooling System
+
+### Water Pump
+The N54 uses an **electric water pump** (EWP) that can fail silently — no belt to snap, no obvious warning. A failed or weak pump causes overheating under load. Test the pump function via ISTA or an N54-specific scanner.
+
+- Replace at 80,000–100,000 miles as preventative maintenance
+- Aftermarket pumps (genuine OEM spec recommended) are generally reliable
+
+### Thermostat
+A stuck-open thermostat will cause the engine to run too cold (reduced efficiency, increased carbon buildup). A stuck-closed thermostat will overheat the engine.
+
+- Replace if the car consistently runs below normal operating temperature, or if overheating has occurred
+
+### Expansion Tank
+The expansion tank is plastic and develops hairline cracks over time, causing coolant loss and air pockets. Inspect or replace if the car is over 7–8 years old.
+
+---
+
+## Oil System
+
+### Oil Condition and Grade
+Run a fresh oil change before tuning. The N54 requires **0W-30 or 5W-30 full synthetic oil meeting BMW Longlife-01 (LL-01) specification**. Running incorrect viscosity or conventional oil is not acceptable on a tuned application.
+
+- Do not use Longlife-04 (LL-04) — it does not meet the N54's requirement
+
+### Valve Cover and PCV
+Inspect for oil leaks at the valve cover gasket and PCV system. A leaking PCV can introduce oil vapor into the intake, fouling the MAF sensor and causing metering errors.
+
+---
+
+## Charge and Boost System
+
+### Charge Pipes
+The factory charge pipes are plastic and routinely fail at elevated boost. **Replace with aluminum charge pipes before tuning.** This is not optional for anything above Stage 1 modest boost levels.
+
+- Inlet pipe (from intercooler to throttle body)
+- Turbo outlet pipes (from each turbo to the intercooler)
+
+### Boost Solenoids
+The WGDC (wastegate duty cycle) solenoids control boost pressure. Worn solenoids cause inconsistent boost, underboost codes (30B9, 2FBC), and oscillating boost on logs. Inspect and replace as needed — N63 solenoids are a popular upgrade.
+
+### Intercooler
+The stock TMIC (top-mount intercooler) is adequate for Stage 1. For Stage 2 and beyond, an FMIC (front-mount intercooler) is recommended. Inspect for any fins damaged from road debris before tuning.
+
+---
+
+## Other Pre-Tune Checks
+
+| Item | Minimum action |
+|---|---|
+| Intake air filter | Clean or replace |
+| Wastegate actuators | Inspect for play/wear |
+| Exhaust manifold | Inspect for cracks (common on N54) |
+| Downpipe/catback | Confirm no leaks or rattles |
+| Battery health | Test under load — a weak battery causes ECU issues |
+| Fuel quality | Confirm you're running the fuel grade your tune is calibrated for |
+
+---
+
+<CTABox variant="readiness" />
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Complete pre-tune checklist | [Tune Readiness Checklist](/checklist/tune-readiness) |
+| Spark plug specs and coil replacement | [Spark Plugs / Coils / Injectors](/hardware/spark-plugs-coils-injectors) |
+| HPFP and LPFP health | [Fuel System Deep Dive](/fueling/hpfp-lpfp-port-injection) |
+| Boost leak and WGDC diagnosis | [Boost Control / WGDC](/datalogging/boost-wgdc) |

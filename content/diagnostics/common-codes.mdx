@@ -1,0 +1,171 @@
+---
+title: Common N54 Fault Codes — 30FF, Misfires, Overboost & More
+description: >-
+  Reference guide for common BMW N54 fault codes: 30FF fuel pressure, P0300
+  misfires, 30B9 overboost, and how to diagnose each.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Common N54 Fault Codes
+
+This reference covers the most frequently seen fault codes on N54-equipped BMWs, with likely causes and diagnostic steps. Codes are BMW-specific where noted; OBD-II codes (P-codes) apply broadly.
+
+---
+
+## 30FF — High Pressure Fuel System, Rail Pressure Too Low
+
+**Severity:** High — address before WOT operation
+
+### What it means
+The ECU commanded a fuel rail pressure the HPFP was unable to maintain. Actual rail pressure dropped below threshold.
+
+### Likely causes
+1. **Failing HPFP** — most common; pump cannot sustain pressure at high RPM/load
+2. **Failing LPFP** — insufficient supply pressure to the HPFP
+3. **Dirty or clogged HPFP inlet strainer** — restricts fuel supply to the pump
+4. **Fuel quality** — heavily diluted or degraded fuel can cause pump behavior issues
+
+### Diagnostic steps
+1. Log HPFP actual vs. requested pressure on a moderate WOT pull
+2. If actual drops significantly below requested, confirm which pump is at fault
+3. Check for underlying BMW extended warranty coverage (BMW extended HPFP warranty on many early N54 vehicles)
+
+---
+
+## P0300 — Random / Multiple Cylinder Misfire
+
+**Severity:** Medium to high depending on frequency
+
+### What it means
+The ECU has detected misfires distributed across multiple cylinders rather than isolated to one.
+
+### Likely causes
+1. **Worn spark plugs** — the most common N54 misfire cause on higher-mileage cars
+2. **Failing ignition coil(s)** — one bad coil can scatter misfires to other cylinders in logs
+3. **Lean condition** — insufficient fuel delivery causes inconsistent combustion
+4. **Boost/vacuum leak** — unmetered air entering the intake causes lean misfires
+5. **Carbon deposits** — heavy intake valve deposits causing inconsistent combustion
+
+### Diagnostic steps
+1. Check spark plug condition first (pull all six)
+2. Swap coils between cylinders if P0301–P0306 codes accompany P0300 — does the misfire follow?
+3. Log fuel trims to identify lean running
+4. Smoke test the intake system for vacuum/boost leaks
+
+---
+
+## P0301–P0306 — Cylinder 1–6 Specific Misfire
+
+**Severity:** Medium — address promptly
+
+### What it means
+Misfires isolated to a specific cylinder.
+
+### Diagnostic approach
+1. **Start with the spark plug** on the affected cylinder — inspect condition and gap
+2. **Swap the ignition coil** with a known-good coil from another cylinder
+3. If misfire follows the coil: replace coil
+4. If misfire stays on the cylinder: suspect plug, injector, or compression issue
+5. For persistent single-cylinder misfire: compression test and leak-down test are next
+
+---
+
+## 30B9 / 2FBC — Charge Air Pressure Too High (Overboost)
+
+**Severity:** High — indicates boost control failure
+
+### What it means
+Boost exceeded the ECU's maximum allowed threshold. The ECU entered overboost protection and cut power.
+
+### Likely causes
+1. **Stuck or seized wastegate** — actuator not opening when commanded; boost has no exit
+2. **WGDC solenoid failure** — solenoid stuck in high-duty-cycle position
+3. **Boost spike from tune** — tune map requesting too much boost for the hardware
+4. **Boost pressure reference line issue** — incorrect pressure reaching the solenoid
+
+### Diagnostic steps
+1. Check WGDC and boost logs around the fault event
+2. Manually inspect wastegate actuator operation (linkage, rod end)
+3. Replace WGDC solenoids if worn
+4. Consult tuner if the overboost occurred under normal operating conditions with a tune in place
+
+---
+
+## 2A97 — Charge Air Pressure Plausibility (Underboost)
+
+**Severity:** Medium — affects performance; requires diagnosis
+
+### What it means
+Boost was significantly below the ECU's target, triggering the underboost plausibility fault.
+
+### Likely causes
+1. **Worn WGDC solenoids** — cannot hold the wastegate closed enough to reach target boost
+2. **Boost leak** — charge pipe crack, intercooler coupler failure, BOV stuck open
+3. **Turbo wear** — seals, wheels, or bearing degradation on high-mileage turbos
+4. **Plastic charge pipe failure** — very common on stock N54 charge pipes
+
+---
+
+## 11B0 — Valvetronic Eccentric Shaft Sensor
+
+**Severity:** Moderate — affects idle, fuel economy, smooth operation
+
+### What it means
+The Valvetronic eccentric shaft sensor has failed or drifted. Valvetronic controls intake valve lift; a faulty sensor causes rough idle, hesitation, and sometimes limp mode.
+
+### Diagnostic steps
+1. Clear the code and observe recurrence
+2. Replace the eccentric shaft sensor if the code returns consistently
+3. Confirm Valvetronic motor operation
+
+---
+
+## 29D4 / 29D7 — Boost Solenoid Fault
+
+**Severity:** Medium — boost control compromised
+
+### What it means
+The ECU has detected an electrical fault (open circuit, short) in one of the boost control solenoid circuits.
+
+### Likely causes
+1. Solenoid wiring harness damage or corrosion
+2. Failed solenoid coil
+3. Connector corrosion
+
+### Diagnostic steps
+1. Inspect the solenoid wiring and connectors on both turbos
+2. Measure solenoid resistance (spec is typically ~20–30Ω, verify with manufacturer)
+3. Replace the affected solenoid
+
+---
+
+## Carbon Buildup (Not a Code, But Common)
+
+While not generating a single fault code, severe carbon buildup causes symptoms that do generate codes and complaints:
+
+- P0300/P030x misfires
+- Rough idle
+- Hesitation at low RPM
+- High fuel trims (engine compensating for reduced airflow)
+
+**Solution:** Walnut blasting (abrasive media cleaning through the intake ports). Not a DIY job — requires removing the intake manifold and using proper equipment.
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />
+
+---
+
+## Related Pages
+
+| Topic | Link |
+|---|---|
+| Prevent most codes with proper prep | [Maintenance Before Tuning](/maintenance/before-tuning) |
+| Diagnose codes with live log data | [Datalogging Guide](/datalogging/guide) |
+| HPFP and fuel system (30FF) | [HPFP / LPFP / Port Injection](/fueling/hpfp-lpfp-port-injection) |
+| Spark plugs and coils (P030x) | [Spark Plugs / Coils / Injectors](/hardware/spark-plugs-coils-injectors) |
+| Boost and WGDC codes | [Boost Control / WGDC](/datalogging/boost-wgdc) |
+| Pre-tune readiness check | [Tune Readiness Checklist](/checklist/tune-readiness) |
