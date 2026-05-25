@@ -68,3 +68,7 @@ CLAUDE_PRIVATE_TUNING_SOURCES_PROMPT.txt
 *.kp
 *.dam
 *.damos
+
+# Private scripts output — diff reports and tooling artifacts
+scripts/private/reports/
+scripts/private/*.log
