@@ -5,10 +5,6 @@ import type { RomFamily } from '@/types/tune-program'
 //
 // hasPrivateSources: true if stock originals, OTS BINs, or XDFs were found in
 // _private_tuning_sources/ during private inventory (2026-05-24).
-//
-// NOT INCLUDED HERE: INA0S — retained in tune file registry for legacy
-// compatibility but not exposed as a ROM selector in v1 UI.
-// Add INA0S here when ready to actively support it.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const romFamilies: RomFamily[] = [
@@ -63,6 +59,34 @@ export const romFamilies: RomFamily[] = [
     hasPrivateSources: true,
     notes:
       'Private inventory (2026-05-24): stock original BIN (IKM0S_original.bin + ikm0s_original.bin), MapSwitchBase BIN, OTS v90 BINs (stage 1/1+/2/2+ × 91/93/95/ACN91_CAD94/E30/E50), current XDF (IKM0S.xdf) + Legacy XDF. No Flex Fuel OTS or Hybrid Twins variants found for IKM0S. Stage 3 and hybrid-base not yet supported for this ROM.',
+  },
+  {
+    romId: 'INA0S',
+    displayName: 'INA0S',
+    description:
+      'Later N54 software revision. Found on 2010+ 135i, 335i, and some 535i models. MSD80 DME. ' +
+      'Confirm your ROM version in MHD before selecting.',
+    vehicleApplications: [
+      '2010–2011 BMW 135i',
+      '2010–2011 BMW 335i',
+      '2010 BMW 535i',
+      'Some late-production N54 models — verify in MHD',
+    ],
+    // OTS v90 source files confirmed for stage 1/1+/2/2+.
+    // Hybrid Twins V12 source files confirmed for hybrid-base.
+    // Stage 3 is a registered placeholder (no OTS stage 3 source found for INA0S,
+    // but upgraded stock-frame builds are theoretically valid — tuner review required).
+    // No Flex Fuel OTS variants found for INA0S in private inventory.
+    supportedStages: ['stage1', 'stage1plus', 'stage2', 'stage2plus', 'stage3', 'hybrid-base'],
+    supportedFuels: ['91', '93', 'E30', 'E40', 'E50'],
+    hasPrivateSources: true,
+    notes:
+      'Private inventory (2026-05-24): stock original BIN (INA0S_original.bin + ina0s_original.bin, ' +
+      'identical SHA-256 confirmed), MapSwitchBase BIN, OTS v90 BINs (stage 1/1+/2/2+ × 6 fuels), ' +
+      'Hybrid Twins V12 (TD03-H E40-50 + TD03-H PUMP + E40-E50 N20 + PUMP N20), ' +
+      'current XDF (INA0S.xdf, 1,103,646 B) + Legacy XDF. ' +
+      'No Flex Fuel OTS v6.0 variants found for INA0S. ' +
+      'Known stock SHA-256: 66296babb3f4060ecc9cb8f40faa982651a790c255361a39cd653f448db3f8e0.',
   },
 ]
 

@@ -21,7 +21,7 @@ export type TurboTypeId = 'stock' | 'upgraded-stock-frame' | 'hybrid'
 export type RomVersion = 'I8A0S' | 'IJE0S' | 'IKM0S' | 'INA0S' | 'UNKNOWN'
 
 /** ROM families supported in the Tune Program selector */
-export type RomFamilyId = 'I8A0S' | 'IJE0S' | 'IKM0S'
+export type RomFamilyId = 'I8A0S' | 'IJE0S' | 'IKM0S' | 'INA0S'
 
 export type TransmissionType = 'MT' | 'AT' | 'Both'
 

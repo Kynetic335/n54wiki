@@ -4,19 +4,18 @@ import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import {
   verifyBin,
-  truncateHash,
   formatBinSize,
   VALID_BIN_SIZE,
 } from '@/lib/tune-program/binVerifier'
-import type { BinVerificationResult } from '@/lib/tune-program/binVerifier'
+import type { BinVerificationResult, HashMatchStatus } from '@/lib/tune-program/binVerifier'
 
 // ─── N54 Tune Program v1 ───────────────────────────────────────────────────────
 // This app is NOT a flashing tool.
 // It does NOT connect to the car, flash the DME, or perform RSA bypass.
 // It generates a BIN file that the customer flashes using MHD or N54 Quickflash.
 //
-// v1 verification: file size + SHA-256 hash only.
-// ROM byte fingerprinting (XDF-derived offset checks) arrives in v2.
+// v1 output: uploaded BIN re-downloaded as-is with PLACEHOLDER_NOT_FLASHABLE label.
+// No patch has been applied. Real calibration patching arrives in v3.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─── ROM Families ─────────────────────────────────────────────────────────────
@@ -44,6 +43,14 @@ const ROM_FAMILIES = [
     badge: 'Verify First',
     badgeColor: '#d97706',
     stages: ['stage1', 'stage1plus', 'stage2', 'stage2plus'],
+  },
+  {
+    id: 'INA0S',
+    label: 'INA0S',
+    desc: 'Later N54 revision — 2010+ 135i, 335i, some 535i. MSD80. Confirm in MHD first.',
+    badge: 'Later Rev',
+    badgeColor: '#7c3aed',
+    stages: ['stage1', 'stage1plus', 'stage2', 'stage2plus', 'stage3', 'hybrid-base'],
   },
 ]
 
@@ -168,6 +175,7 @@ export default function TuneProgram() {
             selectedRom: romFamily,
             sizeValid: false,
             hashKnown: false,
+            hashMatchStatus: 'invalid',
             fingerprintStatus: 'unavailable',
             isSafeToContinue: false,
             warnings: [],
@@ -189,6 +197,7 @@ export default function TuneProgram() {
           selectedRom: romFamily,
           sizeValid: false,
           hashKnown: false,
+          hashMatchStatus: 'invalid',
           fingerprintStatus: 'unavailable',
           isSafeToContinue: false,
           warnings: [],
@@ -248,7 +257,7 @@ export default function TuneProgram() {
     const stageLabel = STAGES.find((s) => s.value === stage)?.label.replace(/\s+/g, '-') ?? stage
     const a = document.createElement('a')
     a.href = url
-    a.download = `synergy-N54-${romFamily}-${stageLabel}-${fuel}.bin`
+    a.download = `PLACEHOLDER_NOT_FLASHABLE_synergy-N54-${romFamily}-${stageLabel}-${fuel}.bin`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -594,12 +603,25 @@ export default function TuneProgram() {
                   <FingerprintBadge status={verResult.fingerprintStatus} />
                 </div>
 
-                {/* Hash known */}
-                <VerifyRow
-                  label="Known stock hash"
-                  value="No stock hash database in v1 — will be populated in v2"
-                  muted
-                />
+                {/* Hash match status */}
+                <div style={{ padding: '0.6rem 1rem', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ margin: '0 0 0.15rem', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#444', fontWeight: 600 }}>
+                      Stock BIN match
+                    </p>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#555', lineHeight: 1.5 }}>
+                      {verResult.hashMatchStatus === 'known-stock' &&
+                        `SHA-256 matches verified stock hash for ${verResult.selectedRom}. Confirmed: unmodified original BIN.`}
+                      {verResult.hashMatchStatus === 'unknown-2mb' &&
+                        'File size is valid (2 MB) but SHA-256 is not in the known-stock database. This may be a modified, tuned, or unlisted stock BIN. Hash database is still being built — proceed with care.'}
+                      {verResult.hashMatchStatus === 'rom-mismatch' &&
+                        `SHA-256 matches the known stock hash for ${verResult.hashMatchedRom ?? 'a different ROM'}, not ${verResult.selectedRom}. Verify your ROM selection in MHD.`}
+                      {verResult.hashMatchStatus === 'invalid' &&
+                        'Hash check skipped — file did not pass size or extension validation.'}
+                    </p>
+                  </div>
+                  <HashMatchBadge status={verResult.hashMatchStatus} />
+                </div>
               </div>
 
               {/* Warnings */}
@@ -642,12 +664,28 @@ export default function TuneProgram() {
           )}
         </section>
 
+        {/* ── Placeholder safety warning ─────────────────────── */}
+        <div style={{ background: '#1a0000', border: '2px solid #dc2626', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+          <span style={{ fontSize: '1.3rem', lineHeight: 1, marginTop: '0.05rem', flexShrink: 0 }}>🚫</span>
+          <div>
+            <p style={{ margin: '0 0 0.3rem', fontWeight: 800, fontSize: '0.95rem', color: '#f87171', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              v1 Placeholder — Do Not Flash
+            </p>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: '#fca5a5', lineHeight: 1.6 }}>
+              No real tune patch has been applied yet. The file generated below is your{' '}
+              <strong style={{ color: '#f87171' }}>uploaded stock BIN re-downloaded as-is</strong> — no calibration changes have been made.{' '}
+              <strong style={{ color: '#fef2f2' }}>Do not flash this file. It is labeled PLACEHOLDER_NOT_FLASHABLE and is for verification purposes only.</strong>{' '}
+              Real patch application arrives in v3.
+            </p>
+          </div>
+        </div>
+
         {/* ── Generate BIN button ────────────────────────────── */}
         <section style={{ marginBottom: '2rem' }}>
           <button disabled={!isReady} onClick={handleGenerateBIN}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: generated ? '#14532d' : isReady ? '#2563eb' : '#1a1a1a', color: generated ? '#4ade80' : isReady ? '#fff' : '#555', fontWeight: 700, fontSize: '1rem', padding: '0.8rem 2rem', borderRadius: '0.5rem', border: `1px solid ${generated ? '#16a34a' : isReady ? '#2563eb' : '#2a2a2a'}`, cursor: isReady ? 'pointer' : 'not-allowed', transition: 'all 0.15s', width: '100%', justifyContent: 'center' }}>
-            <span>{generated ? '✅' : isReady ? '⚙️' : '🔒'}</span>
-            {generated ? 'BIN Downloaded — Flash with MHD or Quickflash' : 'Generate BIN'}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: generated ? '#3b0a0a' : isReady ? '#2563eb' : '#1a1a1a', color: generated ? '#fca5a5' : isReady ? '#fff' : '#555', fontWeight: 700, fontSize: '1rem', padding: '0.8rem 2rem', borderRadius: '0.5rem', border: `1px solid ${generated ? '#dc2626' : isReady ? '#2563eb' : '#2a2a2a'}`, cursor: isReady ? 'pointer' : 'not-allowed', transition: 'all 0.15s', width: '100%', justifyContent: 'center' }}>
+            <span>{generated ? '⚠️' : isReady ? '⚙️' : '🔒'}</span>
+            {generated ? 'PLACEHOLDER Downloaded — Do NOT Flash' : 'Generate BIN'}
             {isReady && !generated && (
               <span style={{ opacity: 0.75, fontSize: '0.85rem' }}>
                 — {romFamily} / {STAGES.find((s) => s.value === stage)?.label} / {fuel}
@@ -667,35 +705,48 @@ export default function TuneProgram() {
           )}
         </section>
 
-        {/* ── External flasher warning (after generate) ─────── */}
+        {/* ── Post-generate notice (after placeholder download) ── */}
         {generated && (
-          <div style={{ background: '#0f1f0f', border: '1px solid #16a34a55', borderRadius: '0.75rem', padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
-            <p style={{ margin: '0 0 0.5rem', fontWeight: 700, fontSize: '0.95rem', color: '#4ade80' }}>
-              🔌 Flash with Your External Tool
-            </p>
-            <p style={{ margin: '0 0 0.75rem', fontSize: '0.88rem', color: '#86efac', lineHeight: 1.65 }}>
-              Generated file must be flashed with MHD, Quickflash, or another supported MSD80/MSD81 flashing tool.
-              This app does not flash your car — it only prepared the BIN file.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              {[
-                ['MHD Flasher', 'Android / iOS — flash via OBD-II over USB', 'https://mhd-flasher.com'],
-                ['N54 Quickflash', 'Standalone flashing tool for MSD80/MSD81 DME', ''],
-              ].map(([name, desc, link]) => (
-                <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', background: '#111', borderRadius: '0.5rem', border: '1px solid #1e1e1e' }}>
-                  <span style={{ fontSize: '0.9rem' }}>🔧</span>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: '0 0 0.1rem', fontWeight: 600, fontSize: '0.85rem', color: '#e0e0e0' }}>{name}</p>
-                    <p style={{ margin: 0, fontSize: '0.78rem', color: '#666' }}>{desc}</p>
+          <div style={{ borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '2rem', border: '1px solid #dc262655' }}>
+            {/* DO NOT FLASH banner */}
+            <div style={{ background: '#2d0000', padding: '0.9rem 1.25rem', borderBottom: '1px solid #dc262633', display: 'flex', gap: '0.65rem', alignItems: 'flex-start' }}>
+              <span style={{ fontSize: '1.2rem', lineHeight: 1, marginTop: '0.05rem', flexShrink: 0 }}>🚫</span>
+              <div>
+                <p style={{ margin: '0 0 0.25rem', fontWeight: 800, fontSize: '0.9rem', color: '#f87171', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  DO NOT FLASH THIS FILE — v1 placeholder only
+                </p>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: '#fca5a5', lineHeight: 1.55 }}>
+                  The downloaded file (<code style={{ fontFamily: 'monospace', color: '#f87171', fontSize: '0.78rem' }}>PLACEHOLDER_NOT_FLASHABLE_…</code>) is your own stock BIN
+                  returned as-is. No calibration changes were applied. Flashing it would only restore your stock tune.{' '}
+                  <strong>Wait for the real calibration package from Synergy before flashing anything.</strong>
+                </p>
+              </div>
+            </div>
+            {/* Flasher info — for reference only */}
+            <div style={{ background: '#111', padding: '1rem 1.25rem' }}>
+              <p style={{ margin: '0 0 0.65rem', fontWeight: 700, fontSize: '0.88rem', color: '#888' }}>
+                🔌 External flasher reference (for when you receive the real file)
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {[
+                  ['MHD Flasher', 'Android / iOS — flash via OBD-II over USB', 'https://mhd-flasher.com'],
+                  ['N54 Quickflash', 'Standalone flashing tool for MSD80/MSD81 DME', ''],
+                ].map(([name, desc, link]) => (
+                  <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', background: '#0d0d0d', borderRadius: '0.5rem', border: '1px solid #1a1a1a' }}>
+                    <span style={{ fontSize: '0.9rem' }}>🔧</span>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: '0 0 0.1rem', fontWeight: 600, fontSize: '0.85rem', color: '#888' }}>{name}</p>
+                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#444' }}>{desc}</p>
+                    </div>
+                    {link && (
+                      <a href={link} target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: '0.78rem', color: '#555', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                        Visit →
+                      </a>
+                    )}
                   </div>
-                  {link && (
-                    <a href={link} target="_blank" rel="noopener noreferrer"
-                      style={{ fontSize: '0.78rem', color: '#2563eb', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                      Visit →
-                    </a>
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -707,8 +758,8 @@ export default function TuneProgram() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             {[
-              { icon: '✅', title: 'v1 — ROM Selection + BIN Upload & Verification', body: 'Select ROM family (I8A0S/IJE0S/IKM0S), stage, and fuel. Upload stock BIN — app checks extension, file size (2,097,152 bytes / 0x200000), reads ArrayBuffer, and computes SHA-256. File structure verification only — no calibration byte checks yet.' },
-              { icon: '🔜', title: 'v2 — ROM Fingerprint Verification', body: 'Read XDF-mapped byte offsets from uploaded BIN and compare against expected patterns for the selected ROM. Blocks wrong-ROM uploads (e.g. uploading an IJE0S BIN while I8A0S is selected). Known-stock SHA-256 hash comparison added.' },
+              { icon: '✅', title: 'v1 — ROM Selection + BIN Upload & Verification', body: 'Select ROM family (I8A0S/IJE0S/IKM0S/INA0S), stage, and fuel. Upload stock BIN — app checks extension, file size (2,097,152 bytes / 0x200000), reads ArrayBuffer, computes SHA-256, and compares against known stock hashes. "Known stock BIN" confirmed for all four ROM originals. Detects ROM mismatches (e.g. uploading I8A0S BIN while IJE0S is selected). Output is a placeholder — no calibration patching applied in v1.' },
+              { icon: '🔜', title: 'v2 — XDF Byte Fingerprinting', body: 'Read XDF-mapped byte offsets from uploaded BIN and compare against expected ROM identifier patterns. Confirms the ROM family from actual calibration bytes — not just file size and known-hash match. Enables fingerprint of BINs not in the known-stock database.' },
               { icon: '🔜', title: 'v3 — Patch-Package Application', body: 'Apply Synergy calibration offset packages (JSON patches built from private XDF/BIN diff analysis) client-side. Private source files stay in _private_tuning_sources/ — never public or committed.' },
               { icon: '🔜', title: 'v4 — Checksum Recalculation', body: 'Recalculate DME checksum on patched BIN before export. A mismatch blocks delivery — no partial or corrupt BIN reaches the customer.' },
             ].map((item) => (
@@ -797,7 +848,22 @@ function FingerprintBadge({ status }: { status: 'pending' | 'pass' | 'fail' | 'u
     pending:     { label: 'Checking…', bg: '#1a1a1a', border: '#333',    text: '#777' },
     pass:        { label: '✓ Match',   bg: '#052e16', border: '#16a34a', text: '#4ade80' },
     fail:        { label: '✗ Mismatch',bg: '#450a0a', border: '#dc2626', text: '#f87171' },
-    unavailable: { label: 'v1 — N/A',  bg: '#1a1a1a', border: '#2a2a2a', text: '#555' },
+    unavailable: { label: 'v2 — N/A',  bg: '#1a1a1a', border: '#2a2a2a', text: '#555' },
+  }
+  const s = map[status]
+  return (
+    <span style={{ flexShrink: 0, fontSize: '0.72rem', fontWeight: 700, padding: '0.2rem 0.55rem', borderRadius: '0.35rem', background: s.bg, border: `1px solid ${s.border}`, color: s.text, whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>
+      {s.label}
+    </span>
+  )
+}
+
+function HashMatchBadge({ status }: { status: HashMatchStatus }) {
+  const map: Record<HashMatchStatus, { label: string; bg: string; border: string; text: string }> = {
+    'known-stock':  { label: '✓ Known stock BIN',  bg: '#052e16', border: '#16a34a', text: '#4ade80' },
+    'unknown-2mb':  { label: '? Unknown 2MB BIN',  bg: '#1a1400', border: '#854d0e', text: '#d97706' },
+    'rom-mismatch': { label: '⚠ ROM mismatch',     bg: '#1a0a00', border: '#c2410c', text: '#fb923c' },
+    'invalid':      { label: '✗ Invalid',           bg: '#450a0a', border: '#dc2626', text: '#f87171' },
   }
   const s = map[status]
   return (

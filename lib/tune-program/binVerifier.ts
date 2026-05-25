@@ -9,15 +9,22 @@
 //   2. Validates exact file size = 2,097,152 bytes (0x200000)
 //   3. Reads ArrayBuffer and converts to Uint8Array
 //   4. Computes SHA-256 hash via crypto.subtle.digest
-//   5. Returns a structured BinVerificationResult
+//   5. Checks hash against knownStockHashes in binFingerprints registry
+//   6. Detects ROM mismatches (hash matches a different ROM than selected)
+//   7. Returns a structured BinVerificationResult
 //
 // What this does NOT do yet (v2+):
-//   - Read byte offsets to verify ROM identifier bytes
-//   - Compare against known stock hash database
+//   - Read byte offsets to verify ROM identifier bytes from XDF
 //   - Validate calibration region checksums
 //   - Apply patch packages
 //
 // ─────────────────────────────────────────────────────────────────────────────
+
+import {
+  isKnownStockHash,
+  findRomByHash,
+  isFingerprintVerified,
+} from '@/data/tune-program/binFingerprints'
 
 /** Exact size of all N54 MSD80/MSD81 ROMs */
 export const VALID_BIN_SIZE = 2_097_152 // 0x200000 = 2 MB
@@ -25,44 +32,68 @@ export const VALID_BIN_SIZE = 2_097_152 // 0x200000 = 2 MB
 export type FingerprintStatus = 'pending' | 'pass' | 'fail' | 'unavailable'
 export type ExtensionStatus = 'preferred' | 'allowed_with_warning' | 'rejected'
 
+/**
+ * Indicates how confident we are that this is a known-good stock BIN.
+ * 'known-stock'    = SHA-256 matches a verified entry in knownStockHashes for selectedRom
+ * 'unknown-2mb'    = size is valid, SHA-256 not in any known-stock list
+ * 'rom-mismatch'   = SHA-256 matches a known-stock hash, but for a DIFFERENT ROM than selected
+ * 'invalid'        = size or extension check failed
+ */
+export type HashMatchStatus = 'known-stock' | 'unknown-2mb' | 'rom-mismatch' | 'invalid'
+
 export interface BinVerificationResult {
   /** Original file name as uploaded */
   fileName: string
   /** File size in bytes */
   fileSize: number
-  /** Detected extension (e.g. '.bin', '.ori') */
+  /** Detected file extension (e.g. '.bin', '.ori') */
   extension: string
-  /** Extension acceptability — preferred = .bin, allowed_with_warning = .ori/.org */
+  /** Extension acceptability */
   extensionStatus: ExtensionStatus
   /** SHA-256 hex digest of the full ArrayBuffer content */
   sha256: string
-  /** ROM family ID selected by user at the time of verification */
+  /** ROM family ID the user selected at time of verification */
   selectedRom: string
   /** true = file size === 2,097,152 */
   sizeValid: boolean
   /**
-   * true = SHA-256 matches a known-good stock hash in binFingerprints registry.
-   * false in v1 — no stock hashes registered yet.
+   * true = SHA-256 matches a knownStockHash entry for selectedRom.
+   * false in most cases until the hash database grows.
    */
   hashKnown: boolean
   /**
+   * Detailed hash match classification:
+   * 'known-stock'   = hash in selectedRom's knownStockHashes ✓
+   * 'unknown-2mb'   = valid size, hash not in any ROM's known list
+   * 'rom-mismatch'  = hash matches a DIFFERENT ROM's known list (warning)
+   * 'invalid'       = size or read error
+   */
+  hashMatchStatus: HashMatchStatus
+  /**
+   * If hashMatchStatus === 'rom-mismatch', this is the ROM the hash actually matches.
+   * undefined otherwise.
+   */
+  hashMatchedRom?: string
+  /**
    * 'pending'     = verification not yet run
-   * 'pass'        = byte signature matched expected pattern for selectedRom
-   * 'fail'        = byte signature did NOT match (wrong ROM or modified file)
-   * 'unavailable' = fingerprint data not yet populated for this ROM (v1 state)
+   * 'pass'        = byte signature matched expected pattern for selectedRom (v2)
+   * 'fail'        = byte signature did NOT match (v2)
+   * 'unavailable' = fingerprint byte data not yet populated for this ROM (v1 state)
    */
   fingerprintStatus: FingerprintStatus
   /**
    * true when it is safe to proceed to Generate BIN:
    *   - sizeValid === true
    *   - ArrayBuffer.byteLength === VALID_BIN_SIZE
-   *   - no hard errors (errors.length === 0)
-   * Does NOT require fingerprintStatus === 'pass' in v1.
+   *   - extensionStatus !== 'rejected'
+   *   - no hard errors
+   * Does NOT require hashKnown === true.
+   * Does NOT require fingerprintStatus === 'pass'.
    */
   isSafeToContinue: boolean
-  /** Advisory warnings — do not block Generate BIN */
+  /** Advisory warnings — shown in UI but do not block Generate BIN */
   warnings: string[]
-  /** Hard errors — block Generate BIN */
+  /** Hard errors — block Generate BIN and shown prominently */
   errors: string[]
 }
 
@@ -101,9 +132,9 @@ function classifyExtension(ext: string): ExtensionStatus {
 /**
  * Perform full client-side BIN verification.
  *
- * @param file         - The File object from the input or drag-drop
- * @param buffer       - ArrayBuffer from FileReader (must already be read)
- * @param selectedRom  - ROM family ID selected by the user (e.g. 'I8A0S')
+ * @param file         File object from the input or drag-drop
+ * @param buffer       ArrayBuffer already read by FileReader
+ * @param selectedRom  ROM family ID selected by the user (e.g. 'I8A0S')
  * @returns            BinVerificationResult with all check results and status flags
  */
 export async function verifyBin(
@@ -121,12 +152,13 @@ export async function verifyBin(
   if (extensionStatus === 'rejected') {
     errors.push(
       `Unsupported file extension "${extension || '(none)'}". ` +
-        'Upload a .bin file exported from MHD or N54 Quickflash.'
+        'Upload a .bin file exported from MHD or N54 Quickflash. ' +
+        'Backup files (.ori, .org) are also accepted with a warning.'
     )
   } else if (extensionStatus === 'allowed_with_warning') {
     warnings.push(
       `File extension "${extension}" is accepted but not preferred. ` +
-        'Ensure this is an unmodified stock BIN (not a backup of a modified file).'
+        'Ensure this is an unmodified stock BIN, not a backup of a modified calibration.'
     )
   }
 
@@ -143,7 +175,7 @@ export async function verifyBin(
     )
   }
 
-  // Also confirm the ArrayBuffer matches
+  // ArrayBuffer size sanity check
   if (buffer.byteLength !== file.size) {
     errors.push(
       `ArrayBuffer size (${buffer.byteLength.toLocaleString()} bytes) does not match ` +
@@ -160,30 +192,50 @@ export async function verifyBin(
     errors.push(`SHA-256 computation failed: ${msg}`)
   }
 
-  // ── ROM fingerprint (v1: unavailable) ────────────────────────────────────────
-  // In v1, fingerprint byte offsets are not yet mapped from XDF analysis.
-  // fingerprintStatus will always be 'unavailable' until binFingerprints.ts
-  // is populated with real offset data in v2.
-  //
-  // Future implementation note:
-  //   const fp = getFingerprintByRomId(selectedRom)
-  //   if (fp?.verified && fp.signatureOffsets.length > 0) {
-  //     const bytes = new Uint8Array(buffer)
-  //     // check each signatureOffset against expected bytes
-  //     // set fingerprintStatus = 'pass' or 'fail'
-  //   }
-  const fingerprintStatus: FingerprintStatus = 'unavailable'
+  // ── Hash match check ─────────────────────────────────────────────────────────
+  let hashKnown = false
+  let hashMatchStatus: HashMatchStatus = 'invalid'
+  let hashMatchedRom: string | undefined
 
-  // ── Hash known check (v1: no stock hashes registered) ────────────────────────
-  const hashKnown = false
+  if (sha256 && sizeValid) {
+    if (selectedRom && isKnownStockHash(sha256, selectedRom)) {
+      // Hash matches the selected ROM's known-stock list ✓
+      hashKnown = true
+      hashMatchStatus = 'known-stock'
+    } else {
+      // Check if it matches any OTHER ROM's known-stock list
+      const matchedRom = findRomByHash(sha256)
+      if (matchedRom) {
+        // Hash matched but for a different ROM — ROM mismatch warning
+        hashMatchedRom = matchedRom
+        hashMatchStatus = 'rom-mismatch'
+        warnings.push(
+          `ROM selection mismatch: this BIN's SHA-256 matches the known stock hash for ` +
+            `${matchedRom}, but you have selected ${selectedRom || '(none)'}. ` +
+            `Double-check your ROM selection in MHD before continuing.`
+        )
+      } else {
+        // Unknown hash but valid size — not in any known-stock list
+        hashMatchStatus = 'unknown-2mb'
+      }
+    }
+  }
+
+  // ── ROM fingerprint (v1: unavailable) ────────────────────────────────────────
+  // Byte-level fingerprinting from XDF-mapped offsets is not yet implemented.
+  // isFingerprintVerified() returns false for all ROMs in v1.
+  const fingerprintStatus: FingerprintStatus = isFingerprintVerified(selectedRom)
+    ? 'pending' // would start matching if offsets were populated
+    : 'unavailable'
 
   // ── isSafeToContinue ─────────────────────────────────────────────────────────
-  // Requires: valid size + no hard errors.
-  // Does NOT require fingerprint pass (unavailable in v1).
-  // Does NOT require hashKnown (no stock hash table in v1).
+  // Requires: valid size + no hard errors + extension not rejected.
+  // Does NOT require: hashKnown, fingerprintStatus === 'pass'.
+  // hashMatchStatus === 'rom-mismatch' does NOT block — it only warns.
   const isSafeToContinue =
     sizeValid &&
     buffer.byteLength === VALID_BIN_SIZE &&
+    extensionStatus !== 'rejected' &&
     errors.length === 0
 
   return {
@@ -195,6 +247,8 @@ export async function verifyBin(
     selectedRom,
     sizeValid,
     hashKnown,
+    hashMatchStatus,
+    hashMatchedRom,
     fingerprintStatus,
     isSafeToContinue,
     warnings,
