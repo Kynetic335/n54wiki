@@ -75,6 +75,7 @@ export default function HomePage() {
         <span style={{ fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>N54 Wiki</span>
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
           <Link href="/wiki" style={{ color: '#a0a0a0', textDecoration: 'none', fontSize: '0.9rem' }}>Wiki</Link>
+          <Link href="/tune-program" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>Tune Program</Link>
           <a
             href="https://synergybmwtuning.com"
             target="_blank"
