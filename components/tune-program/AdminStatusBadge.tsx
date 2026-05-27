@@ -1,12 +1,14 @@
 import type { RequestStatus } from '@/types/tune-program'
 
 const STATUS_CONFIG: Record<RequestStatus, { color: string; bg: string; icon: string }> = {
-  New: { color: '#93c5fd', bg: '#1e3a8a33', icon: '🆕' },
-  'Waiting on Logs': { color: '#fbbf24', bg: '#78350f33', icon: '⏳' },
-  'In Review': { color: '#c4b5fd', bg: '#4c1d9533', icon: '🔍' },
-  'Approved for Export': { color: '#4ade80', bg: '#14532d33', icon: '✅' },
-  Exported: { color: '#6ee7b7', bg: '#065f4633', icon: '📦' },
-  Complete: { color: '#a3a3a3', bg: '#17171733', icon: '🏁' },
+  New:                        { color: '#93c5fd', bg: '#1e3a8a33', icon: '🆕' },
+  'Waiting on BIN':           { color: '#fb923c', bg: '#7c2d1233', icon: '📂' },
+  'Waiting on Logs':          { color: '#fbbf24', bg: '#78350f33', icon: '⏳' },
+  'In Review':                { color: '#c4b5fd', bg: '#4c1d9533', icon: '🔍' },
+  'Approved for Owner Review':{ color: '#4ade80', bg: '#14532d33', icon: '✅' },
+  Exported:                   { color: '#6ee7b7', bg: '#065f4633', icon: '📦' },
+  Complete:                   { color: '#a3a3a3', bg: '#17171733', icon: '🏁' },
+  Blocked:                    { color: '#f87171', bg: '#7f1d1d33', icon: '🚫' },
 }
 
 interface AdminStatusBadgeProps {

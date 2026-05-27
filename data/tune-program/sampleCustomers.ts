@@ -6,7 +6,7 @@ export const sampleCustomers: CustomerRequest[] = [
   {
     id: 'req-001',
     createdAt: '2026-05-20T14:32:00Z',
-    status: 'Approved for Export',
+    status: 'Approved for Owner Review',
     name: 'Alex Romero',
     email: 'alex.romero@example.com',
     vehicleYear: '2008',
@@ -87,7 +87,7 @@ export const sampleCustomers: CustomerRequest[] = [
     turboSetup: 'Stock turbos',
     fuelSystem: 'Stock all around, cam follower unknown',
     selectedFuel: 'E30',
-    selectedStage: 'stage2plus',
+    selectedStage: 'stage3',
     selectedTurboType: 'stock',
     currentMods: 'VRSF FMIC, VRSF catless downpipes, BMS intake, charge pipe kit',
     maintenanceCompleted: [
@@ -101,7 +101,7 @@ export const sampleCustomers: CustomerRequest[] = [
     hpfpDetails: 'Upgraded HPFP internals (Fuel-It Stage 2+), installed 3k miles ago',
     lpfpDetails: 'Walbro 450 in-tank pump installed',
     injectorIndex: 'Unknown',
-    goals: 'E30 Stage 2+ — want around 500whp range, understand this is near stock turbo limit',
+    goals: 'E30 Stage 3 — want around 500whp range, understand this is near stock turbo limit',
     knownIssues: 'None currently',
     selectedTuneFileId: '',
     selectedAddons: ['flex-fuel'],

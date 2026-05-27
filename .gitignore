@@ -1,75 +1,40 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+﻿node_modules/
+.next/
+dist/
+build/
+.vercel/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+.env
+.env.local
+.env.production
+.env.development.local
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
+# Private tuning / source files
 _private_tuning_sources/
+scripts/private/
+PRIVATE_*.md
+
+# Raw calibration files
 *.bin
+*.xdf
+*.ols
+*.a2l
+*.dam
+*.damos
 *.ori
-*.org
-*.7z
-*.zip
-*.rar
-*.xdf
-*.ols
-*.a2l
+*.hex
+*.map
 *.kp
-*.dam
-*.damos
+*.0da
+*.0pa
 
-_private_tuning_sources/
-N54_TUNE_PROGRAM_PROMPT.txt
-PRIVATE_TUNING_SOURCE_INVENTORY.md
-PRIVATE_STOCK_BIN_FINGERPRINTS.md
-CLAUDE_PRIVATE_TUNING_SOURCES_PROMPT.txt
-*.bin
-*.xdf
-*.7z
+# Archives / generated output
 *.zip
+*.7z
 *.rar
-*.ols
-*.a2l
-*.kp
-*.dam
-*.damos
+tsconfig.tsbuildinfo
+build-packages-result.json
 
-# Private scripts output — diff reports and tooling artifacts
-scripts/private/reports/
-scripts/private/*.log
+# Keep private unless intentionally public
+data/tune-program/patch-packages/
+public/tune-program/

@@ -35,13 +35,17 @@ export const fuels: Fuel[] = [
     ethanolPercent: 30,
     status: 'active',
   },
+  // ── E40 — reserved for future Flex Fuel / RFP packages — NOT an active OTS stage fuel ──
+  // No OTS stage tune BIN files exist for E40. E30 and E50 are the supported OTS ethanol options.
+  // E40 may become active if Flex Fuel or custom RFP packages are validated in the future.
   {
     id: 'E40',
     label: 'E40',
-    description: '40% ethanol blend. Good balance of power and availability in most markets.',
-    color: '#8b5cf6',
+    description: '40% ethanol blend. Not currently available for OTS stage packages — E30 and E50 are the supported ethanol options. Reserved for future Flex Fuel / RFP packages.',
+    color: '#6b7280',
     ethanolPercent: 40,
-    status: 'active',
+    status: 'future',
+    statusNote: 'Not available for OTS stage tunes — E30 and E50 only. Reserved for Flex Fuel / RFP.',
   },
   {
     id: 'E50',

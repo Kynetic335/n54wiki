@@ -7,7 +7,7 @@ export const stages: Stage[] = [
     description:
       'Software-only tune on stock hardware. Optimized boost, ignition, and fueling for stock turbos. Best starting point for unmodified cars.',
     turboCompatibility: ['stock'],
-    fuelCompatibility: ['91', '93', 'E30'],
+    fuelCompatibility: ['91', '93', 'E30', 'E50'],
     requiredMods: [],
     recommendedMods: [
       'Fresh OEM-spec spark plugs (NGK LZKAR7A-11 or equivalent)',
@@ -22,7 +22,7 @@ export const stages: Stage[] = [
     description:
       'Stage 1 with additional intake and charge cooling support. Optimized for cars with intake and intercooler upgrades. Still stock turbo.',
     turboCompatibility: ['stock'],
-    fuelCompatibility: ['91', '93', 'E30', 'E40'],
+    fuelCompatibility: ['91', '93', 'E30', 'E50'],
     requiredMods: [
       'Upgraded intake (VRSF, Burger Motorsports, or equivalent)',
     ],
@@ -39,7 +39,7 @@ export const stages: Stage[] = [
     description:
       'High-flow exhaust and intake combination. Requires upgraded downpipes. Significant power gains on stock turbos with proper hardware.',
     turboCompatibility: ['stock', 'upgraded-stock-frame'],
-    fuelCompatibility: ['91', '93', 'E30', 'E40'],
+    fuelCompatibility: ['91', '93', 'E30', 'E50'],
     requiredMods: [
       'Upgraded intake',
       'Catless or high-flow catted downpipes',
@@ -53,46 +53,28 @@ export const stages: Stage[] = [
     ],
   },
   {
-    id: 'stage2plus',
-    label: 'Stage 2+',
+    id: 'stage3',
+    label: 'Stage 3',
     description:
-      'Pushing stock frame turbos toward their limits. Requires full bolt-on package. Ethanol fuels strongly recommended for maximum reliability.',
+      'Pushing stock-frame turbos toward their limits, or base calibration for upgraded stock-frame drop-ins. ' +
+      'Full bolt-on hardware required. Ethanol fuels mandatory — E30 minimum, E50 recommended. ' +
+      'Requires tuner log review before any calibration advancement.',
     turboCompatibility: ['stock', 'upgraded-stock-frame'],
-    fuelCompatibility: ['91', '93', 'E30', 'E40', 'E50'],
+    fuelCompatibility: ['E30', 'E50'],
     requiredMods: [
       'Upgraded intake',
       'Catless or high-flow catted downpipes',
       'Front mount intercooler',
       'Silicone charge pipes',
+      'Fuel system upgrade (HPFP internals + LPFP)',
     ],
     recommendedMods: [
       'Upgraded HPFP internals (Fuel-It Stage 2+)',
-      'Upgraded LPFP (Fuel-It or equivalent)',
       'Walbro 450 or dual pump setup for E50',
-      'Port injection consideration for E50 targets',
       'Water-methanol injection for sustained pulls',
-    ],
-  },
-  {
-    id: 'stage3',
-    label: 'Stage 3',
-    description:
-      'Upgraded stock-frame or oversized turbos only. Full bolt-on hardware required. Ethanol strongly recommended. Requires tuner review before export.',
-    turboCompatibility: ['upgraded-stock-frame'],
-    fuelCompatibility: ['91', '93', 'E30', 'E40', 'E50'],
-    requiredMods: [
-      'Upgraded stock-frame turbos (Precision, Garrett, or equivalent drop-ins)',
-      'Upgraded intake manifold or throttle body',
-      'Catless downpipes',
-      'Front mount intercooler',
-      'Fuel system upgrade (HPFP + LPFP)',
-    ],
-    recommendedMods: [
-      'E30–E50 ethanol blend',
-      'Port injection support',
-      'Upgraded charge piping',
+      'Port injection consideration for E50 targets',
+      'Upgraded stock-frame turbos for Stage 3 maximum (Precision, Garrett, Vargas, etc.)',
       'Cooling system service (thermostat, water pump)',
-      'Drivetrain inspection',
     ],
   },
   {

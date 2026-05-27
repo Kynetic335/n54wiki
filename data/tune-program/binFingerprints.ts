@@ -148,7 +148,7 @@ export const binFingerprints: RomFingerprint[] = [
       // Source: N54/INA0S_original.bin + E Series N54.../ina0s_original.bin
       // Both files: 2,097,152 bytes, identical hash
       // Confidence: filename-and-size | Byte-verified: NO (v2)
-      // Note: INA0S is in the tune file registry but not exposed as a ROM selector in v1 UI
+      // INA0S N20 MAP packages validated 2026-05-25 — READY for owner-review (N20 MAP only)
       '66296babb3f4060ecc9cb8f40faa982651a790c255361a39cd653f448db3f8e0',
     ],
     signatureOffsets: [],
@@ -157,7 +157,8 @@ export const binFingerprints: RomFingerprint[] = [
     stockBinAvailable: true,
     notes:
       'Hash added 2026-05-24. Later N54 revision — 2010+ models, some 535i. ' +
-      'Retained for registry completeness. Not exposed as a selectable ROM in v1 Tune Program UI.',
+      'INA0S N20 MAP packages validated 2026-05-25 (Stock Turbo Stage 3 × 91/93/E50 + Hybrid Base × Pump/E50). ' +
+      'No Standard OTS packages built for INA0S — N20 MAP categories only in Tune Program UI.',
   },
 ]
 

@@ -8,68 +8,111 @@ import {
   VALID_BIN_SIZE,
 } from '@/lib/tune-program/binVerifier'
 import type { BinVerificationResult, HashMatchStatus } from '@/lib/tune-program/binVerifier'
+import { loadPackage, applyPatches } from '@/lib/tune-program/patchApplyEngine'
+import { getPackageByFilter } from '@/data/tune-program/patch-packages/manifest'
+import PatchReviewPanel from '@/components/tune-program/PatchReviewPanel'
+import OwnerReviewDownload from '@/components/tune-program/OwnerReviewDownload'
+import {
+  runPreReviewGates,
+  runPostReviewGates,
+  stageToManifestId,
+  fuelToManifestId,
+} from '@/lib/tune-program/patchReviewGate'
+import type { AppSafePatchPackage, PatchApplyResult } from '@/types/tune-program'
 
-// ─── N54 Tune Program v1 ───────────────────────────────────────────────────────
+// ─── N54 Tune Program — v3 Review Mode ────────────────────────────────────────
 // This app is NOT a flashing tool.
 // It does NOT connect to the car, flash the DME, or perform RSA bypass.
-// It generates a BIN file that the customer flashes using MHD or N54 Quickflash.
 //
-// v1 output: uploaded BIN re-downloaded as-is with PLACEHOLDER_NOT_FLASHABLE label.
-// No patch has been applied. Real calibration patching arrives in v3.
+// v3 flow: ROM → Stage → Fuel → Upload BIN → Run Patch Review (in-memory).
+//
+// SAFETY CONTRACT (review mode):
+//   outputMode:           'STANDARD_BIN_REVIEW_ONLY'
+//   encryptionApproved:   false  — hard-coded, never changes
+//   mhdEncryptionAllowed: false  — hard-coded, never changes
+//   ownerReviewRequired:  true   — hard-coded
+//
+// The patched buffer is NEVER returned. No BIN download. No export.
+// Real flashing requires MHD Flasher or N54 Quickflash (external tools).
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─── ROM Families ─────────────────────────────────────────────────────────────
+// reviewStatus:       current package availability for owner-review
+// stages:             standard OTS stages with READY packages (N20 MAP stages auto-set by category)
+// availableCategories: package categories with READY packages for this ROM
 const ROM_FAMILIES = [
   {
     id: 'I8A0S',
     label: 'I8A0S',
-    desc: 'Most common — 6-speed MT 135i, 335i, Z4 35i, 1M (2007–2010). MSD80.',
+    desc: 'Most common MSD80 — 135i, 335i, 535i, Z4 35i, 1M (2007–2010). Verify in MHD.',
     badge: 'Most Common',
     badgeColor: '#16a34a',
-    stages: ['stage1', 'stage1plus', 'stage2', 'stage2plus', 'stage3', 'hybrid-base'],
+    reviewStatus: 'ready',
+    reviewStatusLabel: 'READY',
+    // Standard OTS stages — hybrid-base is N20 MAP only (not a standard OTS stage)
+    // Stage 1 (basic): no v12 source — starts at Stage 1+
+    stages: ['stage1plus', 'stage2', 'stage3'],
+    availableCategories: ['standard-ots', 'n20-map-stock-turbo', 'n20-map-hybrid-base'],
   },
   {
     id: 'IJE0S',
     label: 'IJE0S',
-    desc: 'Automatic transmission (ZF 6HP) — 135i, 335i, 535i AT (2007–2010). MSD80.',
+    desc: 'Common MSD81 — automatic (ZF 6HP) 135i, 335i, 535i (2007–2010). Verify in MHD.',
     badge: 'AT Cars',
     badgeColor: '#2563eb',
-    stages: ['stage1', 'stage1plus', 'stage2', 'stage2plus', 'stage3', 'hybrid-base'],
+    reviewStatus: 'needs-audit',
+    reviewStatusLabel: 'Needs Audit',
+    stages: ['stage1plus', 'stage2', 'stage3'],
+    availableCategories: [] as string[],
   },
   {
     id: 'IKM0S',
     label: 'IKM0S',
-    desc: 'Less common ROM — select regional/late-production N54 cars. Confirm in MHD first.',
+    desc: 'Less common MSD81 — select regional/late-production N54 cars. Confirm in MHD first.',
     badge: 'Verify First',
     badgeColor: '#d97706',
-    stages: ['stage1', 'stage1plus', 'stage2', 'stage2plus'],
+    reviewStatus: 'not-built',
+    reviewStatusLabel: 'Not Built Yet',
+    stages: ['stage1plus', 'stage2', 'stage3'],
+    availableCategories: [] as string[],
   },
   {
     id: 'INA0S',
     label: 'INA0S',
-    desc: 'Later N54 revision — 2010+ 135i, 335i, some 535i. MSD80. Confirm in MHD first.',
+    desc: 'Later MSD81 — 2010+ 135i, 335i, some 535i. Verify in MHD.',
     badge: 'Later Rev',
     badgeColor: '#7c3aed',
-    stages: ['stage1', 'stage1plus', 'stage2', 'stage2plus', 'stage3', 'hybrid-base'],
+    reviewStatus: 'ready',
+    reviewStatusLabel: 'READY',
+    // v12: Standard OTS (stage1+/2/3 × 91/93/E50) + N20 MAP packages
+    stages: ['stage1plus', 'stage2', 'stage3'],
+    availableCategories: ['standard-ots', 'n20-map-stock-turbo', 'n20-map-hybrid-base'],
   },
 ]
 
 // ─── Stages ───────────────────────────────────────────────────────────────────
+// v12 OTS stage fuel matrix (standard-ots packages only):
+//   Stage 1+  → 91, 93
+//   Stage 2   → 91, 93, E50
+//   Stage 3   → 91, 93, E50
+//
+// Stage 1 (basic): no v12 source — not available in current program.
+// Hybrid-base: N20 MAP only — handled via N20_MAP_HYBRID_BASE_FUELS (pump/E50), not this list.
+// E30: no v12 standard-ots packages — removed from all stage fuel lists.
+// E40: not an OTS stage fuel — reserved for future Flex Fuel / RFP packages.
 const STAGES = [
-  { value: 'stage1',      label: 'Stage 1',                fuels: ['91', '93', 'E30'] },
-  { value: 'stage1plus',  label: 'Stage 1+',               fuels: ['91', '93', 'E30', 'E40'] },
-  { value: 'stage2',      label: 'Stage 2',                fuels: ['91', '93', 'E30', 'E40'] },
-  { value: 'stage2plus',  label: 'Stage 2+',               fuels: ['91', '93', 'E30', 'E40', 'E50'] },
-  { value: 'stage3',      label: 'Stage 3',                fuels: ['91', '93', 'E30', 'E40', 'E50'] },
-  { value: 'hybrid-base', label: 'Hybrid Turbo Base Tune', fuels: ['E30', 'E40', 'E50'] },
+  { value: 'stage1plus', label: 'Stage 1+', fuels: ['91', '93'] },
+  { value: 'stage2',     label: 'Stage 2',  fuels: ['91', '93', 'E50'] },
+  { value: 'stage3',     label: 'Stage 3',  fuels: ['91', '93', 'E50'] },
 ]
 
 // ─── Fuels ────────────────────────────────────────────────────────────────────
+// Active fuels for OTS stage packages: 91, 93, E30, E50.
+// E40 removed — not an OTS stage fuel. Reserved for Flex Fuel / RFP (future).
 const ACTIVE_FUELS = [
   { value: '91',  label: '91 oct', color: '#f59e0b' },
   { value: '93',  label: '93 oct', color: '#10b981' },
   { value: 'E30', label: 'E30',    color: '#3b82f6' },
-  { value: 'E40', label: 'E40',    color: '#8b5cf6' },
   { value: 'E50', label: 'E50',    color: '#ec4899' },
 ]
 
@@ -79,11 +122,57 @@ const FUTURE_FUELS = [
   { value: 'CAD94', label: 'CAD94',  note: 'Canadian 94 oct — source files detected' },
 ]
 
+// ─── N20 MAP Package Fuels ────────────────────────────────────────────────────
+// N20 MAP packages use different fuel sets than Standard OTS.
+//   Stock Turbo N20 MAP: 91, 93, E50 (no E30 — stock turbos at limit on E30)
+//   Hybrid Base N20 MAP: Pump (91/93 pump gas, label 'Pump'), E50
+const N20_MAP_STOCK_TURBO_FUELS = [
+  { value: '91',  label: '91 oct', color: '#f59e0b' },
+  { value: '93',  label: '93 oct', color: '#10b981' },
+  { value: 'E50', label: 'E50',    color: '#ec4899' },
+]
+
+const N20_MAP_HYBRID_BASE_FUELS = [
+  { value: 'pump', label: 'Pump',  color: '#64748b' },
+  { value: 'E50',  label: 'E50',   color: '#ec4899' },
+]
+
+// ─── Package Categories ───────────────────────────────────────────────────────
+// Distinguishes Standard OTS packages from N20 MAP sensor-scaled packages.
+// Stage selector is shown for standard-ots; auto-set for N20 MAP categories.
+type PackageCategory = 'standard-ots' | 'n20-map-stock-turbo' | 'n20-map-hybrid-base' | ''
+
+const PACKAGE_CATEGORIES = [
+  {
+    value: 'standard-ots'        as PackageCategory,
+    label: 'Standard OTS',
+    desc:  'Stage 1+ (91/93) · Stage 2 (91/93/E50) · Stage 3 (91/93/E50)',
+  },
+  {
+    value: 'n20-map-stock-turbo' as PackageCategory,
+    label: 'Stock Turbo · N20 MAP Scaled',
+    desc:  'Stage 3 · 91 / 93 / E50 · N20 MAP pressure sensor — not hybrid turbo',
+  },
+  {
+    value: 'n20-map-hybrid-base' as PackageCategory,
+    label: 'Hybrid Base · N20 MAP Scaled',
+    desc:  'Hybrid turbo base tune · Pump / E50 · N20 MAP sensor scaled',
+  },
+]
+
 // ─── Upload state ─────────────────────────────────────────────────────────────
 type UploadState =
   | { status: 'none' }
   | { status: 'reading'; fileName: string }
   | { status: 'done'; result: BinVerificationResult; buffer: ArrayBuffer }
+
+// ─── Patch review state machine ───────────────────────────────────────────────
+type PatchState =
+  | { phase: 'idle' }
+  | { phase: 'loading' }                                               // fetching package JSON
+  | { phase: 'running' }                                               // applying patches in-memory
+  | { phase: 'done'; result: PatchApplyResult; pkg: AppSafePatchPackage } // review result ready + package
+  | { phase: 'error'; message: string }                                // gate or engine error
 
 /* ── Style tokens ─────────────────────────────────────────────────── */
 const card: React.CSSProperties = {
@@ -118,41 +207,61 @@ const pillBase: React.CSSProperties = {
 
 /* ── Main component ─────────────────────────────────────────────────── */
 export default function TuneProgram() {
-  const [romFamily, setRomFamily]     = useState('')
-  const [stage, setStage]             = useState('')
-  const [fuel, setFuel]               = useState('')
-  const [uploadState, setUploadState] = useState<UploadState>({ status: 'none' })
-  const [dragOver, setDragOver]       = useState(false)
-  const [generated, setGenerated]     = useState(false)
-  const [hashCopied, setHashCopied]   = useState(false)
+  const [romFamily, setRomFamily]         = useState('')
+  const [packageCategory, setPackageCategory] = useState<PackageCategory>('')
+  const [stage, setStage]                 = useState('')
+  const [fuel, setFuel]                   = useState('')
+  const [uploadState, setUploadState]     = useState<UploadState>({ status: 'none' })
+  const [dragOver, setDragOver]           = useState(false)
+  const [patchState, setPatchState]       = useState<PatchState>({ phase: 'idle' })
+  const [hashCopied, setHashCopied]       = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // ── ROM family change → reset downstream ────────────────────────────
+  // ── ROM family change → reset all downstream ────────────────────────
   function handleRomChange(val: string) {
     setRomFamily(val)
-    const rom = ROM_FAMILIES.find((r) => r.id === val)
-    if (stage && rom && !rom.stages.includes(stage)) {
-      setStage('')
-      setFuel('')
-    }
-    setGenerated(false)
+    setPackageCategory('')
+    setStage('')
+    setFuel('')
+    setPatchState({ phase: 'idle' })
     // Re-verify with new ROM if file already loaded
     if (uploadState.status === 'done') {
       setUploadState({ status: 'none' })
     }
   }
 
-  // ── Stage change → reset fuel ────────────────────────────────────────
+  // ── Package category change → auto-set stage for N20 MAP ────────────
+  function handleCategoryChange(cat: PackageCategory) {
+    setPackageCategory(cat)
+    setFuel('')
+    setPatchState({ phase: 'idle' })
+    // N20 MAP categories have a single fixed stage — set it automatically
+    if (cat === 'n20-map-stock-turbo') {
+      setStage('stage3')
+    } else if (cat === 'n20-map-hybrid-base') {
+      setStage('hybrid-base')
+    } else {
+      setStage('')
+    }
+  }
+
+  // ── Stage change → reset fuel + review (standard OTS only) ──────────
   function handleStageChange(val: string) {
     setStage(val)
     const s = STAGES.find((st) => st.value === val)
     if (fuel && s && !s.fuels.includes(fuel)) setFuel('')
-    setGenerated(false)
+    setPatchState({ phase: 'idle' })
+  }
+
+  // ── Fuel change → reset review ───────────────────────────────────────
+  function handleFuelChange(val: string) {
+    setFuel(val)
+    setPatchState({ phase: 'idle' })
   }
 
   // ── File handler — reads ArrayBuffer then runs async verifyBin ───────
   const handleFile = useCallback(async (file: File) => {
-    setGenerated(false)
+    setPatchState({ phase: 'idle' })
     setUploadState({ status: 'reading', fileName: file.name })
 
     const reader = new FileReader()
@@ -233,36 +342,73 @@ export default function TuneProgram() {
 
   // ── Derived lists ────────────────────────────────────────────────────
   const selectedRom = ROM_FAMILIES.find((r) => r.id === romFamily)
-  const availableStages = romFamily ? STAGES.filter((s) => selectedRom?.stages.includes(s.value)) : []
+  // Standard OTS stages for the selected ROM (N20 MAP stages are auto-set by category)
+  const availableStages = (romFamily && packageCategory === 'standard-ots')
+    ? STAGES.filter((s) => selectedRom?.stages.includes(s.value))
+    : []
   const stageFuels = stage ? (STAGES.find((s) => s.value === stage)?.fuels ?? []) : []
-  const availableActiveFuels = stage ? ACTIVE_FUELS.filter((f) => stageFuels.includes(f.value)) : []
+  // Fuel list depends on package category
+  const availableActiveFuels =
+    packageCategory === 'standard-ots'     ? ACTIVE_FUELS.filter((f) => stageFuels.includes(f.value)) :
+    packageCategory === 'n20-map-stock-turbo' ? N20_MAP_STOCK_TURBO_FUELS :
+    packageCategory === 'n20-map-hybrid-base' ? N20_MAP_HYBRID_BASE_FUELS :
+    []
 
   const verResult = uploadState.status === 'done' ? uploadState.result : null
 
-  // ── isReady: all 4 selections + valid file ───────────────────────────
+  // ── isReady: ROM + category + stage + fuel + valid file ─────────────
   const isReady =
     romFamily !== '' &&
+    packageCategory !== '' &&
     stage !== '' &&
     fuel !== '' &&
     uploadState.status === 'done' &&
     uploadState.result.isSafeToContinue
 
-  // ── Generate BIN ─────────────────────────────────────────────────────
-  function handleGenerateBIN() {
+  // ── Run Patch Review ──────────────────────────────────────────────────
+  // REVIEW MODE ONLY: loads package, applies patches in-memory, returns SHA-256.
+  // The patched buffer is never returned. No download. No BIN output.
+  // Gated by: ROM = I8A0S, package exists + safeForApp, buffer = 2MB.
+  async function handleRunReview() {
     if (uploadState.status !== 'done' || !isReady) return
-    const buffer = uploadState.buffer
 
-    const blob = new Blob([buffer], { type: 'application/octet-stream' })
-    const url = URL.createObjectURL(blob)
-    const stageLabel = STAGES.find((s) => s.value === stage)?.label.replace(/\s+/g, '-') ?? stage
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `PLACEHOLDER_NOT_FLASHABLE_synergy-N54-${romFamily}-${stageLabel}-${fuel}.bin`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-    setGenerated(true)
+    const manifestEntry = getPackageByFilter({
+      romId:       romFamily,
+      stage:       stageToManifestId(stage),
+      fuel:        fuelToManifestId(fuel),
+      packageType: packageCategory === 'standard-ots' ? 'standard-ots' : 'n20-map',
+    })
+
+    // Pre-apply gate checks
+    const preGate = runPreReviewGates(romFamily, manifestEntry, uploadState.buffer)
+    if (!preGate.pass) {
+      setPatchState({ phase: 'error', message: preGate.reason })
+      return
+    }
+
+    // manifestEntry is confirmed non-null by gatePackageExists
+    const entry = manifestEntry!
+
+    setPatchState({ phase: 'loading' })
+    try {
+      const pkg = await loadPackage(entry.packageId, romFamily)
+      setPatchState({ phase: 'running' })
+      const result = await applyPatches(uploadState.buffer, pkg)
+
+      // Post-apply safety gate — confirm safety fields on result
+      const postGate = runPostReviewGates(result)
+      if (!postGate.pass) {
+        setPatchState({ phase: 'error', message: postGate.reason })
+        return
+      }
+
+      setPatchState({ phase: 'done', result, pkg })
+    } catch (err) {
+      setPatchState({
+        phase: 'error',
+        message: err instanceof Error ? err.message : String(err),
+      })
+    }
   }
 
   /* ── Render ─────────────────────────────────────────────────────── */
@@ -291,15 +437,18 @@ export default function TuneProgram() {
         <div style={{ marginBottom: '2rem' }}>
           <div style={{ display: 'inline-block', background: '#1a1a2e', border: '1px solid #2563eb44', borderRadius: '2rem', padding: '0.25rem 0.9rem', marginBottom: '1rem' }}>
             <span style={{ fontSize: '0.78rem', color: '#6699ff', fontWeight: 500 }}>
-              Synergy BMW Tuning — Tune Program (v1 Beta)
+              Synergy BMW Tuning — Tune Program (v3 Review Mode)
             </span>
           </div>
           <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '0.75rem', lineHeight: 1.1 }}>
             N54 BIN Generator
           </h1>
           <p style={{ color: '#888', lineHeight: 1.65, maxWidth: '600px', marginBottom: '0.75rem' }}>
-            Select your ROM family, stage, and fuel — then upload and verify your stock BIN.
-            The app checks file structure only. It does not yet confirm stock calibration bytes or apply tune patches.
+            Select your ROM, package category, and fuel — then upload your stock BIN.
+            For <strong style={{ color: '#aaa' }}>I8A0S</strong> and{' '}
+            <strong style={{ color: '#aaa' }}>INA0S</strong> (Standard OTS + N20 MAP), the app runs
+            a full patch review in-memory: verifies stock SHA-256, applies all calibration regions,
+            and returns a review result. No BIN is downloaded — owner-review mode only.
           </p>
         </div>
 
@@ -351,12 +500,19 @@ export default function TuneProgram() {
                     {active && <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#fff' }} />}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.15rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.15rem', flexWrap: 'wrap' }}>
                       <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: active ? '#93c5fd' : '#ccc', fontFamily: 'monospace' }}>
                         {rom.label}
                       </p>
                       <span style={{ fontSize: '0.68rem', fontWeight: 600, padding: '0.1rem 0.45rem', borderRadius: '0.3rem', background: `${rom.badgeColor}22`, border: `1px solid ${rom.badgeColor}55`, color: rom.badgeColor, fontFamily: 'system-ui, sans-serif' }}>
                         {rom.badge}
+                      </span>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '0.1rem 0.45rem', borderRadius: '0.3rem',
+                        background: rom.reviewStatus === 'ready' ? '#052e16' : rom.reviewStatus === 'needs-audit' ? '#1a1200' : '#1a1a1a',
+                        border: `1px solid ${rom.reviewStatus === 'ready' ? '#16a34a55' : rom.reviewStatus === 'needs-audit' ? '#854d0e55' : '#333'}`,
+                        color: rom.reviewStatus === 'ready' ? '#4ade80' : rom.reviewStatus === 'needs-audit' ? '#d97706' : '#555',
+                        fontFamily: 'system-ui, sans-serif' }}>
+                        {rom.reviewStatusLabel}
                       </span>
                     </div>
                     <p style={{ margin: 0, fontSize: '0.78rem', color: '#555' }}>{rom.desc}</p>
@@ -371,63 +527,128 @@ export default function TuneProgram() {
         </section>
 
         {/* ────────────────────────────────────────────────────
-            Step 2 — Stage
+            Step 2 — Package Category
         ──────────────────────────────────────────────────── */}
         <section style={{ marginBottom: '1.75rem', opacity: romFamily ? 1 : 0.35 }}>
-          <p style={sectionTitle}>Step 2 — Select Stage</p>
-          <div style={{ ...card, display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
-            {romFamily ? (
-              availableStages.map((s) => {
-                const active = stage === s.value
-                const isHybrid = s.value === 'hybrid-base'
+          <p style={sectionTitle}>Step 2 — Select Package Category</p>
+          <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {romFamily ? (() => {
+              const rom = ROM_FAMILIES.find(r => r.id === romFamily)
+              const availCats = rom?.availableCategories ?? []
+              if (availCats.length === 0) {
                 return (
-                  <button key={s.value} onClick={() => handleStageChange(s.value)}
-                    style={{ ...pillBase, background: active ? (isHybrid ? '#3b1a6e' : '#1d3a6e') : '#1a1a1a', borderColor: active ? (isHybrid ? '#7c3aed' : '#2563eb') : '#222', color: active ? (isHybrid ? '#c4b5fd' : '#fff') : '#bbb' }}>
-                    {s.label}
-                  </button>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', fontStyle: 'italic' }}>
+                    {rom?.reviewStatus === 'needs-audit'
+                      ? `${romFamily} packages are still being audited — not yet available for owner-review.`
+                      : `${romFamily} packages have not been built yet — check back for future updates.`}
+                  </p>
                 )
-              })
-            ) : (
+              }
+              return PACKAGE_CATEGORIES
+                .filter(cat => availCats.includes(cat.value))
+                .map(cat => {
+                  const active = packageCategory === cat.value
+                  const isN20 = cat.value !== 'standard-ots'
+                  return (
+                    <button key={cat.value} onClick={() => handleCategoryChange(cat.value)}
+                      style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', padding: '0.8rem 0.9rem', background: active ? (isN20 ? '#0f1a2e' : '#0d1f3a') : '#0d0d0d', border: `1px solid ${active ? (isN20 ? '#7c3aed' : '#2563eb') : '#1e1e1e'}`, borderRadius: '0.55rem', cursor: 'pointer', textAlign: 'left', width: '100%' }}>
+                      <div style={{ width: '16px', height: '16px', borderRadius: '50%', border: `2px solid ${active ? (isN20 ? '#7c3aed' : '#2563eb') : '#333'}`, background: active ? (isN20 ? '#7c3aed' : '#2563eb') : 'transparent', flexShrink: 0, marginTop: '0.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {active && <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#fff' }} />}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <p style={{ margin: '0 0 0.1rem', fontWeight: 700, fontSize: '0.92rem', color: active ? (isN20 ? '#c4b5fd' : '#93c5fd') : '#ccc' }}>
+                          {cat.label}
+                        </p>
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#555' }}>{cat.desc}</p>
+                      </div>
+                    </button>
+                  )
+                })
+            })() : (
               <p style={{ margin: 0, fontSize: '0.82rem', color: '#444' }}>Select a ROM family first.</p>
-            )}
-            {romFamily === 'IKM0S' && (
-              <p style={{ width: '100%', margin: '0.35rem 0 0', fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
-                IKM0S: Stage 3 and Hybrid Base not yet available — no source files confirmed for those stages.
-              </p>
             )}
           </div>
         </section>
 
         {/* ────────────────────────────────────────────────────
-            Step 3 — Fuel
+            Step 3 — Stage
         ──────────────────────────────────────────────────── */}
-        <section style={{ marginBottom: '1.75rem', opacity: stage ? 1 : 0.35 }}>
-          <p style={sectionTitle}>Step 3 — Select Fuel</p>
+        <section style={{ marginBottom: '1.75rem', opacity: packageCategory ? 1 : 0.35 }}>
+          <p style={sectionTitle}>Step 3 — Stage</p>
           <div style={{ ...card, display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
-            {stage ? (
+            {packageCategory === 'standard-ots' ? (
+              availableStages.length > 0 ? (
+                availableStages.map((s) => {
+                  const active = stage === s.value
+                  return (
+                    <button key={s.value} onClick={() => handleStageChange(s.value)}
+                      style={{ ...pillBase, background: active ? '#1d3a6e' : '#1a1a1a', borderColor: active ? '#2563eb' : '#222', color: active ? '#fff' : '#bbb' }}>
+                      {s.label}
+                    </button>
+                  )
+                })
+              ) : (
+                <p style={{ margin: 0, fontSize: '0.82rem', color: '#444' }}>
+                  {'Select a ROM family and package category first.'}
+                </p>
+              )
+            ) : packageCategory === 'n20-map-stock-turbo' ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span style={{ ...pillBase, background: '#1d3a6e', borderColor: '#2563eb', color: '#fff', cursor: 'default' }}>
+                  Stage 3
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#555' }}>Fixed — Stage 3 N20 MAP scaled (stock turbo)</span>
+              </div>
+            ) : packageCategory === 'n20-map-hybrid-base' ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span style={{ ...pillBase, background: '#3b1a6e', borderColor: '#7c3aed', color: '#c4b5fd', cursor: 'default' }}>
+                  Hybrid Base
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#555' }}>Fixed — Hybrid turbo base N20 MAP scaled</span>
+              </div>
+            ) : (
+              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444' }}>Select a package category first.</p>
+            )}
+          </div>
+        </section>
+
+        {/* ────────────────────────────────────────────────────
+            Step 4 — Fuel
+        ──────────────────────────────────────────────────── */}
+        <section style={{ marginBottom: '1.75rem', opacity: (packageCategory === 'standard-ots' ? !!stage : !!packageCategory) ? 1 : 0.35 }}>
+          <p style={sectionTitle}>Step 4 — Select Fuel</p>
+          <div style={{ ...card, display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+            {availableActiveFuels.length > 0 ? (
               <>
                 {availableActiveFuels.map((f) => {
                   const active = fuel === f.value
                   return (
-                    <button key={f.value} onClick={() => setFuel(f.value)}
+                    <button key={f.value} onClick={() => handleFuelChange(f.value)}
                       style={{ ...pillBase, background: active ? `${f.color}22` : '#1a1a1a', borderColor: active ? f.color : '#222', color: active ? f.color : '#bbb' }}>
                       {f.label}
                     </button>
                   )
                 })}
-                <div style={{ width: '100%', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #1e1e1e', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#444', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', flexShrink: 0 }}>Coming soon:</span>
-                  {FUTURE_FUELS.map((f) => (
-                    <button key={f.value} disabled title={f.note}
-                      style={{ ...pillBase, background: '#141414', borderColor: '#222', color: '#383838', cursor: 'not-allowed', fontSize: '0.82rem', padding: '0.35rem 0.8rem' }}>
-                      {f.label}
-                    </button>
-                  ))}
-                  <span style={{ fontSize: '0.72rem', color: '#3a3a3a', fontStyle: 'italic' }}>Source files detected — future update</span>
-                </div>
+                {/* Coming-soon fuels: standard OTS only */}
+                {packageCategory === 'standard-ots' && (
+                  <div style={{ width: '100%', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #1e1e1e', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#444', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', flexShrink: 0 }}>Coming soon:</span>
+                    {FUTURE_FUELS.map((f) => (
+                      <button key={f.value} disabled title={f.note}
+                        style={{ ...pillBase, background: '#141414', borderColor: '#222', color: '#383838', cursor: 'not-allowed', fontSize: '0.82rem', padding: '0.35rem 0.8rem' }}>
+                        {f.label}
+                      </button>
+                    ))}
+                    <span style={{ fontSize: '0.72rem', color: '#3a3a3a', fontStyle: 'italic' }}>Source files detected — future update</span>
+                  </div>
+                )}
               </>
             ) : (
-              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444' }}>Select a stage first.</p>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444' }}>
+                {!packageCategory ? 'Select a package category first.'
+                  : packageCategory === 'standard-ots' && !stage ? 'Select a stage first.'
+                  : 'No packages available for this selection.'}
+              </p>
             )}
           </div>
         </section>
@@ -437,7 +658,7 @@ export default function TuneProgram() {
         ──────────────────────────────────────────────────── */}
         <section style={{ marginBottom: '1.75rem', opacity: fuel ? 1 : 0.35 }}>
           <p style={sectionTitle}>
-            Step 4 — Upload &amp; Verify{romFamily ? ` ${romFamily}` : ' N54'} Stock BIN
+            Step 5 — Upload &amp; Verify{romFamily ? ` ${romFamily}` : ' N54'} Stock BIN
           </p>
 
           {/* Drop zone */}
@@ -664,104 +885,226 @@ export default function TuneProgram() {
           )}
         </section>
 
-        {/* ── Placeholder safety warning ─────────────────────── */}
-        <div style={{ background: '#1a0000', border: '2px solid #dc2626', borderRadius: '0.75rem', padding: '1rem 1.25rem', marginBottom: '1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-          <span style={{ fontSize: '1.3rem', lineHeight: 1, marginTop: '0.05rem', flexShrink: 0 }}>🚫</span>
-          <div>
-            <p style={{ margin: '0 0 0.3rem', fontWeight: 800, fontSize: '0.95rem', color: '#f87171', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              v1 Placeholder — Do Not Flash
-            </p>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: '#fca5a5', lineHeight: 1.6 }}>
-              No real tune patch has been applied yet. The file generated below is your{' '}
-              <strong style={{ color: '#f87171' }}>uploaded stock BIN re-downloaded as-is</strong> — no calibration changes have been made.{' '}
-              <strong style={{ color: '#fef2f2' }}>Do not flash this file. It is labeled PLACEHOLDER_NOT_FLASHABLE and is for verification purposes only.</strong>{' '}
-              Real patch application arrives in v3.
-            </p>
-          </div>
-        </div>
-
-        {/* ── Generate BIN button ────────────────────────────── */}
+        {/* ═══════════════════════════════════════════════════
+            Step 5 — Patch Review (Review Mode)
+            REVIEW ONLY — no BIN download, no export,
+            no MHD encryption. Patched buffer never returned.
+        ════════════════════════════════════════════════════ */}
         <section style={{ marginBottom: '2rem' }}>
-          <button disabled={!isReady} onClick={handleGenerateBIN}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: generated ? '#3b0a0a' : isReady ? '#2563eb' : '#1a1a1a', color: generated ? '#fca5a5' : isReady ? '#fff' : '#555', fontWeight: 700, fontSize: '1rem', padding: '0.8rem 2rem', borderRadius: '0.5rem', border: `1px solid ${generated ? '#dc2626' : isReady ? '#2563eb' : '#2a2a2a'}`, cursor: isReady ? 'pointer' : 'not-allowed', transition: 'all 0.15s', width: '100%', justifyContent: 'center' }}>
-            <span>{generated ? '⚠️' : isReady ? '⚙️' : '🔒'}</span>
-            {generated ? 'PLACEHOLDER Downloaded — Do NOT Flash' : 'Generate BIN'}
-            {isReady && !generated && (
-              <span style={{ opacity: 0.75, fontSize: '0.85rem' }}>
-                — {romFamily} / {STAGES.find((s) => s.value === stage)?.label} / {fuel}
+
+          {/* ── Run Review button ──────────────────────────── */}
+          <button
+            disabled={
+              !isReady ||
+              patchState.phase === 'loading' ||
+              patchState.phase === 'running'
+            }
+            onClick={handleRunReview}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              background:
+                patchState.phase === 'done'    ? '#0d2a1a'
+                : patchState.phase === 'error'   ? '#1a0d00'
+                : patchState.phase === 'loading' || patchState.phase === 'running'
+                                                 ? '#0d1a2e'
+                : isReady                        ? '#14532d'
+                : '#1a1a1a',
+              color:
+                patchState.phase === 'done'    ? '#4ade80'
+                : patchState.phase === 'error'   ? '#fbbf24'
+                : patchState.phase === 'loading' || patchState.phase === 'running'
+                                                 ? '#93c5fd'
+                : isReady                        ? '#86efac'
+                : '#555',
+              fontWeight: 700, fontSize: '1rem',
+              padding: '0.8rem 2rem',
+              borderRadius: '0.5rem',
+              border: `1px solid ${
+                patchState.phase === 'done'    ? '#16a34a'
+                : patchState.phase === 'error'   ? '#854d0e'
+                : patchState.phase === 'loading' || patchState.phase === 'running'
+                                                 ? '#1d4ed8'
+                : isReady                        ? '#16a34a33'
+                : '#2a2a2a'
+              }`,
+              cursor: isReady && patchState.phase !== 'loading' && patchState.phase !== 'running'
+                ? 'pointer' : 'not-allowed',
+              transition: 'all 0.15s',
+              width: '100%', justifyContent: 'center',
+            }}
+          >
+            <span>
+              {patchState.phase === 'loading' || patchState.phase === 'running' ? '⏳'
+                : patchState.phase === 'done'  ? '✅'
+                : patchState.phase === 'error' ? '⚠️'
+                : isReady                      ? '🔬'
+                : '🔒'}
+            </span>
+            {patchState.phase === 'loading' ? 'Loading patch package…'
+              : patchState.phase === 'running' ? 'Applying patches in-memory…'
+              : patchState.phase === 'done'    ? 'Review complete — see results below'
+              : patchState.phase === 'error'   ? 'Review failed — see error below'
+              : 'Run Patch Review'}
+            {isReady && patchState.phase === 'idle' && (
+              <span style={{ opacity: 0.65, fontSize: '0.82rem' }}>
+                — {romFamily} / {
+                  packageCategory === 'n20-map-stock-turbo' ? 'Stock Turbo N20 MAP' :
+                  packageCategory === 'n20-map-hybrid-base' ? 'Hybrid Base N20 MAP' :
+                  STAGES.find((s) => s.value === stage)?.label
+                } / {fuel === 'pump' ? 'Pump' : fuel}
               </span>
             )}
           </button>
 
+          {/* Not-ready hint */}
           {!isReady && (
             <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>
-              {!romFamily ? 'Select a ROM family to begin.'
-                : !stage ? 'Select a stage to continue.'
-                : !fuel ? 'Select a fuel type to continue.'
-                : uploadState.status === 'none' ? `Upload your ${romFamily} stock BIN to continue.`
+              {!romFamily          ? 'Select a ROM family to begin.'
+                : !packageCategory ? 'Select a package category to continue.'
+                : !stage           ? 'Select a stage to continue.'
+                : !fuel            ? 'Select a fuel to continue.'
+                : uploadState.status === 'none'    ? `Upload your ${romFamily} stock BIN to continue.`
                 : uploadState.status === 'reading' ? 'Verifying file…'
                 : 'Fix verification errors before continuing.'}
             </p>
           )}
+
+          {/* ── Loading / running indicator ─────────────────── */}
+          {(patchState.phase === 'loading' || patchState.phase === 'running') && (
+            <div style={{
+              marginTop: '1rem', padding: '1rem 1.25rem',
+              background: '#0d1525', border: '1px solid #1e3a8a44',
+              borderRadius: '0.65rem', display: 'flex', gap: '0.75rem', alignItems: 'center',
+            }}>
+              <span style={{ fontSize: '1.2rem' }}>⏳</span>
+              <div>
+                <p style={{ margin: '0 0 0.15rem', fontWeight: 700, fontSize: '0.85rem', color: '#93c5fd' }}>
+                  {patchState.phase === 'loading' ? 'Loading patch package…' : 'Applying patch regions in-memory…'}
+                </p>
+                <p style={{ margin: 0, fontSize: '0.78rem', color: '#4b6ea8' }}>
+                  {patchState.phase === 'loading'
+                    ? 'Fetching app-safe JSON package from /tune-program/patch-packages/'
+                    : 'Computing SHA-256, checking stock bytes, writing replacements — patched buffer will not be returned'}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* ── Error state ────────────────────────────────── */}
+          {patchState.phase === 'error' && (
+            <div style={{
+              marginTop: '1rem', padding: '1rem 1.25rem',
+              background: '#1a0f00', border: '1px solid #854d0e55',
+              borderRadius: '0.65rem',
+            }}>
+              <p style={{ margin: '0 0 0.4rem', fontWeight: 700, fontSize: '0.82rem', color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                ⚠ Review Blocked
+              </p>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#d97706', lineHeight: 1.6 }}>
+                {patchState.message}
+              </p>
+              <button
+                onClick={() => setPatchState({ phase: 'idle' })}
+                style={{ marginTop: '0.75rem', padding: '0.3rem 0.75rem', background: 'transparent', border: '1px solid #444', borderRadius: '0.35rem', color: '#666', cursor: 'pointer', fontSize: '0.78rem' }}
+              >
+                ↺ Dismiss
+              </button>
+            </div>
+          )}
+
+          {/* ── Review result + locked output section ──────── */}
+          {patchState.phase === 'done' && (
+            <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+              <PatchReviewPanel result={patchState.result} showRegionDetail={false} />
+
+              {/* ── Owner Review Download (only after clean review) ─── */}
+              {uploadState.status === 'done' && (
+                <OwnerReviewDownload
+                  result={patchState.result}
+                  stockBuffer={uploadState.buffer}
+                  pkg={patchState.pkg}
+                />
+              )}
+
+              {/* ── Locked output section ─────────────────── */}
+              <div style={{
+                background: '#0a0f1a',
+                border: '1px solid #1e3a8a44',
+                borderRadius: '0.75rem',
+                overflow: 'hidden',
+              }}>
+                <div style={{ padding: '0.85rem 1.1rem', background: '#0d1525', borderBottom: '1px solid #1e3a8a33', display: 'flex', gap: '0.65rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '1.1rem' }}>🔒</span>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0, fontWeight: 700, fontSize: '0.82rem', color: '#93c5fd' }}>
+                      DOWNLOAD / EXPORT DISABLED — REVIEW MODE ONLY
+                    </p>
+                  </div>
+                  <span style={{ fontSize: '0.68rem', fontFamily: 'monospace', color: '#1d4ed8', background: '#0a0f1a', border: '1px solid #1e3a8a', padding: '0.15rem 0.45rem', borderRadius: '0.3rem' }}>
+                    outputMode: STANDARD_BIN_REVIEW_ONLY
+                  </span>
+                </div>
+                <div style={{ padding: '1rem 1.1rem' }}>
+                  <p style={{ margin: '0 0 0.75rem', fontSize: '0.82rem', color: '#475569', lineHeight: 1.65 }}>
+                    This step only proves the selected patch package can apply cleanly to the verified stock BIN.
+                    Download and export are intentionally disabled in this review build.
+                    No patched BIN was returned — the apply engine discards the buffer immediately after hashing.
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                    {[
+                      'This is not a flashing tool. It does not connect to your car or DME.',
+                      'The patched BIN SHA-256 shown above is for owner review only — it is not a flashable file.',
+                      'Flashing requires MHD Flasher or N54 Quickflash (external). The app never produces a download.',
+                      'MHD-locked (.mhd) packages require owner approval and are produced separately, outside this app.',
+                      'Review-mode output is not customer-ready. Real delivery requires owner export + VIN locking.',
+                    ].map((w, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                        <span style={{ color: '#1e40af', fontSize: '0.7rem', marginTop: '0.2rem', flexShrink: 0 }}>⚠</span>
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#374151', lineHeight: 1.55 }}>{w}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #1e2a3a', display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+                    <div>
+                      <p style={{ margin: '0 0 0.1rem', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#374151', fontWeight: 600 }}>encryptionApproved</p>
+                      <p style={{ margin: 0, fontFamily: 'monospace', fontSize: '0.75rem', color: '#ef4444' }}>false</p>
+                    </div>
+                    <div>
+                      <p style={{ margin: '0 0 0.1rem', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#374151', fontWeight: 600 }}>mhdEncryptionAllowed</p>
+                      <p style={{ margin: 0, fontFamily: 'monospace', fontSize: '0.75rem', color: '#ef4444' }}>false</p>
+                    </div>
+                    <div>
+                      <p style={{ margin: '0 0 0.1rem', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#374151', fontWeight: 600 }}>ownerReviewRequired</p>
+                      <p style={{ margin: 0, fontFamily: 'monospace', fontSize: '0.75rem', color: '#f59e0b' }}>true</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Reset for another run ─────────────────── */}
+              <button
+                onClick={() => setPatchState({ phase: 'idle' })}
+                style={{ padding: '0.45rem 1rem', background: 'transparent', border: '1px solid #1e2a3a', borderRadius: '0.4rem', color: '#374151', cursor: 'pointer', fontSize: '0.8rem', alignSelf: 'flex-start' }}
+              >
+                ↺ Run again with different BIN or package
+              </button>
+            </div>
+          )}
         </section>
 
-        {/* ── Post-generate notice (after placeholder download) ── */}
-        {generated && (
-          <div style={{ borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '2rem', border: '1px solid #dc262655' }}>
-            {/* DO NOT FLASH banner */}
-            <div style={{ background: '#2d0000', padding: '0.9rem 1.25rem', borderBottom: '1px solid #dc262633', display: 'flex', gap: '0.65rem', alignItems: 'flex-start' }}>
-              <span style={{ fontSize: '1.2rem', lineHeight: 1, marginTop: '0.05rem', flexShrink: 0 }}>🚫</span>
-              <div>
-                <p style={{ margin: '0 0 0.25rem', fontWeight: 800, fontSize: '0.9rem', color: '#f87171', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  DO NOT FLASH THIS FILE — v1 placeholder only
-                </p>
-                <p style={{ margin: 0, fontSize: '0.82rem', color: '#fca5a5', lineHeight: 1.55 }}>
-                  The downloaded file (<code style={{ fontFamily: 'monospace', color: '#f87171', fontSize: '0.78rem' }}>PLACEHOLDER_NOT_FLASHABLE_…</code>) is your own stock BIN
-                  returned as-is. No calibration changes were applied. Flashing it would only restore your stock tune.{' '}
-                  <strong>Wait for the real calibration package from Synergy before flashing anything.</strong>
-                </p>
-              </div>
-            </div>
-            {/* Flasher info — for reference only */}
-            <div style={{ background: '#111', padding: '1rem 1.25rem' }}>
-              <p style={{ margin: '0 0 0.65rem', fontWeight: 700, fontSize: '0.88rem', color: '#888' }}>
-                🔌 External flasher reference (for when you receive the real file)
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                {[
-                  ['MHD Flasher', 'Android / iOS — flash via OBD-II over USB', 'https://mhd-flasher.com'],
-                  ['N54 Quickflash', 'Standalone flashing tool for MSD80/MSD81 DME', ''],
-                ].map(([name, desc, link]) => (
-                  <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', background: '#0d0d0d', borderRadius: '0.5rem', border: '1px solid #1a1a1a' }}>
-                    <span style={{ fontSize: '0.9rem' }}>🔧</span>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ margin: '0 0 0.1rem', fontWeight: 600, fontSize: '0.85rem', color: '#888' }}>{name}</p>
-                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#444' }}>{desc}</p>
-                    </div>
-                    {link && (
-                      <a href={link} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: '0.78rem', color: '#555', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                        Visit →
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── v1 Scope & Roadmap ──────────────────────────────── */}
+        {/* ── Scope & Roadmap ──────────────────────────────────── */}
         <div style={{ background: '#0d1117', border: '1px solid #21262d', borderRadius: '0.75rem', padding: '1.5rem' }}>
           <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#444', fontWeight: 600, marginBottom: '1rem' }}>
-            v1 Scope & Roadmap
+            Scope & Roadmap
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             {[
               { icon: '✅', title: 'v1 — ROM Selection + BIN Upload & Verification', body: 'Select ROM family (I8A0S/IJE0S/IKM0S/INA0S), stage, and fuel. Upload stock BIN — app checks extension, file size (2,097,152 bytes / 0x200000), reads ArrayBuffer, computes SHA-256, and compares against known stock hashes. "Known stock BIN" confirmed for all four ROM originals. Detects ROM mismatches (e.g. uploading I8A0S BIN while IJE0S is selected). Output is a placeholder — no calibration patching applied in v1.' },
               { icon: '🔜', title: 'v2 — XDF Byte Fingerprinting', body: 'Read XDF-mapped byte offsets from uploaded BIN and compare against expected ROM identifier patterns. Confirms the ROM family from actual calibration bytes — not just file size and known-hash match. Enables fingerprint of BINs not in the known-stock database.' },
-              { icon: '🔜', title: 'v3 — Patch-Package Application', body: 'Apply Synergy calibration offset packages (JSON patches built from private XDF/BIN diff analysis) client-side. Private source files stay in _private_tuning_sources/ — never public or committed.' },
-              { icon: '🔜', title: 'v4 — Checksum Recalculation', body: 'Recalculate DME checksum on patched BIN before export. A mismatch blocks delivery — no partial or corrupt BIN reaches the customer.' },
+              { icon: '✅', title: 'v3 — Patch-Package Review Mode (active)', body: 'App-safe patch packages (JSON, stripped of private paths) are fetched client-side. Stock SHA-256 is verified, regions applied in-memory, patched SHA-256 returned for owner review. The patched buffer is never returned — discarded after hashing. I8A0S Standard OTS: Stage 1/1+/2 × 91/93, Stage 3 × E30/E50 (8 packages, 141–144 regions). I8A0S + INA0S N20 MAP: Stock Turbo Stage 3 × 91/93/E50, Hybrid Base × Pump/E50 (10 packages, 111–138 regions). Review mode only — no download, no encryption.' },
+              { icon: '✅', title: 'v3.1 — Owner Review Download (active)', body: 'After a clean patch review (0 mismatches), owner can download the review BIN for TunerPro inspection and a JSON sidecar manifest. Download is browser-only — no server, no upload. Buffer is created inside the click handler and discarded immediately after. Labelled TUNERPRO_REVIEW_ONLY. Not customer-ready. MHD encryption and VIN locking require a separate step.' },
+              { icon: '🔜', title: 'v4 — Owner Export + VIN Locking', body: 'Owner-only local export command (scripts/private/export-review-bin.mjs) creates a review BIN outside the public app (inside _private_tuning_sources/ only), after manual approval. MHD encryption pipeline stages workspace for drag-and-drop with TuningMapBuilder — produces VIN-locked .mhd package. Output classification: LOCKED_MHD_PACKAGE.' },
             ].map((item) => (
               <div key={item.title} style={{ display: 'flex', gap: '0.85rem', padding: '0.9rem 1rem', background: '#111', border: '1px solid #1e1e1e', borderRadius: '0.6rem' }}>
                 <span style={{ fontSize: '1.1rem', lineHeight: 1, marginTop: '0.1rem' }}>{item.icon}</span>
@@ -775,7 +1118,11 @@ export default function TuneProgram() {
           <p style={{ marginTop: '1rem', fontSize: '0.78rem', color: '#333', fontStyle: 'italic' }}>
             Private tune source files (BIN/XDF) stay in{' '}
             <code style={{ fontFamily: 'monospace', color: '#444' }}>_private_tuning_sources/</code> — gitignored, never served.
-            95 oct, ACN91, and CAD94 source files detected — coming in future update.
+            Patch packages are app-safe JSON (private paths stripped). 95 oct, ACN91, and CAD94 source files detected — coming in future update.
+            <strong style={{ color: '#444' }}> I8A0S:</strong> Standard OTS + N20 MAP packages READY.{' '}
+            <strong style={{ color: '#444' }}>INA0S:</strong> N20 MAP packages READY (no Standard OTS).{' '}
+            <strong style={{ color: '#444' }}>IJE0S:</strong> needs audit (150 unmatched offsets per package).{' '}
+            <strong style={{ color: '#444' }}>IKM0S:</strong> not built yet.
           </p>
         </div>
 

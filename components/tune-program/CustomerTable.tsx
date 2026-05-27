@@ -13,11 +13,13 @@ interface CustomerTableProps {
 
 const ALL_STATUSES: RequestStatus[] = [
   'New',
+  'Waiting on BIN',
   'Waiting on Logs',
   'In Review',
-  'Approved for Export',
+  'Approved for Owner Review',
   'Exported',
   'Complete',
+  'Blocked',
 ]
 
 export function CustomerTable({

@@ -5,15 +5,15 @@ export const turboTypes: TurboType[] = [
     id: 'stock',
     label: 'Stock Turbo',
     description:
-      'OEM N54 twin turbos (IHI RHF4 or RHF5). Best for Stage 1 through Stage 2+ on full bolt-on builds. Well-documented power ceiling around 450–480whp on E fuels.',
-    stageCompatibility: ['stage1', 'stage1plus', 'stage2', 'stage2plus'],
+      'OEM N54 twin turbos (IHI RHF4 or RHF5). Supports Stage 1 through Stage 3 on full bolt-on builds. Well-documented power ceiling around 450–480whp on E fuels at Stage 3.',
+    stageCompatibility: ['stage1', 'stage1plus', 'stage2', 'stage3'],
   },
   {
     id: 'upgraded-stock-frame',
     label: 'Upgraded Stock-Frame',
     description:
-      'Larger compressor/turbine wheels in the stock frame housing. Examples: Precision PT4036, Vargas Stage 2+, Garrett G25 drop-in. Required for Stage 2+ and Stage 3 targets.',
-    stageCompatibility: ['stage2', 'stage2plus', 'stage3'],
+      'Larger compressor/turbine wheels in the stock frame housing. Examples: Precision PT4036, Vargas drop-in, Garrett G25 drop-in. Used as base calibration at Stage 3.',
+    stageCompatibility: ['stage2', 'stage3'],
   },
   {
     id: 'hybrid',

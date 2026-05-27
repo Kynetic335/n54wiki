@@ -13,7 +13,6 @@ const stageColors: Record<string, string> = {
   stage1: '#10b981',
   stage1plus: '#3b82f6',
   stage2: '#f59e0b',
-  stage2plus: '#f97316',
   stage3: '#ef4444',
   'hybrid-base': '#8b5cf6',
 }
@@ -36,7 +35,6 @@ const stageLabels: Record<string, string> = {
   stage1: 'Stage 1',
   stage1plus: 'Stage 1+',
   stage2: 'Stage 2',
-  stage2plus: 'Stage 2+',
   stage3: 'Stage 3',
   'hybrid-base': 'Hybrid Base',
 }

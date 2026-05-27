@@ -61,11 +61,13 @@ export function AdminDashboard({ adminPin }: AdminDashboardProps) {
             [
               'All',
               'New',
+              'Waiting on BIN',
               'Waiting on Logs',
               'In Review',
-              'Approved for Export',
+              'Approved for Owner Review',
               'Exported',
               'Complete',
+              'Blocked',
             ] as const
           ).map((s) => (
             <button
@@ -198,7 +200,7 @@ export function AdminDashboard({ adminPin }: AdminDashboardProps) {
           </div>
 
           {/* Export section */}
-          {selected.status === 'Approved for Export' && selectedFile ? (
+          {selected.status === 'Approved for Owner Review' && selectedFile ? (
             <div>
               <p
                 style={{
@@ -239,7 +241,7 @@ export function AdminDashboard({ adminPin }: AdminDashboardProps) {
                 }}
               />
             </div>
-          ) : selected.status !== 'Approved for Export' ? (
+          ) : selected.status !== 'Approved for Owner Review' ? (
             <div
               style={{
                 padding: '0.75rem',
@@ -250,7 +252,7 @@ export function AdminDashboard({ adminPin }: AdminDashboardProps) {
                 color: '#555',
               }}
             >
-              Status must be <strong style={{ color: '#4ade80' }}>Approved for Export</strong> before the export button is available.
+              Status must be <strong style={{ color: '#4ade80' }}>Approved for Owner Review</strong> before the export button is available.
             </div>
           ) : !selectedFile ? (
             <div

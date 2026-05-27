@@ -13,7 +13,7 @@ const fuels: Record<string, string> = {
 }
 const stages: Record<string, string> = {
   stage1: 'Stage 1', stage1plus: 'Stage 1+', stage2: 'Stage 2',
-  stage2plus: 'Stage 2+', stage3: 'Stage 3', 'hybrid-base': 'Hybrid Base',
+  stage3: 'Stage 3', 'hybrid-base': 'Hybrid Base',
 }
 const turbos: Record<string, string> = {
   stock: 'Stock Turbo',

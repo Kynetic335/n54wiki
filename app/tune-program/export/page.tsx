@@ -99,7 +99,7 @@ function ExportPageInner() {
         This app does not flash the car.
       </div>
 
-      {request.status !== 'Approved for Export' && (
+      {request.status !== 'Approved for Owner Review' && (
         <div
           style={{
             background: '#1a1a1a',
@@ -112,7 +112,7 @@ function ExportPageInner() {
           }}
         >
           Status is <strong style={{ color: '#888' }}>{request.status}</strong>.
-          Change status to <strong style={{ color: '#4ade80' }}>Approved for Export</strong> in the Admin dashboard before exporting.
+          Change status to <strong style={{ color: '#4ade80' }}>Approved for Owner Review</strong> in the Admin dashboard before exporting.
         </div>
       )}
 
@@ -129,7 +129,7 @@ function ExportPageInner() {
             />
           )}
 
-          {request.status === 'Approved for Export' && (
+          {request.status === 'Approved for Owner Review' && (
             <LockedExportButton
               tuneFile={tuneFile}
               request={request}
