@@ -35,7 +35,7 @@ export default function ContactForm({ initialFrom }: { initialFrom?: string }) {
     }
   }, [initialFrom])
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const serviceLabel = SERVICE_OPTIONS.find((o) => o.value === service)?.label ?? 'Inquiry'
     const subject = `N54 Wiki: ${serviceLabel}${vehicle ? ` — ${vehicle}` : ''}`
@@ -49,8 +49,29 @@ export default function ContactForm({ initialFrom }: { initialFrom?: string }) {
     ]
       .filter(Boolean)
       .join('\n')
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSubmitted(true)
+    const mailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          vehicle,
+          message: body,
+          source: service || 'contact-form',
+        }),
+      })
+
+      if (!response.ok) {
+        window.location.href = mailtoHref
+      }
+    } catch {
+      window.location.href = mailtoHref
+    } finally {
+      setSubmitted(true)
+    }
   }
 
   return (
@@ -119,10 +140,10 @@ export default function ContactForm({ initialFrom }: { initialFrom?: string }) {
             }}
           >
             <p style={{ fontWeight: 700, fontSize: '1.1rem', color: '#86efac', margin: '0 0 0.5rem' }}>
-              Your email client should have opened.
+              Your message was submitted.
             </p>
             <p style={{ color: '#999', margin: '0 0 1.5rem' }}>
-              If it did not, email{' '}
+              If you do not hear back, email{' '}
               <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#6699ff' }}>
                 {CONTACT_EMAIL}
               </a>{' '}
@@ -218,7 +239,7 @@ export default function ContactForm({ initialFrom }: { initialFrom?: string }) {
             </button>
 
             <p style={{ fontSize: '0.8rem', color: '#555', margin: 0 }}>
-              This opens your email client pre-filled. Or email{' '}
+              If the form cannot submit, it opens your email client pre-filled. Or email{' '}
               <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#6699ff' }}>
                 {CONTACT_EMAIL}
               </a>{' '}

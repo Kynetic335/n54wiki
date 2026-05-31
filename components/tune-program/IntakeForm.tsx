@@ -150,6 +150,29 @@ export function IntakeForm({ prefill }: IntakeFormProps) {
       existing.push(request)
       localStorage.setItem('synergy-tune-requests', JSON.stringify(existing))
     }
+
+    void fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        vehicle: [form.vehicleYear, form.vehicleModel].filter(Boolean).join(' '),
+        rom: form.romVersion,
+        message: [
+          form.currentTune ? `Current tune: ${form.currentTune}` : null,
+          form.turboSetup ? `Turbo setup: ${form.turboSetup}` : null,
+          form.fuelSystem ? `Fuel system: ${form.fuelSystem}` : null,
+          form.selectedFuel ? `Fuel: ${form.selectedFuel}` : null,
+          form.selectedStage ? `Stage: ${form.selectedStage}` : null,
+          form.selectedTurboType ? `Turbo type: ${form.selectedTurboType}` : null,
+          form.currentMods ? `Current mods: ${form.currentMods}` : null,
+          form.goals ? `Goals: ${form.goals}` : null,
+          form.knownIssues ? `Known issues: ${form.knownIssues}` : null,
+        ].filter(Boolean).join('\n'),
+        source: 'tune-program-intake',
+      }),
+    }).catch(() => undefined)
     setSubmitted(true)
   }
 
