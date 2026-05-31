@@ -38,3 +38,9 @@ build-packages-result.json
 # Keep private unless intentionally public
 data/tune-program/patch-packages/
 public/tune-program/
+
+# Local-only tune program artifacts
+N54_TUNE_PROGRAM_PROMPT.txt
+OWNER_REVIEW_EXPORT.md
+build-packages.mjs
+docs/N54_TUNE_PROGRAM_STATUS_AND_ROADMAP.md
