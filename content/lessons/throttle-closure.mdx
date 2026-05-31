@@ -1,0 +1,102 @@
+---
+title: Throttle Closure and Torque Intervention — N54 MSD80/MSD81
+description: Why the N54 MSD80/81 closes the throttle during WOT, how to identify the trigger in logs, and the correct order to resolve each cause before touching any ceiling or limiter.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Throttle Closure and Torque Intervention
+
+On the N54, the throttle plate does more than respond to the accelerator pedal — it is also a **torque reduction actuator**. When the ECU determines that actual or predicted output is outside the safe calibrated envelope, it reduces throttle angle to cut torque. A throttle closure at WOT is never a random event; it has a specific cause visible in the log.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/safety-protections) · [Load / Torque Lesson](/wiki/lessons/load-torque-request)
+
+---
+
+## What This System Does
+
+### Throttle as a protection output
+
+The MSD80/81 uses throttle position as the final enforcement mechanism for torque, load, and boost protection. When any of these conditions is met, the ECU reduces throttle angle even with the pedal at 100%:
+
+- **Boost ceiling exceeded**: actual pressure above the calibrated overboost limit
+- **Load limiter hit**: requested load above the maximum allowed for current conditions
+- **Torque monitor mismatch**: actual output diverges from what the model predicts
+- **Fuel pressure protection**: fuel delivery cannot support the commanded load
+
+### Torque monitor
+
+The torque monitor compares predicted engine output to actual output signals. If the gap is too large — for example, because actual boost is much higher than the load model accounts for — the monitor closes the throttle as a plausibility protection. This is the most commonly misdiagnosed closure type.
+
+---
+
+## Why It Matters
+
+Every throttle closure has a cause. Raising the nearest ceiling until the closure stops removes the protection without fixing the underlying mismatch. The correct response is to identify which protection triggered, confirm whether it was responding to a real condition, and fix that condition.
+
+---
+
+## What Logs Prove
+
+- `Throttle angle (%)` vs `Pedal position (%)` — any divergence confirms intervention
+- `Load requested` vs `Load actual` — if actual is clipped, a limiter is active
+- `Boost actual` vs `Boost setpoint` — overshoot above setpoint = ceiling trigger candidate
+- `Torque intervention` channel — confirms monitor activation (where available in MHD)
+- `HPFP pressure actual` — pressure drop can trigger fuel protection closure
+
+### Closure trigger identification
+
+| Log pattern | Trigger |
+|-------------|---------|
+| Boost actual above setpoint when throttle closes | Boost ceiling or overboost protection |
+| Load actual clipped below requested | Load limiter |
+| Load = requested but throttle still closes | Torque monitor mismatch |
+| Pressure drops before closure | Fuel pressure protection |
+
+---
+
+## Maps Involved
+
+- [Throttle / Load Protection](/parameters/throttle-load-protection) — primary throttle intervention logic
+- [Load Limiters](/parameters/load-limiters) — hard ceiling on requested load
+- [Boost Ceiling / Overboost Limit](/parameters/boost-ceiling) — pressure boundary for overboost protection
+- [Torque Monitor Ceiling](/parameters/torque-monitor-ceiling) — plausibility boundary for the torque model
+
+---
+
+## Safe Adjustment Direction
+
+1. Identify the trigger from the log pattern above
+2. If boost overshoot: fix boost control — not the ceiling
+3. If load limiter: raise only if target is validated and hardware supports it
+4. If torque monitor: align the torque model with the new operating point
+5. Change one thing, relog, confirm the closure is resolved before touching anything else
+
+---
+
+## Danger Signs
+
+- Closure at exactly the same RPM/load every pull — a hard limit is being hit
+- Closure starts after boost overshoot — ceiling intervening correctly; fix the overshoot
+- Closure appears only after a tune revision — something raised without matching limiters
+- Closure at different points each pull — torque monitor mismatch or unstable boost control
+
+---
+
+## Related Workflows
+
+- [Diagnose Throttle Closure](/guides/throttle-closure-diagnosis)
+- [Fix Boost Oscillation](/guides/boost-oscillation-fix)
+
+---
+
+## Related Diagnostics
+
+- [Throttle Closure](/diagnostics/throttle-closure)
+- [Torque Limit Intervention](/diagnostics/torque-limit-intervention)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

@@ -1,0 +1,95 @@
+---
+title: VANOS and Spool Strategy — N54 MSD80/MSD81
+description: How N54 intake and exhaust cam phasing affects spool, torque shape, knock margin, and turbine energy — what logs prove and when to adjust VANOS calibration.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# VANOS and Spool Strategy
+
+The N54's variable cam timing system (**VANOS**) controls both intake and exhaust cam phasing independently. VANOS directly affects cylinder filling, valve overlap, exhaust energy to the turbines, residual gas, and knock susceptibility — all at once. A VANOS change is rarely just a spool change.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/vanos) · [Boost Control Lesson](/wiki/lessons/boost-control)
+
+---
+
+## What This System Does
+
+### Intake VANOS
+
+Intake cam phasing determines when the intake valves open and close relative to the piston. Advancing intake phasing in the low-to-mid RPM range can improve cylinder filling at spool RPM and sharpen torque onset. Too much advance in the wrong region increases residual gas and raises knock sensitivity.
+
+### Exhaust VANOS
+
+Exhaust cam phasing controls when exhaust valves open. Earlier exhaust opening affects blowdown energy — more energy to the turbine at lower RPM can improve spool. It also affects scavenging and residual gas retention, which influences knock margin at high load.
+
+### Spool WGDC interaction
+
+VANOS phasing and wastegate duty interact during the spool phase. A VANOS change that improves spool may reduce the duty needed to hit target — or it may mask a WGDC table that was compensating for poor cam strategy. Log both channels after any VANOS revision.
+
+---
+
+## Why It Matters
+
+VANOS is a late-stage calibration refinement — after boost, fueling, and ignition are stable. Changes that improve spool on the dyno can introduce knock sensitivity or residual gas problems that only appear under sustained load. The log after any VANOS change must include timing corrections, not just boost and power numbers.
+
+---
+
+## What Logs Prove
+
+- `Intake VANOS target (deg)` and `Intake VANOS actual (deg)` — confirms tracking and solenoid health
+- `Exhaust VANOS target (deg)` and `Exhaust VANOS actual (deg)` — same for exhaust side
+- `Boost actual` and `Boost setpoint` — spool changes visible here
+- `Timing corrections cyl 1–6` — knock sensitivity from overlap changes appears here
+- `WGDC base` and `WGDC after PID` — VANOS affecting spool changes the duty required
+
+### Problem signs
+- VANOS actual lags target significantly — solenoid wear or oil control fault
+- Timing corrections increase at the RPM/load where cam phasing changed
+- Boost varies pull-to-pull in the same conditions — inconsistent cam tracking
+
+---
+
+## Maps Involved
+
+- [Intake VANOS Target](/parameters/vanos-intake) — intake cam phasing table
+- [Exhaust VANOS Target](/parameters/vanos-exhaust) — exhaust cam phasing table
+- [Spool WGDC](/parameters/spool-wgdc) — interacts with VANOS during transient spool
+
+---
+
+## Safe Adjustment Direction
+
+1. Tune VANOS only after boost, fueling, and ignition are stable
+2. Change one cam at a time, in a narrow RPM/load region
+3. Log VANOS target/actual, timing corrections, and boost on every revision
+4. If corrections increase after a cam change: revert before reducing base timing
+5. Hybrid and single-turbo builds need different exhaust VANOS strategy than stock twins — turbine energy requirements differ
+
+---
+
+## Danger Signs
+
+- Timing corrections increase at the point where cam phasing changed — overlap too high
+- VANOS actual cannot track target — hardware issue, not calibration
+- Spool improves but timing corrections appear immediately after — cam shifted knock margin
+- Boost becomes inconsistent pull-to-pull without other changes — VANOS control drift
+
+---
+
+## Related Workflows
+
+- [Stock Turbo vs Hybrid vs Single Turbo Workflow](/guides/turbo-type-workflow)
+- [Safe Base Map Workflow](/guides/safe-base-map-workflow)
+
+---
+
+## Related Diagnostics
+
+- [Boost Control (General)](/diagnostics/boost-control)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

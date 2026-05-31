@@ -1,0 +1,115 @@
+---
+title: WGDC and PID Control — N54 MSD80/MSD81
+description: How wastegate duty cycle feed-forward tables and PID correction interact on the N54 MSD80/81 — diagnosing oscillation, overshoot, and undershoot.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# WGDC and PID Control
+
+The N54 boost controller uses a **feed-forward + PID** architecture. Understanding which part is doing the work — and when each part is causing a problem — is the difference between a clean calibration and a boost control disaster.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/boost-control) · [Boost Control Lesson](/wiki/lessons/boost-control)
+
+---
+
+## What This System Does
+
+### Feed-forward (base WGDC)
+
+The base WGDC table tells the wastegate solenoid what duty to run *before* any boost error is measured. Think of it as the tuner's best prediction of how much duty is needed to reach the target at a given operating point.
+
+A good base table means the PID controller only needs to make small corrections. A bad base table means the PID is constantly fighting large errors — which causes oscillation, overshoot, or slow response.
+
+### PID correction
+
+Once actual boost diverges from target, the PID loop modifies duty to correct:
+
+- **P (proportional)** — reacts to *current* boost error; too high = oscillation
+- **I (integral)** — corrects *accumulated* error over time; too high = wind-up and delayed overshoot
+- **D (derivative)** — reacts to the *rate of change* of error; damps overshoot
+
+The output of all three combined is **WGDC After PID** — the actual duty the solenoid receives.
+
+### Spool WGDC
+
+A separate spool duty adder helps the turbos reach target quickly from low RPM. Too much spool duty causes an overshoot spike immediately after boost builds.
+
+---
+
+## Why It Matters
+
+Misdiagnosing a base table problem as a PID problem (or vice versa) leads to chasing symptoms. Adjusting PID gains on a bad base table rarely works — it adds complexity without fixing the root cause.
+
+---
+
+## What Logs Prove
+
+Log these channels together:
+
+- `WGDC base (%)` — what the feed-forward table is commanding
+- `WGDC after PID (%)` — what the solenoid actually receives
+- `Boost error` — difference between setpoint and actual
+- `Boost setpoint` and `Boost actual`
+- `Throttle angle`
+
+### Key diagnostic patterns
+
+| Pattern | Meaning |
+|---------|---------|
+| After-PID consistently below base | Base table too aggressive; PID pulling duty back |
+| After-PID consistently above base | Base table too conservative; PID adding duty constantly |
+| After-PID oscillates around base | PID gains too high or solenoid responding inconsistently |
+| After-PID at ceiling, boost still low | Hardware problem — not a calibration problem |
+| Boost overshoots then throttle closes | Spool duty or base table too high at onset |
+
+---
+
+## Maps Involved
+
+- [Base WGDC](/parameters/base-wgdc) — feed-forward table; the first thing to dial in
+- [WGDC Ceiling](/parameters/wgdc-ceiling) — maximum duty the controller can command
+- [Spool WGDC](/parameters/spool-wgdc) — transient adder during boost build
+- [WGDC P-Factor](/parameters/wgdc-p-factor) — proportional gain; adjust only after base is right
+- [WGDC D-Factor](/parameters/wgdc-d-factor) — derivative damping; reduces overshoot
+
+---
+
+## Safe Adjustment Direction
+
+1. Get base WGDC close first — the PID should be making small corrections, not large ones
+2. Log after every base table change before touching PID
+3. If oscillation persists after base is dialed: reduce P-factor in small steps
+4. If overshoot persists at spool: reduce spool duty in the specific RPM/load area
+5. Adjust one table at a time, one region at a time
+
+Never raise WGDC ceiling to compensate for a hardware problem. Maxed WGDC with underboost is a mechanical diagnosis, not a calibration task.
+
+---
+
+## Danger Signs
+
+- WGDC after PID hitting the ceiling with boost still low (hardware — stop)
+- Oscillating boost trace after spool settling
+- Boost spiking above target then throttle closing at peak torque
+- WGDC front and rear diverging significantly (hardware asymmetry)
+
+---
+
+## Related Workflows
+
+- [Fix Boost Oscillation](/guides/boost-oscillation-fix)
+- [WGDC PID Diagnosis](/guides/wgdc-pid-diagnosis)
+
+---
+
+## Related Diagnostics
+
+- [Boost Overshoot](/diagnostics/boost-overshoot)
+- [WGDC Maxed Out](/diagnostics/wgdc-maxed)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

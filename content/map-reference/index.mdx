@@ -1,0 +1,83 @@
+---
+title: N54 Calibration Map Reference
+description: Overview of MSD80/MSD81 calibration map categories — what each group does, when to adjust, and how they connect to workflow guides and log diagnostics.
+---
+
+# N54 Calibration Map Reference
+
+The N54 MSD80/MSD81 uses a torque-model architecture. Every output — boost, fueling, ignition, VANOS — flows from a load request. Understanding which group of maps owns which part of that chain is the foundation of safe calibration.
+
+[Browse all parameters →](/parameters)
+
+---
+
+## Boost Control
+
+Load target and boost target define what the DME asks for. WGDC base, spool duty, and PID terms determine how hard the wastegates work to deliver it. WGDC ceiling caps the maximum duty the controller can command.
+
+Adjust only after confirming mechanical health: no boost leaks, good wastegate solenoid function, stable charge piping.
+
+[Boost Control parameters →](/parameters/boost-control)
+
+---
+
+## Fueling
+
+Lambda target sets the enrichment command. Fuel scalar translates fuel energy content into the correct injector pulse. HPFP and LPFP pressure targets keep the direct-injection system supplied with enough rail pressure to support the commanded fuel mass.
+
+Fuel maps and timing must be earned together — never raise timing while fuel pressure or lambda is unstable.
+
+[Fueling parameters →](/parameters/fueling)
+
+---
+
+## Ignition / Timing Corrections
+
+Main timing sets commanded spark advance. IAT correction pulls timing as charge temperature rises. Per-cylinder corrections tell you when the DME is protecting against knock — these are diagnostic signals before they are calibration targets.
+
+[Ignition parameters →](/parameters/ignition)
+
+---
+
+## Throttle Closure / Torque Intervention
+
+The throttle closes when load limiters, torque monitors, or boost ceilings determine that the actual operating point is outside the calibrated envelope. These maps define those boundaries. Closure is a symptom — find the cause before raising any ceiling.
+
+[Safety & Protections parameters →](/parameters/safety-protections)
+
+---
+
+## VANOS / Spool
+
+Intake and exhaust VANOS phasing shapes cylinder filling, turbine energy, overlap, and spool response. Changes here affect boost, knock margin, and torque simultaneously — log all three after any cam revision.
+
+[VANOS parameters →](/parameters/vanos)
+
+---
+
+## Drivability & Misc
+
+Pedal torque request maps raw accelerator input into a torque demand before the boost model responds. These maps control how aggressive the car feels without actually adding power.
+
+[Drivability parameters →](/parameters/drivability-misc)
+
+---
+
+## MHD+ Custom Boost
+
+MHD+ adds feature layers on top of the base MSD80/81 calibration: map switching, FlexFuel interpolation, custom 3D boost ceiling, custom WGDC control, and antilag. Each feature must be calibrated as a full strategy — enabling a feature without matching all dependent tables is unsafe.
+
+[MHD+ parameters →](/parameters/mhd-plus)
+
+---
+
+## ROM Support
+
+All maps in this reference are documented for **I8A0S** and **IJE0S**. Support for **IKM0S** and **INA0S** is listed as _Needs Audit_ where aliases have not been verified against a live BIN.
+
+---
+
+## Cross-Links
+
+- [Workflow Guides →](/workflow-guides) — step-by-step calibration workflows for each map group
+- [Log Diagnostics →](/log-diagnostics) — symptom-first diagnostic index for reading logs before changing maps

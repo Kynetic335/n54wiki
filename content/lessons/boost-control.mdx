@@ -1,0 +1,114 @@
+---
+title: Boost Control Deep Dive — N54 MSD80/MSD81
+description: How the N54 torque-model architecture requests, controls, and protects boost pressure — what the ECU is doing and how to read it in logs.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Boost Control Deep Dive
+
+The N54 does not directly command boost pressure the way a simple boost controller does. It commands a **load target** — a measure of cylinder filling — and the boost control system works to achieve that target through wastegate management. Understanding this chain is the foundation of every calibration decision on the MSD80/81.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters) · [Workflow Guides](/wiki/workflow-guides)
+
+---
+
+## What This System Does
+
+The MSD80/81 uses a **torque-model architecture**. The driver's pedal input is converted into a torque request, which translates into a load (cylinder filling) target. The boost controller then works to deliver the airflow needed to hit that target.
+
+The control chain looks like this:
+
+1. Pedal input → torque request → load target
+2. Load target drives a boost pressure setpoint
+3. The wastegate solenoids receive a **duty cycle (WGDC)** command to hold boost
+4. Actual boost is compared to target; a PID loop corrects error through duty changes
+5. Protection layers (boost ceiling, load limiters, torque monitor) cap the output if something goes wrong
+
+Both turbochargers have independent wastegate solenoids. The ECU commands them separately, though calibration typically treats them symmetrically.
+
+---
+
+## Why It Matters
+
+A misread boost control system is the most common source of failed calibrations. Raising load targets without understanding WGDC headroom, boost ceilings, and torque limiter alignment causes throttle closures, boost plausibility faults, and compressor damage. Every other calibration domain — fueling, timing, VANOS — depends on boost being stable and predictable first.
+
+---
+
+## What Logs Prove
+
+Log these channels together on every WOT pull:
+
+- `Charge air pressure setpoint` — what the ECU is asking for
+- `Charge air pressure actual` — what the turbos are delivering
+- `WGDC front (%)` and `WGDC rear (%)` — how hard the controller is working
+- `Load requested` and `Load actual` — torque model demand vs delivery
+- `Throttle angle (%)` — any drop below pedal = intervention
+
+### Healthy trace
+- Actual follows setpoint within a tight band through the pull
+- WGDC rises at spool, then stabilizes or tapers
+- Load actual tracks load requested
+- Throttle stays at pedal position
+
+### Problem signs in the log
+- **Actual below setpoint + WGDC high**: underboost — hardware or target-realism problem
+- **Actual above setpoint then throttle closes**: overshoot — WGDC feed-forward too aggressive
+- **WGDC oscillating**: PID fighting an unstable base table or mechanical issue
+- **Load actual clipped below requested**: limiter or protection intervening
+
+---
+
+## Maps Involved
+
+- [Boost Target / Load Target](/parameters/boost-target) — primary demand input
+- [Boost Ceiling / Overboost Limit](/parameters/boost-ceiling) — protection boundary; raise only to match a validated tuned target
+- [Load Limiters](/parameters/load-limiters) — hard cap on torque request; must agree with boost target
+- [Gear-Based Load Limits](/parameters/gear-load-limits) — per-gear torque management
+
+---
+
+## Safe Adjustment Direction
+
+Always work in this order:
+
+1. Confirm mechanical health first — no boost leaks, good solenoids, healthy wastegate actuators
+2. Set a realistic load/boost target based on hardware capability
+3. Align boost ceiling and load limiters to give headroom above the intended target
+4. Log before and after every single change — one area at a time
+
+Never raise the ceiling or limiter to stop a throttle closure before identifying what triggered the closure.
+
+---
+
+## Danger Signs
+
+Stop and investigate if logs show:
+
+- Boost actual chronically above target with throttle closure at peak
+- WGDC at or near maximum with boost still under target
+- Load requested and load actual diverging repeatedly in the same RPM range
+- Boost plausibility fault codes (30FF, 2FBC series)
+- Throttle angle dropping while pedal remains at 100%
+
+---
+
+## Related Workflows
+
+- [Fix Boost Oscillation](/guides/boost-oscillation-fix)
+- [Safe Base Map Workflow](/guides/safe-base-map-workflow)
+- [How to Review an N54 Log](/guides/n54-log-review)
+
+---
+
+## Related Diagnostics
+
+- [Boost Overshoot](/diagnostics/boost-overshoot)
+- [Boost Undershoot](/diagnostics/boost-undershoot)
+- [Boost Control (General)](/diagnostics/boost-control)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

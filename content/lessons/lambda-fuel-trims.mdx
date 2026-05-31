@@ -1,0 +1,107 @@
+---
+title: Lambda / AFR and Fuel Trims — N54 MSD80/MSD81
+description: How the N54 MSD80/81 manages lambda targets, fuel trims, and the fuel scalar — what logs prove and how to identify scalar vs hardware problems.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Lambda / AFR and Fuel Trims
+
+Lambda is the ratio of actual air-fuel mixture to stoichiometric. On the N54, **lambda target** drives high-load enrichment strategy, and **short-term / long-term fuel trims (STFT/LTFT)** reveal how hard the closed-loop correction system is working to compensate for fuel model error.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/fueling) · [Fuel Pressure Lesson](/wiki/lessons/hpfp-lpfp)
+
+---
+
+## What This System Does
+
+### Lambda at high load
+
+Under wide-open throttle, the N54 runs a commanded lambda target richer than stoichiometric to manage combustion temperature, knock margin, and turbine heat. The exact target depends on boost level, fuel type, and ethanol content.
+
+The DME compares commanded to measured lambda and uses fuel scalar and injection mass to close the gap. A lean miss at high load is an engine risk — not a calibration inconvenience.
+
+### Fuel trims at light load and cruise
+
+At idle and cruise, the closed-loop system uses STFT (fast corrections, resets frequently) and LTFT (slow accumulation, persistent) to center fueling around stoichiometric. Healthy trims are small and balanced between banks.
+
+### Fuel scalar
+
+The **fuel scalar** corrects for fuel energy content and injector mass-flow assumptions. On ethanol blends, raising the scalar accounts for ethanol's lower energy density so the same injection duration delivers the correct fuel mass for the commanded lambda.
+
+---
+
+## Why It Matters
+
+Ignoring trims before a calibration change is the most common fueling mistake. A car with large positive LTFTs on pump gas has a fuel model already running lean — adding boost or ethanol without addressing the root cause stacks risk. Scalar adjustments are car-specific; they do not transfer between builds.
+
+---
+
+## What Logs Prove
+
+- `Lambda requested (bank 1/2)` — commanded target
+- `Lambda actual (bank 1/2)` — measured by wideband O2
+- `STFT bank 1/2 (%)` — current closed-loop correction; should be near zero at cruise
+- `LTFT bank 1/2 (%)` — accumulated correction; large values mean persistent fuel model error
+- `Ethanol content (%)` — confirms blend (with FlexFuel sensor)
+- `HPFP pressure actual` — pressure drops produce lean symptoms that look like trim problems
+
+### Healthy trim pattern
+- STFT oscillating within a few percent of zero at cruise
+- LTFT near zero — model is already close
+- Bank 1 and bank 2 trims within a few percent of each other
+
+### Problem patterns
+
+| Pattern | Likely cause |
+|---------|-------------|
+| Both banks LTFT strongly positive | Scalar too low for blend, or injector wear |
+| One bank LTFT positive, one neutral | Bank-specific injector or O2 issue |
+| Trims swing large under load | HPFP pressure drop — pressure problem, not scalar |
+| LTFT good on pump gas, goes lean on ethanol | Scalar not updated for blend change |
+
+---
+
+## Maps Involved
+
+- [WOT Lambda Target](/parameters/lambda-target) — high-load enrichment command
+- [Fuel Scalar](/parameters/fuel-scalar) — energy-content and mass-flow correction
+- [Fuel Main](/parameters/fuel-main) — bank-level fuel delivery tables
+
+---
+
+## Safe Adjustment Direction
+
+1. Fix hardware first — verify injectors, O2 sensors, and fuel pressure before touching scalar
+2. Confirm ethanol content with a live log channel — never assume blend
+3. Make scalar changes in small steps and relog before going further
+4. Never use scalar to hide a fuel pressure problem — symptoms look similar but the cause is different
+
+---
+
+## Danger Signs
+
+- Lambda actual leans out under WOT — target not met under boost
+- Trims pegged at their positive limit — model is far off and cannot self-correct
+- Bank-to-bank trim split beyond several percent — hardware asymmetry, not scalar
+- LTFT normalizes after fuel pressure repair — confirms pressure was the root cause
+
+---
+
+## Related Workflows
+
+- [Pump Gas vs E-Blend Workflow](/guides/pump-gas-vs-e-blend)
+- [How to Review an N54 Log](/guides/n54-log-review)
+
+---
+
+## Related Diagnostics
+
+- [STFT/LTFT Issues](/diagnostics/stft-ltft)
+- [Fueling (General)](/diagnostics/fueling)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

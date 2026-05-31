@@ -1,0 +1,100 @@
+---
+title: HPFP / LPFP Fuel Pressure — N54 MSD80/MSD81
+description: How the N54 dual fuel pressure system works, what causes rail pressure sag, and how to diagnose HPFP vs LPFP failure in logs before changing calibration.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# HPFP / LPFP Fuel Pressure
+
+The N54 uses a **two-stage fuel system**: a low-pressure pump (LPFP) in the tank feeds a high-pressure direct-injection pump (HPFP) on the engine. Both must operate correctly for the fuel system to support power and ethanol targets. A pressure failure at either stage looks like a fueling problem in the log — but the fix is hardware, not calibration.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/fueling) · [Lambda Lesson](/wiki/lessons/lambda-fuel-trims)
+
+---
+
+## What This System Does
+
+### Low-pressure circuit (LPFP)
+
+The in-tank LPFP supplies fuel to the HPFP at a regulated low pressure. On a stock N54, the LPFP is a known weak point at high ethanol blends and sustained high-load operation. If LPFP supply drops, the HPFP cannot maintain rail pressure regardless of its own mechanical condition.
+
+### High-pressure circuit (HPFP)
+
+The HPFP is a cam-driven direct-injection pump that raises fuel pressure from the LPFP supply level to the high rail pressure the injectors need. The MSD80/81 commands a **fuel pressure target** and the HPFP tracks it. Rail pressure is logged as `HPFP pressure actual`.
+
+### How pressure affects calibration
+
+At high ethanol blends, more fuel mass is needed per injection event. This increases HPFP demand. If pressure cannot hold target, injectors cannot deliver the commanded fuel mass — the result is lean lambda, positive trims, and eventually misfire. This sequence is routinely misread as a scalar or tune problem.
+
+---
+
+## Why It Matters
+
+Fuel pressure problems mimic calibration errors. A lean lambda reading under load might be a scalar issue — or it might be the fuel system physically unable to deliver the commanded fuel mass. Only a log with both pressure and lambda channels captured together can distinguish them.
+
+---
+
+## What Logs Prove
+
+Log these channels on every fuel system diagnostic pull:
+
+- `HPFP pressure actual (bar)` — actual rail pressure
+- `HPFP pressure target (bar)` — commanded pressure
+- `LPFP pressure (bar)` or `LPFP voltage (V)` — supply side health
+- `Lambda actual (bank 1/2)` — leans out when pressure drops
+- `STFT bank 1/2 (%)` — positive trims follow a pressure sag
+
+### Diagnostic sequence in the log
+
+LPFP drops → HPFP loses prime → HPFP actual falls below target → lambda leans → STFT goes positive → misfire possible.
+
+If HPFP drops first without LPFP dropping, the HPFP itself is the weak point.
+
+---
+
+## Maps Involved
+
+- [HPFP Pressure Target](/parameters/hpfp-pressure-target) — commanded rail pressure; do not raise to compensate for hardware weakness
+- [LPFP Pressure Target](/parameters/lpfp-pressure-target) — low-pressure supply command
+- [Fuel Pressure Protection](/parameters/fuel-pressure-protection) — DME response when pressure leaves the safe window
+
+---
+
+## Safe Adjustment Direction
+
+1. Log baseline LPFP and HPFP together across multiple pulls before any calibration change
+2. If pressure holds target — hardware is adequate for current demand
+3. If pressure sags — reduce load or ethanol demand until hardware is upgraded
+4. Do not raise HPFP pressure target on a struggling pump — it increases wear without fixing supply deficit
+
+---
+
+## Danger Signs
+
+- HPFP actual falls away from target during WOT
+- LPFP drops before HPFP — tank supply is the bottleneck
+- Lambda leans out and STFT goes positive immediately after a pressure sag
+- Rail pressure oscillates instead of holding steady — pump at or beyond capacity
+- Long crank after repeated hard pulls — pump cavitating
+
+---
+
+## Related Workflows
+
+- [Diagnose HPFP/LPFP Pressure Drop](/guides/hpfp-lpfp-pressure-drop)
+- [Pump Gas vs E-Blend Workflow](/guides/pump-gas-vs-e-blend)
+
+---
+
+## Related Diagnostics
+
+- [Rail Pressure Crash](/diagnostics/rail-pressure-crash)
+- [LPFP Drop](/diagnostics/lpfp-drop)
+- [Fuel Pressure (General)](/diagnostics/fuel-pressure)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

@@ -1,0 +1,82 @@
+---
+title: N54 Log Diagnostics
+description: Symptom-first diagnostic index for N54 MSD80/MSD81 logs — boost overshoot, boost undershoot, WGDC maxed, timing corrections, rail pressure crash, LPFP drop, STFT/LTFT, throttle closure, and torque limit intervention.
+---
+
+# N54 Log Diagnostics
+
+Start with the symptom. Every calibration problem shows up in the log before it shows up in power or behavior. Identify what the log is telling you before opening any map.
+
+[Open diagnostic index →](/diagnostics/logs)
+
+---
+
+## Boost Diagnostics
+
+**Boost Overshoot** — boost spikes above target after spool; base WGDC or spool duty too aggressive.
+[Diagnose boost overshoot →](/diagnostics/boost-overshoot)
+
+**Boost Undershoot** — boost cannot reach target despite high WGDC; hardware or target-realism problem.
+[Diagnose boost undershoot →](/diagnostics/boost-undershoot)
+
+**WGDC Maxed Out** — WGDC after PID sits at ceiling with persistent underboost; mechanical issue before calibration.
+[Diagnose WGDC maxed →](/diagnostics/wgdc-maxed)
+
+**Boost Control (General)** — WGDC after PID below base, PID fighting the feed-forward table.
+[Boost control diagnostics →](/diagnostics/boost-control)
+
+---
+
+## Fuel Pressure Diagnostics
+
+**Rail Pressure Crash** — HPFP drops under WOT, leading to lean lambda or misfire.
+[Diagnose rail pressure crash →](/diagnostics/rail-pressure-crash)
+
+**LPFP Drop** — low-pressure pump sags under load, starving the HPFP before the rail crashes.
+[Diagnose LPFP drop →](/diagnostics/lpfp-drop)
+
+**Fuel Pressure (General)** — rail pressure drops under load with lambda drift.
+[Fuel pressure diagnostics →](/diagnostics/fuel-pressure)
+
+---
+
+## Fueling / Trim Diagnostics
+
+**STFT/LTFT Issues** — persistent positive or negative trim bias at cruise indicating a scalar or blend mismatch.
+[Diagnose STFT/LTFT →](/diagnostics/stft-ltft)
+
+**Fueling (General)** — bank lambda mismatch, trim divergence, fuel scalar error.
+[Fueling diagnostics →](/diagnostics/fueling)
+
+---
+
+## Timing Diagnostics
+
+**Timing Corrections** — multi-cylinder corrections in the same load/RPM area; check IAT, lambda, fuel pressure, and load before removing timing.
+[Timing correction diagnostics →](/diagnostics/timing-corrections)
+
+---
+
+## Throttle / Torque Diagnostics
+
+**Throttle Closure** — WOT throttle closes from boost overshoot, load limiter, or torque monitor.
+[Throttle closure diagnostics →](/diagnostics/throttle-closure)
+
+**Torque Limit Intervention** — torque monitoring flag activates without obvious boost overshoot; model mismatch.
+[Torque limit intervention →](/diagnostics/torque-limit-intervention)
+
+---
+
+## How to Use
+
+1. Find the symptom that matches your log
+2. Follow the link to the diagnostic page
+3. Use the log evidence checklist and maps-to-inspect list
+4. Cross-check the related workflow guide before changing any map
+
+---
+
+## Cross-Links
+
+- [Map Reference →](/map-reference) — what each map group does and when to touch it
+- [Workflow Guides →](/workflow-guides) — step-by-step calibration procedures

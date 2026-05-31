@@ -1,0 +1,102 @@
+---
+title: Load / Torque Request Strategy — N54 MSD80/MSD81
+description: How the N54 MSD80/81 translates driver demand into a load target, and how torque limiters, gear limits, and the torque monitor govern the output ceiling.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Load / Torque Request Strategy
+
+The N54 is a torque-model engine. Every output — boost, fueling, ignition advance, throttle position — originates from a **load request**. Understanding how that request is shaped, capped, and monitored is essential before changing any other calibration area.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters) · [Boost Control Lesson](/wiki/lessons/boost-control)
+
+---
+
+## What This System Does
+
+### From pedal to load
+
+The accelerator pedal maps to a torque request through driver-wish tables. That torque request translates into a **load target** — a normalized measure of cylinder filling. The load target then drives boost setpoint, fueling, ignition advance, and throttle plate position simultaneously.
+
+### Load limiters
+
+The ECU enforces hard ceilings on the maximum load that can be requested. If the load target hits a limiter, the DME clips the request — the car cannot reach intended torque regardless of WGDC or timing.
+
+### Gear-based limits
+
+Different load ceilings can apply per gear. This manages traction, drivetrain load, and torque multiplication in low gears.
+
+### Torque monitor
+
+A separate **torque monitoring system** validates that engine output is consistent with the model's prediction. If actual boost diverges significantly from what the load model expects, the monitor triggers throttle closure or torque reduction — often without a fault code.
+
+---
+
+## Why It Matters
+
+If load targets, limiters, boost ceilings, and the torque monitor are misaligned, the car cuts power even when individual values look correct in isolation. The most common Phase 2+ calibration failure: load target raised, limiters not updated, monitor not matched — car closes throttle at peak torque every pull.
+
+---
+
+## What Logs Prove
+
+- `Load requested` vs `Load actual` — if actual is clipped below requested, a limiter is active
+- `Throttle angle (%)` — any drop during WOT with full pedal = active intervention
+- `Torque intervention` channel — confirms monitor is triggering (if available in your MHD version)
+- `Boost setpoint` and `Boost actual` — load and boost must be consistent with each other
+- `Gear` — problem only in specific gears = gear-based limiter
+
+---
+
+## Maps Involved
+
+- [Boost Target / Load Target](/parameters/boost-target) — primary demand
+- [Load Limiters](/parameters/load-limiters) — must give headroom above the intended target
+- [Gear-Based Load Limits](/parameters/gear-load-limits) — per-gear torque caps
+- [Torque Monitor Ceiling](/parameters/torque-monitor-ceiling) — must be updated when load is raised
+
+---
+
+## Safe Adjustment Direction
+
+Work in this exact order:
+
+1. Set a realistic load target based on hardware
+2. Update load limiters to give clear headroom above the target
+3. Update torque monitor ceiling to match the new envelope
+4. Update boost ceiling to allow target + overshoot margin
+5. Log and validate before touching fueling or timing
+
+Never raise one limit in isolation. All four boundaries must agree.
+
+---
+
+## Danger Signs
+
+- Throttle closes at peak torque with full pedal — intervention is active
+- Load actual clipped at the same value across multiple pulls — hard limiter hit
+- Power loss only in specific gears — gear-based limiter
+- Power drops with no fault codes — torque monitor (often silent)
+- Boost actual well above what load model expects — monitor mismatch
+
+---
+
+## Related Workflows
+
+- [Safe Base Map Workflow](/guides/safe-base-map-workflow)
+- [Stock Turbo vs Hybrid vs Single Turbo Workflow](/guides/turbo-type-workflow)
+- [Diagnose Throttle Closure](/guides/throttle-closure-diagnosis)
+
+---
+
+## Related Diagnostics
+
+- [Torque Limit Intervention](/diagnostics/torque-limit-intervention)
+- [Throttle Closure](/diagnostics/throttle-closure)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

@@ -1,0 +1,99 @@
+---
+title: MHD+ Custom Boost Layer — N54 MSD80/MSD81
+description: How MHD+ custom 3D boost ceiling, custom WGDC override, map switching, and FlexFuel add calibration layers on top of the base MSD80/81 strategy — when to use them and what can go wrong.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# MHD+ Custom Boost Layer
+
+MHD+ extends the base MSD80/81 calibration with additional feature layers: a custom 3D boost ceiling, custom WGDC control tables, map switching, and FlexFuel interpolation. These features add power to the calibration toolkit — but each one adds complexity that multiplies the consequences of an incorrect implementation. Enable them only when the base calibration is proven.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/mhd-plus) · [WGDC Lesson](/wiki/lessons/wgdc-pid)
+
+---
+
+## What This System Does
+
+### Custom 3D Boost Ceiling
+
+The base MSD80/81 boost ceiling is a fixed overboost limit. The MHD+ custom 3D ceiling replaces it with a table that can vary by gear and RPM — allowing a higher ceiling where boost naturally tapers without opening the protection window in low gears where overshoot is more dangerous.
+
+### Custom WGDC Override
+
+The custom WGDC override replaces the base ECU's WGDC tables with MHD+-controlled versions. This is used for builds where the stock WGDC control strategy is insufficient — particularly hybrid and single-turbo setups with different pneumatic characteristics. The custom tables must be built to replicate the stock baseline behavior before being tuned from there.
+
+### Map Switching
+
+Map switching allows multiple calibrated slots to coexist in one flash. Each slot can have different load, timing, fueling, and WGDC tables. Every active slot must be fully calibrated — a partially built slot is not a placeholder, it is an engine risk.
+
+### FlexFuel Interpolation
+
+FlexFuel uses a live ethanol content input to interpolate load, timing, and fueling between a pump-gas baseline and an ethanol endpoint. Both endpoints must be independently validated before FlexFuel is enabled. The interpolation is only as accurate as the calibration on either end.
+
+---
+
+## Why It Matters
+
+Each MHD+ feature is a layer on top of the base strategy, not a replacement for it. Enabling custom WGDC on a base calibration that is not yet dialed in adds a new set of variables to an already unstable system. Enable features one at a time, validate each one, then proceed.
+
+---
+
+## What Logs Prove
+
+- `Active map slot` — confirm which slot is active before interpreting any other data
+- `Ethanol content active (%)` — with FlexFuel, confirm what the ECU is actually acting on
+- `Boost actual` vs `Boost setpoint` — custom ceiling changes where protection fires
+- `WGDC custom base (%)` — confirms the override is active and what it is commanding
+- `WGDC after PID (%)` — PID behavior changes when custom gains replace stock values
+- `Timing corrections cyl 1–6` — FlexFuel endpoint calibration errors appear here at live blends
+
+---
+
+## Maps Involved
+
+- [Enable Custom 3D Boost Ceiling](/parameters/enable-custom-3d-boost-ceiling) — activates gear/RPM-shaped ceiling
+- [Enable Custom WGDC Override](/parameters/enable-custom-wgdc-override) — replaces stock WGDC tables
+- [Enable Map Switch](/parameters/enable-map-switch) — activates multi-slot calibration
+- [Enable FlexFuel](/parameters/enable-flexfuel) — activates ethanol content interpolation
+
+---
+
+## Safe Adjustment Direction
+
+1. Validate the base calibration completely before enabling any MHD+ feature
+2. Enable one feature per flash — never stack new layers
+3. **Custom 3D ceiling**: set to tuned target + overshoot margin per gear; verify no unintended throttle closure in any gear
+4. **Custom WGDC**: log stock base and after-PID first; build custom tables to match that baseline before tuning
+5. **Map switching**: validate every slot; document which slot maps to which fuel before delivery
+6. **FlexFuel**: validate both endpoints independently; log ethanol content on first startup; confirm interpolation behavior at a known blend
+
+---
+
+## Danger Signs
+
+- Boost spike immediately after enabling custom WGDC — stock tables were doing correction work the custom tables are not replicating
+- Ceiling change allows overshoot that was previously contained — ceiling is now above actual overshoot margin
+- Wrong active map slot — driver or cold-start condition selected an unvalidated slot
+- Ethanol content reads incorrectly — FlexFuel interpolating from wrong starting point
+- Timing corrections appear after enabling FlexFuel — endpoint calibration error
+
+---
+
+## Related Workflows
+
+- [Stock Turbo vs Hybrid vs Single Turbo Workflow](/guides/turbo-type-workflow)
+- [Pump Gas vs E-Blend Workflow](/guides/pump-gas-vs-e-blend)
+
+---
+
+## Related Diagnostics
+
+- [Boost Overshoot](/diagnostics/boost-overshoot)
+- [WGDC Maxed Out](/diagnostics/wgdc-maxed)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />

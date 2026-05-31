@@ -27,6 +27,14 @@ const meta = {
   },
   datalogging: 'Datalogging',
   diagnostics: 'Diagnostics',
+  sep_calref: {
+    type: 'separator',
+    title: 'Calibration Reference',
+  },
+  lessons: 'Tuning Lessons',
+  'map-reference': 'Map Reference',
+  'workflow-guides': 'Workflow Guides',
+  'log-diagnostics': 'Log Diagnostics',
   sep_synergy: {
     type: 'separator',
     title: 'Tuning Services',

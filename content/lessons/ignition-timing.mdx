@@ -1,0 +1,108 @@
+---
+title: Ignition Timing and Corrections — N54 MSD80/MSD81
+description: How the N54 MSD80/81 sets spark advance, how IAT and knock corrections work, and what per-cylinder correction data tells you before changing any timing map.
+---
+
+import { CTABox } from '../../components/CTABox'
+
+# Ignition Timing and Corrections
+
+Ignition timing is the most sensitive calibration lever on the N54. The engine produces more torque when spark fires earlier — but advancing beyond the knock threshold causes detonation that can destroy ring lands, bearings, and pistons. The MSD80/81 correction system is the diagnostic signal: when cylinders pull timing, the base map has exceeded the available knock margin.
+
+→ [Back to Tuning School](/school) · [Map Reference](/parameters/ignition) · [Boost Control Lesson](/wiki/lessons/boost-control)
+
+---
+
+## What This System Does
+
+### Main timing table
+
+The **main ignition timing** map sets commanded spark advance by load and RPM, before any correction factors are applied. This is the starting point the tuner sets — it assumes good fuel quality, controlled charge temperature, and stable lambda.
+
+### IAT timing correction
+
+As intake air temperature rises, knock margin shrinks. The **IAT timing correction** removes advance as charge temperature increases. On stock-intercooled N54s, heat soak between pulls is significant — the IAT correction is active protection, not a target to flatten.
+
+### Per-cylinder knock corrections
+
+The MSD80/81 monitors knock independently on each cylinder and applies **individual timing corrections** when the knock sensor detects an event. These corrections appear as negative values in the log. They are the most important diagnostic signal in any timing review.
+
+---
+
+## Why It Matters
+
+Timing corrections are not a problem to tune around — they are a measurement. If cylinders are correcting, base timing has exceeded what the fuel, temperature, and pressure conditions can safely support. Adding boost while corrections are present multiplies risk. The correct response is to find out *why* the margin is gone before making any other change.
+
+---
+
+## What Logs Prove
+
+- `Ignition timing (deg)` — commanded advance
+- `Timing corrections cyl 1–6 (deg)` — per-cylinder retard from knock detection
+- `IAT (°C)` — charge temperature at the manifold
+- `Lambda actual` — lean mixtures reduce knock margin
+- `HPFP pressure actual` — fuel pressure drops cause lean spikes that trigger corrections
+- `Boost actual` — high cylinder pressure increases knock susceptibility
+
+### Correction severity reference
+
+| Correction (deg) | Interpretation |
+|-----------------|----------------|
+| 0 to –1 | Normal; occasional single events |
+| –2 to –4 | Marginal; investigate fuel, IAT, or lambda |
+| –5 to –8 | Significant; do not add timing or load |
+| Beyond –8 | Dangerous; reduce load or timing immediately |
+
+*These ranges are interpretive, not absolute limits. Fuel quality, boost level, and IAT all affect the threshold.*
+
+### Multi-cylinder vs single-cylinder pattern
+
+- **Multiple cylinders correcting simultaneously**: global cause — fuel quality, IAT, lean lambda, or base timing too aggressive
+- **Single cylinder correcting**: hardware issue on that cylinder — plug, coil, or injector
+
+---
+
+## Maps Involved
+
+- [Main Ignition Timing](/parameters/ignition-main) — commanded advance before corrections
+- [IAT Timing Correction](/parameters/iat-timing-correction) — retard applied as charge temperature rises
+- [Timing Main](/parameters/timing-main) — equivalent table in some XDF configurations
+
+---
+
+## Safe Adjustment Direction
+
+1. Never add timing while corrections are present — find the cause first
+2. Verify fuel quality, plug condition, coil health, and lambda before any timing change
+3. Make changes in small steps across a narrow load/RPM region
+4. Log every change; compare corrections before and after on the same pulls
+5. IAT correction must remain active — do not flatten it for dyno sessions
+
+---
+
+## Danger Signs
+
+- Multiple cylinders correcting at a repeatable RPM/load point
+- Corrections growing pull-over-pull as IAT rises — heat soak limiting margin
+- Corrections appear after adding boost — load increased faster than margin allows
+- Misfire counters increment alongside corrections — detonation past the correction threshold
+- Power falls despite higher boost — corrections pulling more than boost is adding
+
+---
+
+## Related Workflows
+
+- [Safe Base Map Workflow](/guides/safe-base-map-workflow)
+- [How to Review an N54 Log](/guides/n54-log-review)
+
+---
+
+## Related Diagnostics
+
+- [Timing Corrections](/diagnostics/timing-corrections)
+
+---
+
+<CTABox variant="log" />
+
+<CTABox variant="tune" />
