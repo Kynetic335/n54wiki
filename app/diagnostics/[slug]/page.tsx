@@ -16,14 +16,24 @@ export function generateStaticParams() {
   return logDiagnostics.map((diagnostic) => ({ slug: diagnostic.slug }))
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://synergybmwtuning.com'
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const diagnostic = getLogDiagnostic(slug)
   if (!diagnostic) return {}
 
+  const url = `${BASE_URL}/diagnostics/${slug}`
   return {
     title: diagnostic.title,
     description: diagnostic.summary,
+    alternates: { canonical: url },
+    openGraph: {
+      title: diagnostic.title,
+      description: diagnostic.summary,
+      url,
+      type: 'article',
+    },
   }
 }
 
@@ -32,8 +42,25 @@ export default async function DiagnosticPage({ params }: PageProps) {
   const diagnostic = getLogDiagnostic(slug)
   if (!diagnostic) notFound()
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: diagnostic.title,
+    description: diagnostic.summary,
+    url: `${BASE_URL}/diagnostics/${slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Synergy BMW Tuning',
+      url: BASE_URL,
+    },
+  }
+
   return (
     <CalibrationShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="cal-detail">
         <div className="cal-breadcrumb">
           <Link href="/school">School</Link>

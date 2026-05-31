@@ -2,8 +2,10 @@ import type { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import './globals.css'
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://synergybmwtuning.com'
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://n54wiki.com'),
+  metadataBase: new URL(BASE_URL),
   title: {
     template: '%s | N54 Wiki',
     default: 'N54 Wiki — BMW N54 Tuning, Diagnostics & Upgrades',

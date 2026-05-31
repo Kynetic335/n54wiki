@@ -15,14 +15,24 @@ export function generateStaticParams() {
   return guides.map((guide) => ({ slug: guide.slug }))
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://synergybmwtuning.com'
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const guide = getGuide(slug)
   if (!guide) return {}
 
+  const url = `${BASE_URL}/guides/${slug}`
   return {
     title: guide.title,
     description: guide.summary,
+    alternates: { canonical: url },
+    openGraph: {
+      title: guide.title,
+      description: guide.summary,
+      url,
+      type: 'article',
+    },
   }
 }
 
@@ -31,8 +41,25 @@ export default async function GuidePage({ params }: PageProps) {
   const guide = getGuide(slug)
   if (!guide) notFound()
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: guide.title,
+    description: guide.summary,
+    url: `${BASE_URL}/guides/${slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Synergy BMW Tuning',
+      url: BASE_URL,
+    },
+  }
+
   return (
     <CalibrationShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="cal-detail">
         <header className="cal-hero cal-compact-hero">
           <p className="cal-eyebrow">Platform Guide</p>

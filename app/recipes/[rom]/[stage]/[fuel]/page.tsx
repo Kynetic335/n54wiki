@@ -28,14 +28,19 @@ export function generateStaticParams() {
   }))
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://synergybmwtuning.com'
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { rom, stage, fuel } = await params
   const recipe = getRecipe(rom, stage, fuel)
   if (!recipe) return {}
 
+  const url = `${BASE_URL}/recipes/${rom}/${stage}/${fuel}`
   return {
     title: recipe.title,
     description: recipe.calibrationIntent,
+    alternates: { canonical: url },
+    openGraph: { title: recipe.title, description: recipe.calibrationIntent, url },
   }
 }
 

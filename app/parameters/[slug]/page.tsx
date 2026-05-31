@@ -26,13 +26,19 @@ export function generateStaticParams() {
   ]
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://synergybmwtuning.com'
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
+  const url = `${BASE_URL}/parameters/${slug}`
+
   const category = getCategoryBySlug(slug)
   if (category) {
     return {
       title: `${category} Parameters`,
       description: categoryIntros[category],
+      alternates: { canonical: url },
+      openGraph: { title: `${category} Parameters`, description: categoryIntros[category], url },
     }
   }
 
@@ -41,6 +47,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: parameter.canonicalName,
       description: parameter.whatItDoes,
+      alternates: { canonical: url },
+      openGraph: { title: parameter.canonicalName, description: parameter.whatItDoes, url },
     }
   }
 
