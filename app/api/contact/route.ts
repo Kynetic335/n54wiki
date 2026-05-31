@@ -6,18 +6,25 @@ export const runtime = 'nodejs'
 
 type LeadPayload = {
   name?: string
-  email: string
+  email?: string
   vehicle?: string
   rom?: string
+  stage?: string
+  fuel?: string
+  turboType?: string
+  selectedAddons?: string[]
   message?: string
   source: string
 }
 
-const STRING_LIMITS: Record<keyof LeadPayload, number> = {
+const STRING_LIMITS = {
   name: 120,
   email: 254,
   vehicle: 160,
   rom: 40,
+  stage: 80,
+  fuel: 40,
+  turboType: 80,
   message: 4000,
   source: 80,
 }
@@ -31,6 +38,19 @@ function cleanString(value: unknown, limit: number) {
   return cleaned.length > 0 ? cleaned : undefined
 }
 
+function cleanStringArray(value: unknown, limit: number, itemLimit: number) {
+  if (!Array.isArray(value)) {
+    return undefined
+  }
+
+  const cleaned = value
+    .map((item) => cleanString(item, itemLimit))
+    .filter((item): item is string => Boolean(item))
+    .slice(0, limit)
+
+  return cleaned.length > 0 ? cleaned : undefined
+}
+
 function parseLeadPayload(body: unknown): { lead: LeadPayload } | { error: string } {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return { error: 'Payload must be a JSON object.' }
@@ -40,7 +60,7 @@ function parseLeadPayload(body: unknown): { lead: LeadPayload } | { error: strin
   const email = cleanString(sourceObject.email, STRING_LIMITS.email)
   const source = cleanString(sourceObject.source, STRING_LIMITS.source)
 
-  if (!email) {
+  if (!email && source !== 'tune-program-export') {
     return { error: 'Email is required.' }
   }
 
@@ -54,6 +74,10 @@ function parseLeadPayload(body: unknown): { lead: LeadPayload } | { error: strin
       email,
       vehicle: cleanString(sourceObject.vehicle, STRING_LIMITS.vehicle),
       rom: cleanString(sourceObject.rom, STRING_LIMITS.rom),
+      stage: cleanString(sourceObject.stage, STRING_LIMITS.stage),
+      fuel: cleanString(sourceObject.fuel, STRING_LIMITS.fuel),
+      turboType: cleanString(sourceObject.turboType, STRING_LIMITS.turboType),
+      selectedAddons: cleanStringArray(sourceObject.selectedAddons, 12, 80),
       message: cleanString(sourceObject.message, STRING_LIMITS.message),
       source,
     },

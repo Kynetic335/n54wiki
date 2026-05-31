@@ -60,6 +60,46 @@ describe('POST /api/contact', () => {
     expect(writtenLead.binContents).toBeUndefined()
   })
 
+  it('accepts tune-program export metadata without private payload fields', async () => {
+    const response = await POST(requestFor({
+      name: 'Alex',
+      email: 'alex@example.com',
+      vehicle: '2008 335i',
+      rom: 'I8A0S',
+      stage: 'stage2',
+      fuel: '93',
+      turboType: 'stock',
+      selectedAddons: ['xhp-tcu', 'flex-fuel'],
+      message: 'Tune program export completed.',
+      source: 'tune-program-export',
+      binContents: 'ignored',
+      patchJson: { unsafe: true },
+      stockSha256: 'ignored',
+    }))
+
+    await expect(response.json()).resolves.toEqual({ ok: true })
+    expect(response.status).toBe(200)
+    expect(fsMocks.appendFile).toHaveBeenCalledOnce()
+
+    const writtenLine = fsMocks.appendFile.mock.calls[0][1] as string
+    const writtenLead = JSON.parse(writtenLine)
+    expect(writtenLead).toMatchObject({
+      name: 'Alex',
+      email: 'alex@example.com',
+      vehicle: '2008 335i',
+      rom: 'I8A0S',
+      stage: 'stage2',
+      fuel: '93',
+      turboType: 'stock',
+      selectedAddons: ['xhp-tcu', 'flex-fuel'],
+      message: 'Tune program export completed.',
+      source: 'tune-program-export',
+    })
+    expect(writtenLead.binContents).toBeUndefined()
+    expect(writtenLead.patchJson).toBeUndefined()
+    expect(writtenLead.stockSha256).toBeUndefined()
+  })
+
   it('rejects a payload with missing email', async () => {
     const response = await POST(requestFor({
       source: 'contact-form',

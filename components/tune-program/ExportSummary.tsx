@@ -9,6 +9,7 @@ interface ExportSummaryProps {
   contentHash?: string
   exportedAt?: string
   packageFileName?: string
+  leadStatus?: 'idle' | 'sending' | 'sent' | 'error'
 }
 
 export function ExportSummary({
@@ -17,6 +18,7 @@ export function ExportSummary({
   contentHash,
   exportedAt,
   packageFileName,
+  leadStatus = 'idle',
 }: ExportSummaryProps) {
   return (
     <div
@@ -39,6 +41,27 @@ export function ExportSummary({
       >
         📦 Export Package Summary
       </p>
+
+      {leadStatus === 'sent' && (
+        <StatusMessage
+          tone="success"
+          message="Your tune request summary was saved. Synergy will follow up."
+        />
+      )}
+
+      {leadStatus === 'sending' && (
+        <StatusMessage
+          tone="info"
+          message="Saving tune request summary..."
+        />
+      )}
+
+      {leadStatus === 'error' && (
+        <StatusMessage
+          tone="warning"
+          message="Export completed, but the tune request summary could not be saved. Follow up with Synergy directly."
+        />
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
         <InfoBlock label="Customer" value={request.name} />
@@ -101,6 +124,41 @@ export function ExportSummary({
           The content hash above can be used to verify file integrity.
         </p>
       </div>
+    </div>
+  )
+}
+
+function StatusMessage({ tone, message }: { tone: 'success' | 'info' | 'warning'; message: string }) {
+  const styles = {
+    success: {
+      background: '#052e16',
+      border: '1px solid #16a34a44',
+      color: '#86efac',
+    },
+    info: {
+      background: '#0d1525',
+      border: '1px solid #1e3a8a44',
+      color: '#93c5fd',
+    },
+    warning: {
+      background: '#1a0f00',
+      border: '1px solid #854d0e44',
+      color: '#d97706',
+    },
+  }[tone]
+
+  return (
+    <div
+      style={{
+        ...styles,
+        marginBottom: '1rem',
+        padding: '0.75rem',
+        borderRadius: '0.5rem',
+        fontSize: '0.84rem',
+        lineHeight: 1.55,
+      }}
+    >
+      {message}
     </div>
   )
 }

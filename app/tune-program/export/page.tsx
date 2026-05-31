@@ -19,6 +19,7 @@ function ExportPageInner() {
   const [request, setRequest] = useState<CustomerRequest | null>(null)
   const [exportedHash, setExportedHash] = useState('')
   const [exportedFileName, setExportedFileName] = useState('')
+  const [leadStatus, setLeadStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
@@ -37,6 +38,51 @@ function ExportPageInner() {
   const tuneFile = request?.selectedTuneFileId
     ? getTuneFileById(request.selectedTuneFileId)
     : null
+
+  const sendExportCompletionEvent = async (completedRequest: CustomerRequest) => {
+    const vehicle = [completedRequest.vehicleYear, completedRequest.vehicleModel].filter(Boolean).join(' ')
+    const rom = completedRequest.romVersion || tuneFile?.romVersion || ''
+    const stage = completedRequest.selectedStage || tuneFile?.stage || ''
+    const fuel = completedRequest.selectedFuel || tuneFile?.fuel || ''
+    const turboType = completedRequest.selectedTurboType || tuneFile?.turboType || ''
+    const selectedAddons = completedRequest.selectedAddons ?? []
+    const message = [
+      'Tune program export completed.',
+      vehicle ? `Vehicle: ${vehicle}` : null,
+      rom ? `ROM: ${rom}` : null,
+      stage ? `Stage: ${stage}` : null,
+      fuel ? `Fuel: ${fuel}` : null,
+      turboType ? `Turbo type: ${turboType}` : null,
+      selectedAddons.length ? `Selected add-ons: ${selectedAddons.join(', ')}` : null,
+    ]
+      .filter(Boolean)
+      .join('\n')
+
+    setLeadStatus('sending')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          source: 'tune-program-export',
+          name: completedRequest.name || undefined,
+          email: completedRequest.email || undefined,
+          vehicle: vehicle || undefined,
+          rom: rom || undefined,
+          stage: stage || undefined,
+          fuel: fuel || undefined,
+          turboType: turboType || undefined,
+          selectedAddons,
+          message,
+        }),
+      })
+
+      setLeadStatus(response.ok ? 'sent' : 'error')
+    } catch {
+      setLeadStatus('error')
+    }
+  }
 
   if (!requestId) {
     return (
@@ -126,6 +172,7 @@ function ExportPageInner() {
               contentHash={exportedHash}
               exportedAt={new Date().toISOString()}
               packageFileName={exportedFileName}
+              leadStatus={leadStatus}
             />
           )}
 
@@ -137,6 +184,7 @@ function ExportPageInner() {
               onSuccess={(fileName, hash) => {
                 setExportedHash(hash)
                 setExportedFileName(fileName)
+                void sendExportCompletionEvent(request)
               }}
             />
           )}
