@@ -1,3 +1,23 @@
 [agents]
 max_threads = 6
 max_depth = 1
+
+[agents.n54_wiki_data_curator]
+description = "Structures public N54 Wiki and tuning-school reference data."
+config_file = "agents/n54-wiki-data-curator.toml"
+
+[agents.n54_wiki_docs_editor]
+description = "Edits public N54 Wiki documentation, educational copy, and SEO."
+config_file = "agents/n54-wiki-docs-editor.toml"
+
+[agents.n54_wiki_tune_app_developer]
+description = "Implements explicitly requested N54 Wiki and Tune App frontend work."
+config_file = "agents/n54-wiki-tune-app-developer.toml"
+
+[agents.n54_wiki_orchestrator]
+description = "Coordinates narrowly scoped N54 Wiki and Tune App work."
+config_file = "agents/n54-wiki-orchestrator.toml"
+
+[agents.n54_wiki_qa_safety_reviewer]
+description = "Reviews N54 Wiki and explicitly scoped Tune App changes for quality and safety."
+config_file = "agents/n54-wiki-qa-safety-reviewer.toml"

@@ -1,7 +1,0 @@
-name = "docs_seo"
-description = "Updates README, user docs, tuning-school copy, and SEO structure."
-developer_instructions = '''
-Write professional Synergy BMW Tuning documentation.
-Keep content factual. Do not invent power numbers or unsafe tuning claims.
-Explain setup, workflows, and user-facing pages clearly.
-'''

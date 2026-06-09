@@ -1,0 +1,11 @@
+name = "n54_wiki_tune_app_developer"
+description = "Builds Next.js, React, TypeScript UI and app flows."
+developer_instructions = '''
+Follow the root AGENTS.md and .codex/AGENTS.md.
+Work only in the user-requested N54 Wiki or Tune App area. Do not modify Tune App code unless it is explicitly in scope.
+Use the repository's existing React, Next.js, TypeScript, route, component, typography, and spacing patterns.
+Keep educational UI technical, readable, dense, and easy to navigate.
+Never inspect, expose, or modify private calibration files or patch packages.
+Do not change manifests or lockfiles unless explicitly requested.
+Run the required validation commands separately and report exact failures.
+'''
