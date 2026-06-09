@@ -1,0 +1,1254 @@
+{
+  "packageId": "ikm0s-stage3-91-v90",
+  "packageVersion": 1,
+  "romId": "IKM0S",
+  "stage": "stage3",
+  "fuel": "91",
+  "packageType": "standard-ots",
+  "stockSha256": "6e1e4d70166dfe7a6608b8c63101153c8e1b163a2acc5e9ffd49bf0a49e9a4df",
+  "tunedSha256": "2c8c397a6d2135a8782c157c4ece01363d38591ca7812fbc727fe23ea7a4d541",
+  "sourceMapVersion": "v90-source",
+  "builtAt": "2026-06-09T14:25:49.810Z",
+  "outputMode": "STANDARD_BIN_REVIEW_ONLY",
+  "ownerReviewRequired": true,
+  "encryptionApproved": false,
+  "mhdEncryptionAllowed": false,
+  "safeForAppPackage": true,
+  "needsAuditOffsets": [],
+  "externalFlasherRequired": true,
+  "requiresExternalFlasherChecksum": true,
+  "supportedFlashers": [
+    "MHD N54 Flasher",
+    "N54 Quickflash"
+  ],
+  "patchRegionCount": 152,
+  "notes": "IKM0S v90-source OTS. All included regions are XDF-evidenced. Byte 0x0470B2 is excluded as UNKNOWN_EXCLUDE. Review BIN only; external flasher applies checksum.",
+  "ownerAccept": {
+    "ownerAcceptedCalibrationRegions": 0,
+    "xdfEvidencedRegions": 152,
+    "identChecksumExcluded": 0,
+    "unknownExcluded": 1,
+    "unknownExcludeOffsets": [
+      "0x0470B2"
+    ],
+    "note": "All included regions match mapped IKM0S XDF ranges. Byte 0x0470B2 is excluded as UNKNOWN_EXCLUDE. No IDENT, checksum, header, or ROM flag bytes are included."
+  },
+  "patchRegions": [
+    {
+      "offset": 272828,
+      "byteCount": 1,
+      "expectedStockHex": "c6",
+      "replacementHex": "00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 272856,
+      "byteCount": 1,
+      "expectedStockHex": "c6",
+      "replacementHex": "00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 274788,
+      "byteCount": 1,
+      "expectedStockHex": "11",
+      "replacementHex": "00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 281788,
+      "byteCount": 1,
+      "expectedStockHex": "22",
+      "replacementHex": "00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 283076,
+      "byteCount": 1,
+      "expectedStockHex": "11",
+      "replacementHex": "00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 297726,
+      "byteCount": 2,
+      "expectedStockHex": "2c 65",
+      "replacementHex": "bf 7c",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 297750,
+      "byteCount": 1,
+      "expectedStockHex": "00",
+      "replacementHex": "01",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 304480,
+      "byteCount": 118,
+      "expectedStockHex": "00 19 58 1b 58 1b 58 1b 58 1b 58 1b 58 1b 00 19 00 19 00 00 90 1a 44 1b 44 1b 44 1b 44 1b 44 1b 44 1b 00 19 00 19 00 00 c8 19 bc 1b bc 1b bc 1b bc 1b 58 1b 58 1b c8 19 c8 19 00 00 92 1a 46 1b 46 1b 46 1b 46 1b 46 1b 46 1b c8 19 c8 19 00 00 92 1a 46 1b 46 1b 46 1b 46 1b 46 1b 46 1b c8 19 c8 19 00 00 90 1a 44 1b 44 1b 44 1b 44 1b 44 1b 44 1b 00 19 00 19",
+      "replacementHex": "90 1a 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 00 00 90 1a 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 00 00 90 1a 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 00 00 90 1a 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 00 00 90 1a 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 00 00 90 1a 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c 20 1c",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 308761,
+      "byteCount": 23,
+      "expectedStockHex": "86 40 86 40 86 00 99 40 86 40 86 40 86 00 99 40 86 c0 83 c0 83 00 99",
+      "replacementHex": "9f 40 9f 40 9f 40 9f 40 9f 40 9f 40 9f 40 9f 40 9f 40 9f 40 9f 40 9f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 312540,
+      "byteCount": 5,
+      "expectedStockHex": "d7 03 48 02 8f",
+      "replacementHex": "d4 03 48 02 66",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 314207,
+      "byteCount": 1,
+      "expectedStockHex": "00",
+      "replacementHex": "02",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 314625,
+      "byteCount": 3,
+      "expectedStockHex": "00 00 00",
+      "replacementHex": "02 02 02",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 316424,
+      "byteCount": 127,
+      "expectedStockHex": "00 1e 47 66 79 80 80 80 00 0e 3a 5d 60 7b 80 80 00 0b 23 44 55 6d 80 80 00 09 22 42 4c 68 75 80 00 08 21 3a 4a 5e 74 80 00 08 21 3a 4a 5e 74 80 00 08 21 3a 4a 5e 74 80 00 0a 20 3a 4a 5e 74 80 00 0f 1e 3e 53 70 80 80 00 0c 19 2e 3a 48 65 80 00 06 16 2a 36 41 60 80 00 02 14 2a 36 40 5f 80 00 02 12 2a 36 40 5d 80 00 02 12 2a 36 40 5d 80 00 02 12 2a 36 40 5d 80 00 02 12 2a 36 40 5d",
+      "replacementHex": "80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80 80",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 318512,
+      "byteCount": 14,
+      "expectedStockHex": "63 58 d9 5c 2a 5b 78 5a 90 5b 5f 59 d0 4f",
+      "replacementHex": "ff ff ff ff ff ff ff ff ff ff ff ff ff ff",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 365386,
+      "byteCount": 284,
+      "expectedStockHex": "14 16 7f 1a a2 28 96 3f 20 49 52 55 69 5b b4 78 00 80 00 80 00 80 00 00 ec 11 9a 19 54 29 6a 39 6d 46 a0 53 69 5b a0 62 1f 7d 00 80 00 80 00 00 ba 07 75 0f 2a 24 3c 32 4d 40 5b 4c 76 53 d3 5f 8f 78 00 80 00 80 00 00 d0 06 a2 0d 89 18 14 22 a0 2b cd 33 6f 41 85 54 54 6a 00 80 00 80 00 00 a2 04 46 09 d8 17 71 1d 66 26 58 32 98 3f 3d 4a 56 67 33 73 00 80 00 00 7b 04 f6 08 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73 00 80 00 00 7b 04 f6 08 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73 00 80 00 00 7b 04 f6 08 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73 00 80 00 00 7b 04 f6 08 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73 00 80 00 00 7b 04 f6 08 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73 00 80 00 00 7b 04 f6 08 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73 00 80 00 00 66 06 cd 0c 0a 17 71 1d 66 26 14 2e 52 38 3d 4a 71 5d 33 73",
+      "replacementHex": "c3 05 5c 0f 6c 1d 9f 2f e0 4a ce 60 37 6f eb 73 0d 77 b0 7c 00 80 00 00 c3 05 5c 0f 6c 1d 9f 2f e0 4a ce 60 37 6f eb 73 0d 77 b0 7c 00 80 00 00 c3 05 5c 0f 6c 1d 9f 2f e0 4a ce 60 37 6f eb 73 0d 77 b0 7c 00 80 00 00 c3 05 5c 0f 6c 1d 9f 2f e0 4a ce 60 37 6f eb 73 0d 77 b0 7c 00 80 00 00 c3 05 a6 0b 0b 18 0a 29 ab 43 da 5a b6 6c b9 71 8b 74 1f 7b 00 80 00 00 d7 03 33 08 e3 12 92 24 08 3e 87 55 b2 69 52 6f bd 72 9a 79 00 80 00 00 5a 04 b4 08 48 11 83 20 66 36 b8 4e 1f 65 cd 6c 89 71 52 78 00 80 00 00 9c 04 40 09 0a 10 ef 1b 3f 2e dd 46 99 60 0a 6b 43 70 ae 77 00 80 00 00 1f 05 3d 0a be 0f 9a 19 f6 28 00 40 e1 5a ae 67 56 6e 66 76 00 80 00 00 e3 05 f2 0a 41 0f 80 17 99 23 d8 3a 72 56 9d 64 9b 6c 7b 74 00 80 00 00 60 05 cf 09 51 0d e7 14 43 1f 29 34 a6 50 2f 60 2c 6a 7b 74 00 80 00 00 60 05 16 09 28 0d 0d 14 c3 1d 9f 2f 71 4c ac 5d 53 68 7b 74",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 383072,
+      "byteCount": 119,
+      "expectedStockHex": "08 07 08 07 08 07 08 07 08 07 08 07 08 07 08 07 08 07 08 07 34 08 34 08 34 08 34 08 34 08 34 08 34 08 34 08 34 08 34 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 fc 08 40 06 40 06 40 06 40 06 40 06 40 06 40 06 40 06 40 06 40 06 c8 00 c8 00 c8 00 c8 00 c8 00 c8 00 c8 00 c8 00 c8 00 c8",
+      "replacementHex": "64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 64 00 4b 00 4b 00 4b 00 4b 00 4b 00 4b 00 4b 00 4b 00 4b 00 4b 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32 00 32",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 384250,
+      "byteCount": 8,
+      "expectedStockHex": "9a 9a 9a 9a 7a 60 48 47",
+      "replacementHex": "da da da da d7 9a 8a 6d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 384267,
+      "byteCount": 40,
+      "expectedStockHex": "32 80 3e 40 51 00 64 80 70 00 7d 00 00 00 00 0c 02 a1 05 f5 08 13 0e 00 00 06 00 80 57 c0 5d 40 6a c0 76 80 89 00 96 ec",
+      "replacementHex": "5a 80 70 00 87 80 9d 00 b4 80 ca 00 00 cd 0c 00 20 33 33 00 40 cd 4c 00 00 06 00 4d 57 9a 5d 33 6a cd 76 00 87 00 b4 eb",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 384690,
+      "byteCount": 672,
+      "expectedStockHex": "00 0f 00 14 00 19 00 1e 00 23 00 28 00 32 00 3c 00 41 00 4b 00 55 00 5a 00 64 00 6e 00 82 00 96 f9 09 79 09 56 09 50 08 4c 07 50 07 8a 06 a2 05 60 05 0a 08 5f 07 ae 07 ae 07 ae 07 ae 07 ae 07 f6 28 cd 0c ff 0a d2 0a 00 0a 77 09 b9 09 77 0a ca 09 94 08 ed 07 e6 08 2f 09 2f 09 2f 09 2f 09 a9 64 71 3d 5c 0f c9 0b 18 0b e0 0a 14 0b 9f 0b fa 0b b6 0c 0b 0c f9 0c 4f 0d 4f 0d 4f 0d 4f 0d 66 66 ec 51 52 18 5c 0f 1f 0c 88 0b 5d 0b 92 0b da 0c e0 0d e0 0d 90 0d 90 0d 90 0d 90 0d 90 0d a4 70 a4 70 d7 23 ec 11 8e 0d b5 0c 8a 0c c0 0c 8b 0d 21 0f b6 0e 6e 0f 10 0e 10 0e 10 0e 10 0e 52 78 52 78 a4 30 56 17 d4 0e 5b 0d 42 0d ac 0d e7 0d 8a 0f a3 0f 21 10 39 0f 39 0f 39 0f 39 0f 00 80 52 78 cd 4c 48 21 e4 10 21 0e c6 0d 7d 0e b8 0e 2c 10 e4 10 ae 10 e1 0f a0 10 a0 10 a0 10 1f 85 1f 85 cd 4c 85 2b 9b 15 7b 11 4a 0e f3 0e c5 0f 54 11 ca 11 ca 11 dd 11 d7 12 d7 12 d7 12 ae 87 1f 85 cd 4c 85 2b b8 1e 07 13 52 0f 97 0f aa 11 3f 12 a5 12 ec 11 b5 11 a3 13 e5 13 e5 13 cd 8c 1f 85 cd 4c 52 38 48 21 c3 15 52 0f 5b 11 2d 12 e9 12 3e 13 fa 13 6e 13 1a 14 28 15 e0 13 5c 8f 1f 85 66 66 cd 4c d7 23 52 18 a4 10 e5 11 4e 12 81 14 bb 14 ee 14 9c 14 33 14 6f 15 ff 13 ec 91 ec 91 ec 91 cd 4c 66 26 e1 1a 33 13 ec 11 75 12 81 15 f7 15 fb 14 b2 15 fe 14 af 15 65 14 7b 94 7b 94 7b 94 7b 94 00 40 48 21 84 15 70 14 fe 14 46 16 87 16 78 16 93 17 d7 15 47 16 10 15 7b 94 7b 94 7b 94 7b 94 91 8f f6 28 9a 19 42 17 32 17 93 18 c9 16 8d 17 52 18 52 18 d0 17 c0 15 7b 94 7b 94 7b 94 7b 94 7b 94 85 2b 71 1d c6 17 8d 18 d5 18 8d 17 8d 17 9a 19 9a 19 9a 19 89 18 7b 94 7b 94 7b 94 7b 94 7b 94 33 33 66 26 48 21 b8 1e 17 1a ae 17 73 18 1d 1a 1d 1a da 1b 9b 1b 7b 94 7b 94 7b 94 7b 94 7b 94 7b 94 00 80 cd 4c a4 30 29 1c bb 17 bc 19 15 1b c8 1a 01 1d 96 1c 7b 94 7b 94 7b 94 7b 94 7b 94 7b 94 00 80 3e 59 e1 3a b8 1e 52 18 f4 18 43 1a 2d 1b 38 1e 33 1e 7b 94 7b 94 7b 94 7b 94 7b 94 7b 94 00 80 50 5d 22 4d 20 31 49 1c 36 19 86 1a b6 1b 99 1e 76 1f 7b 94 7b 94 7b 94 7b 94 7b 94 7b 94 00 80 50 5d 2d 52 17 39 a3 20 fc 19 0d 1b 3e 1c 87 21 66 26",
+      "replacementHex": "cd 13 33 19 26 1e 1a 23 0d 28 f3 31 da 3b cd 40 26 4b 0d 55 00 5a 80 70 00 87 80 9d 00 b4 80 ca 79 09 58 09 52 08 4c 07 52 07 8d 07 b5 07 fd 07 0a 08 5f 07 a8 06 ae 07 73 08 4b 09 37 0a 3d 0b cd 0c 02 0b d4 0a 02 0a 79 09 ba 09 78 0a 09 0a db 09 ba 09 e9 08 b4 09 1d 0a 23 0b 43 0c 7e 0d 70 3d 5c 0f c7 0b 16 0b e1 0a 16 0b 9f 0b fb 0b b9 0c 92 0c 71 0c 43 0c 15 0d cc 0e 69 10 75 12 eb 51 52 18 5c 0f 1c 0c 85 0b 5e 0b 98 0c da 0c e0 0d 22 0e 91 0d 91 0d ed 0e 69 10 89 11 1f 14 a3 70 d7 23 eb 11 8b 0d b3 0c 8b 0c 01 0d 8b 0d 21 0f fa 0e ab 0e d2 0e 76 0f 00 11 b0 12 9b 15 51 78 a4 30 59 17 d2 0e 5d 0d 43 0d ac 0d e7 0d 8a 0f ec 0f df 0f 00 10 c5 10 75 12 4d 14 1e 17 51 78 cd 4c 48 21 e5 10 22 0e c6 0d 3c 0e b8 0e 2e 10 e5 10 b1 10 df 10 47 12 18 14 18 16 58 19 1e 85 cd 4c 85 2b 1e 16 7c 11 49 0e 35 0f c5 0f 90 10 4e 12 48 11 0c 12 f8 13 c9 15 cf 17 93 1a 1e 85 cd 4c bd 32 b8 1e 05 13 4f 0f e5 10 62 10 ff 11 26 13 b0 12 1f 13 1f 15 52 17 ba 19 da 1b 1e 85 cd 4c 29 3b 48 21 c2 15 4f 0f 5b 11 27 11 eb 12 ff 12 33 13 18 14 dd 15 0a 18 f5 1a 15 1d 1e 85 66 66 cd 4c d7 23 52 18 27 11 68 12 0c 12 81 14 bc 14 af 14 fe 14 c2 16 b4 18 a6 1b 49 1e eb 91 eb 91 cd 4c 66 26 e1 1a 7b 14 b6 13 f8 12 fe 14 2c 15 fe 14 0b 16 80 17 37 19 7e 1c ab 1e 7a 94 7a 94 7a 94 00 40 48 21 23 1a 04 17 81 15 46 16 87 16 7a 16 e3 16 79 18 4a 1a 9e 1d b1 20 7a 94 7a 94 7a 94 90 8f f6 28 8a 1f 10 19 31 17 93 18 d5 17 8d 17 52 18 7f 19 a6 1b cc 1e f8 21 7a 94 7a 94 7a 94 7a 94 85 2b 19 23 1d 1a 8d 18 d5 18 10 18 52 18 58 19 78 1a 9f 1c 21 20 67 23 7a 94 7a 94 7a 94 7a 94 33 33 57 2c 48 21 b8 1e 16 1a 02 1a f6 18 a0 1a 5d 1c 5c 1e 68 21 c3 24 7a 94 7a 94 7a 94 7a 94 7a 94 ff 7f cd 4c a4 30 29 1c 58 1a 79 19 c7 1a 98 1c 76 1f 9c 22 11 26 7a 94 7a 94 7a 94 7a 94 7a 94 ff 7f 3e 59 e1 3a 54 22 01 1e 08 1b 30 1b 35 1e 41 22 95 25 3e 29 7a 94 7a 94 7a 94 7a 94 7a 94 ff 7f 50 5d 22 4d 20 31 2d 21 d3 1c c0 1c c4 20 f7 24 ef 28 3c 2c 7a 94 7a 94 7a 94 7a 94 7a 94 ff 7f 50 5d 2d 52 77 3d 9a 27 28 1f a4 1f 1f 25 3d 2a 77 2e 19 33",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385426,
+      "byteCount": 9,
+      "expectedStockHex": "98 09 50 08 02 06 c4 05 82",
+      "replacementHex": "9a 09 52 08 04 06 c3 05 81",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385448,
+      "byteCount": 45,
+      "expectedStockHex": "9a 19 49 0c 56 0b 84 0a fb 09 77 09 6f 09 90 0a 28 0b 91 0c 8a 0d a9 64 96 63 ae 47 df 0e e6 0c a6 0b 98 0b d9 0a 76 0b be 0d d9 0d 7d",
+      "replacementHex": "99 19 4a 0c 57 0b 85 0a fc 09 79 09 72 09 93 0a 29 0b 92 0c 8b 0d a8 64 95 63 ae 47 e0 0e e7 0c a6 0b 99 0b db 0a 78 0b bf 0d d9 0d 7e",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385516,
+      "byteCount": 7,
+      "expectedStockHex": "98 0e a4 70 4f 6f 2f",
+      "replacementHex": "97 0e a3 70 4f 6f 2e",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385538,
+      "byteCount": 7,
+      "expectedStockHex": "42 10 34 10 52 78 52",
+      "replacementHex": "41 10 34 10 51 78 51",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385560,
+      "byteCount": 1,
+      "expectedStockHex": "06",
+      "replacementHex": "07",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385566,
+      "byteCount": 10,
+      "expectedStockHex": "00 80 00 80 00 80 00 80 00 80",
+      "replacementHex": "ff 7f ff 7f ff 7f ff 7f ff 7f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385586,
+      "byteCount": 14,
+      "expectedStockHex": "ec 11 7c 12 1f 85 1f 85 d1 82 00 80 00 80",
+      "replacementHex": "eb 11 7c 12 1e 85 1e 85 d0 82 ff 7f ff 7f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385620,
+      "byteCount": 5,
+      "expectedStockHex": "00 80 00 80 c3",
+      "replacementHex": "ff 7f ff 7f c2",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385636,
+      "byteCount": 12,
+      "expectedStockHex": "88 15 cd 8c cd 8c ad 8a 3a 83 00 80",
+      "replacementHex": "87 15 cc 8c cc 8c ac 8a 39 83 ff 7f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385658,
+      "byteCount": 1,
+      "expectedStockHex": "ca",
+      "replacementHex": "c9",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385668,
+      "byteCount": 1,
+      "expectedStockHex": "4f",
+      "replacementHex": "4e",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385682,
+      "byteCount": 17,
+      "expectedStockHex": "c3 15 7a 16 ec 91 ec 91 ec 91 ec 91 ec 91 a0 53 9a",
+      "replacementHex": "c2 15 7a 16 eb 91 eb 91 eb 91 eb 91 eb 91 a2 53 99",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385704,
+      "byteCount": 17,
+      "expectedStockHex": "61 15 ff 16 8f 17 7b 94 7b 94 7b 94 7b 94 7b 94 92",
+      "replacementHex": "60 15 fd 16 8d 17 7a 94 7a 94 7a 94 7a 94 7a 94 90",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385728,
+      "byteCount": 17,
+      "expectedStockHex": "ea 16 0b 17 04 18 7b 94 7b 94 7b 94 7b 94 91 8f 4d",
+      "replacementHex": "e9 16 0a 17 03 18 7a 94 7a 94 7a 94 7a 94 90 8f 4c",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385758,
+      "byteCount": 11,
+      "expectedStockHex": "7b 94 7b 94 7b 94 7b 94 7b 94 7b",
+      "replacementHex": "7a 94 7a 94 7a 94 7a 94 7a 94 7a",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385776,
+      "byteCount": 1,
+      "expectedStockHex": "9a",
+      "replacementHex": "99",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385782,
+      "byteCount": 15,
+      "expectedStockHex": "7b 94 7b 94 7b 94 7b 94 7b 94 7b 94 22 92 f2",
+      "replacementHex": "7a 94 7a 94 7a 94 7a 94 7a 94 7a 94 1f 92 f4",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 385802,
+      "byteCount": 3,
+      "expectedStockHex": "49 1c 36",
+      "replacementHex": "4a 1c 37",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386636,
+      "byteCount": 2,
+      "expectedStockHex": "c0 03",
+      "replacementHex": "00 04",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386674,
+      "byteCount": 11,
+      "expectedStockHex": "99 fe 01 ff 1a ff 00 ff 82 ff cd",
+      "replacementHex": "4c ff 80 ff 8d ff 80 ff c1 ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386702,
+      "byteCount": 11,
+      "expectedStockHex": "99 fe 01 ff 1a ff 00 ff 65 ff cd",
+      "replacementHex": "4c ff 80 ff 8d ff 80 ff b2 ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386730,
+      "byteCount": 11,
+      "expectedStockHex": "99 fe 01 ff 1a ff 1a ff 33 ff cd",
+      "replacementHex": "4c ff 80 ff 8d ff 8d ff 99 ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386758,
+      "byteCount": 11,
+      "expectedStockHex": "b2 fe 1a ff 33 ff 5c ff 80 ff cd",
+      "replacementHex": "59 ff 8d ff 99 ff ae ff c0 ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386786,
+      "byteCount": 11,
+      "expectedStockHex": "ce fe 1a ff 4d ff 8a ff bb ff cd",
+      "replacementHex": "67 ff 8d ff a6 ff c5 ff dd ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386806,
+      "byteCount": 19,
+      "expectedStockHex": "33 00 4d 00 66 00 76 00 d1 fe 1a ff 67 ff 9b ff cb ff d7",
+      "replacementHex": "1a 00 27 00 33 00 3b 00 68 ff 8d ff b3 ff cd ff e5 ff eb",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386830,
+      "byteCount": 23,
+      "expectedStockHex": "0f 00 1a 00 43 00 5c 00 66 00 8f 00 ad fe 0d ff 5b ff 83 ff b1 ff bd",
+      "replacementHex": "08 00 0d 00 22 00 2e 00 33 00 48 00 56 ff 86 ff ad ff c1 ff d8 ff de",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386858,
+      "byteCount": 23,
+      "expectedStockHex": "14 00 33 00 65 00 80 00 9a 00 cd 00 8d fe e6 fe 33 ff 33 ff 66 ff 9a",
+      "replacementHex": "0a 00 1a 00 33 00 40 00 4d 00 67 00 46 ff 73 ff 99 ff 99 ff b3 ff cd",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386886,
+      "byteCount": 19,
+      "expectedStockHex": "1a 00 3d 00 8f 00 a9 00 c3 00 00 01 80 fe 27 ff 4d ff 66",
+      "replacementHex": "0d 00 1f 00 48 00 55 00 62 00 80 00 40 ff 93 ff a6 ff b3",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386914,
+      "byteCount": 19,
+      "expectedStockHex": "33 00 4d 00 99 00 b8 00 cd 00 1a 01 83 fe 4d ff 80 ff cd",
+      "replacementHex": "1a 00 27 00 4d 00 5c 00 67 00 8d 00 41 ff a6 ff c0 ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386942,
+      "byteCount": 17,
+      "expectedStockHex": "3d 00 57 00 9f 00 cd 00 d7 00 33 01 be fe 8f ff cd",
+      "replacementHex": "1f 00 2c 00 50 00 67 00 6c 00 9a 00 5f ff c7 ff e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386970,
+      "byteCount": 15,
+      "expectedStockHex": "4d 00 80 00 c2 00 e6 00 0f 01 5c 01 14 ff c4",
+      "replacementHex": "27 00 40 00 61 00 73 00 88 00 ae 00 8a ff e2",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 386998,
+      "byteCount": 12,
+      "expectedStockHex": "66 00 9a 00 f5 00 0f 01 29 01 75 01",
+      "replacementHex": "33 00 4d 00 7b 00 88 00 95 00 bb 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 387026,
+      "byteCount": 12,
+      "expectedStockHex": "66 00 cd 00 0f 01 42 01 5c 01 dc 01",
+      "replacementHex": "33 00 67 00 88 00 a1 00 ae 00 ee 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 387054,
+      "byteCount": 12,
+      "expectedStockHex": "66 00 cd 00 0f 01 42 01 75 01 0f 02",
+      "replacementHex": "33 00 67 00 88 00 a1 00 bb 00 08 01",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 387108,
+      "byteCount": 2,
+      "expectedStockHex": "ec 91",
+      "replacementHex": "cc cc",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 401334,
+      "byteCount": 4,
+      "expectedStockHex": "88 13 70 17",
+      "replacementHex": "5c 12 b4 14",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 401343,
+      "byteCount": 4,
+      "expectedStockHex": "64 73 6a 61",
+      "replacementHex": "73 76 80 8d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408160,
+      "byteCount": 6,
+      "expectedStockHex": "f5 f3 f2 f1 f0 f0",
+      "replacementHex": "f2 ee ec ec ec ec",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408176,
+      "byteCount": 6,
+      "expectedStockHex": "f9 f5 f3 f1 f0 f0",
+      "replacementHex": "f6 f0 ec ec ec ec",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408192,
+      "byteCount": 6,
+      "expectedStockHex": "01 fb f9 f6 f5 f5",
+      "replacementHex": "fe f6 f1 f1 f1 f1",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408208,
+      "byteCount": 6,
+      "expectedStockHex": "0e 06 04 00 fd f8",
+      "replacementHex": "08 00 f9 f4 f4 f4",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408224,
+      "byteCount": 6,
+      "expectedStockHex": "13 0b 07 03 00 fc",
+      "replacementHex": "0b 04 fc f9 f8 f8",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408240,
+      "byteCount": 6,
+      "expectedStockHex": "16 0d 0a 06 03 fe",
+      "replacementHex": "0d 05 ff fb fa fa",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408256,
+      "byteCount": 6,
+      "expectedStockHex": "19 11 0d 09 05 ff",
+      "replacementHex": "10 08 01 fd fc fc",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408272,
+      "byteCount": 6,
+      "expectedStockHex": "1c 17 0f 0d 08 02",
+      "replacementHex": "12 0e 04 00 ff ff",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408288,
+      "byteCount": 6,
+      "expectedStockHex": "1c 16 0f 0e 0a 04",
+      "replacementHex": "16 10 08 03 02 02",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408304,
+      "byteCount": 6,
+      "expectedStockHex": "1d 1b 19 16 11 0b",
+      "replacementHex": "1a 15 08 05 04 04",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408320,
+      "byteCount": 6,
+      "expectedStockHex": "1e 1d 1b 17 13 0d",
+      "replacementHex": "1c 15 08 05 04 04",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408336,
+      "byteCount": 6,
+      "expectedStockHex": "1c 18 15 13 0e 0b",
+      "replacementHex": "19 13 08 05 04 04",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408352,
+      "byteCount": 6,
+      "expectedStockHex": "1a 16 15 11 0c 08",
+      "replacementHex": "16 10 08 06 05 05",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408368,
+      "byteCount": 6,
+      "expectedStockHex": "1a 16 14 11 0e 0c",
+      "replacementHex": "17 10 09 08 07 07",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408384,
+      "byteCount": 6,
+      "expectedStockHex": "1c 19 17 12 0d 0c",
+      "replacementHex": "19 11 0a 09 08 08",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408400,
+      "byteCount": 6,
+      "expectedStockHex": "1c 1c 18 14 11 0c",
+      "replacementHex": "16 11 0c 0a 09 09",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408416,
+      "byteCount": 6,
+      "expectedStockHex": "1d 1c 18 15 13 0e",
+      "replacementHex": "17 13 0e 0a 09 09",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408432,
+      "byteCount": 6,
+      "expectedStockHex": "1e 1b 18 16 14 0e",
+      "replacementHex": "18 13 0f 0a 09 09",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408448,
+      "byteCount": 6,
+      "expectedStockHex": "1f 1d 19 17 16 0f",
+      "replacementHex": "19 14 10 0a 09 09",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408464,
+      "byteCount": 6,
+      "expectedStockHex": "1f 1c 19 17 15 0e",
+      "replacementHex": "19 14 10 0a 09 09",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 408507,
+      "byteCount": 63,
+      "expectedStockHex": "00 fb f7 f5 f3 f2 f2 08 07 03 fc f9 f6 f4 f1 10 0f 07 03 01 fe fb f6 16 15 11 07 05 04 00 fc 1a 1a 16 0d 09 06 03 00 1d 1b 18 13 0e 09 04 01 1d 1a 18 15 10 0a 04 01 1e 1d 1d 1b 16 11 0c 05",
+      "replacementHex": "fe f6 f0 ec ec ec ec 0a 07 fe f6 f1 f1 f1 f1 16 12 08 00 f9 f4 f4 f4 1b 17 0b 04 fc f9 f8 f8 1d 19 0d 05 ff fb fa fa 20 1b 10 08 01 fd fc fc 22 1d 12 0e 04 00 ff ff 1e 1d 16 10 08 03 02 02",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 457016,
+      "byteCount": 2,
+      "expectedStockHex": "f0 55",
+      "replacementHex": "60 6d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 457596,
+      "byteCount": 2,
+      "expectedStockHex": "f0 55",
+      "replacementHex": "60 6d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 458176,
+      "byteCount": 2,
+      "expectedStockHex": "f0 55",
+      "replacementHex": "60 6d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 458914,
+      "byteCount": 36,
+      "expectedStockHex": "08 22 a2 21 a2 21 d5 20 a1 1f a1 1f a1 1f a1 1f 6f 20 6f 20 d5 1e 08 1e 3a 1d d4 1c d4 1c a0 1b 6d 1a 6d 1a",
+      "replacementHex": "f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a f8 2a",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 459806,
+      "byteCount": 6,
+      "expectedStockHex": "9c 2c 44 33 8f 3a",
+      "replacementHex": "9a 39 9a 39 9a 39",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460468,
+      "byteCount": 13,
+      "expectedStockHex": "1f 11 cd 10 a4 10 a4 10 a4 10 a4 10 7b",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460492,
+      "byteCount": 13,
+      "expectedStockHex": "1f 11 cd 10 a4 10 a4 10 a4 10 a4 10 7b",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460516,
+      "byteCount": 13,
+      "expectedStockHex": "48 11 f6 10 a4 10 a4 10 cd 10 a4 10 7b",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460540,
+      "byteCount": 13,
+      "expectedStockHex": "9a 11 f6 10 cd 10 cd 10 f6 10 f6 10 7b",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460564,
+      "byteCount": 13,
+      "expectedStockHex": "c3 11 9a 11 71 11 71 11 1f 11 f6 10 7b",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460588,
+      "byteCount": 13,
+      "expectedStockHex": "1f 11 48 11 48 11 f6 10 a4 10 a4 10 7b",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460612,
+      "byteCount": 48,
+      "expectedStockHex": "7b 10 7b 10 a4 10 a4 10 7b 10 7b 10 52 10 f8 0f f8 0f f8 0f f8 0f f8 0f f8 0f f8 0f f8 0f 7b 10 52 10 52 10 52 10 f8 0f f8 0f f8 0f f8 0f f8 0f",
+      "replacementHex": "00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 00 10 f8 0f f8 0f f8 0f f8 0f f8 0f 00 10 00 10 00 10 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460674,
+      "byteCount": 8,
+      "expectedStockHex": "f8 0f f8 0f f8 0f f8 0f",
+      "replacementHex": "00 10 00 10 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460698,
+      "byteCount": 8,
+      "expectedStockHex": "f8 0f f8 0f f8 0f f8 0f",
+      "replacementHex": "00 10 00 10 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460720,
+      "byteCount": 8,
+      "expectedStockHex": "d5 0c f8 0f f8 0f f8 0f",
+      "replacementHex": "1f 0d 00 10 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460740,
+      "byteCount": 12,
+      "expectedStockHex": "04 0d a8 0c 83 0c f8 0f f8 0f f8 0f",
+      "replacementHex": "1f 0d 1f 0d 1f 0d 00 10 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460762,
+      "byteCount": 12,
+      "expectedStockHex": "eb 0c c5 0c aa 0c 7b 0c f8 0f f8 0f",
+      "replacementHex": "1f 0d 1f 0d 1f 0d 1f 0d 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460786,
+      "byteCount": 12,
+      "expectedStockHex": "da 0c 87 0c 53 0c 3f 0c f8 0f f8 0f",
+      "replacementHex": "1f 0d 1f 0d 1f 0d 1f 0d 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460808,
+      "byteCount": 14,
+      "expectedStockHex": "e0 0c 74 0c 54 0c 18 0c 17 0c f8 0f f8 0f",
+      "replacementHex": "1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 00 10 00 10",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 460832,
+      "byteCount": 10,
+      "expectedStockHex": "cc 0c 7c 0c 52 0c 2a 0c 2b 0c",
+      "replacementHex": "1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 461958,
+      "byteCount": 3,
+      "expectedStockHex": "f0 0f a6",
+      "replacementHex": "a6 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 461992,
+      "byteCount": 3,
+      "expectedStockHex": "f0 0f a6",
+      "replacementHex": "a6 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462026,
+      "byteCount": 3,
+      "expectedStockHex": "f0 0f a6",
+      "replacementHex": "a6 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462056,
+      "byteCount": 7,
+      "expectedStockHex": "f0 0f a6 0f 60 0f 5c",
+      "replacementHex": "a6 0f 60 0f 5c 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462088,
+      "byteCount": 9,
+      "expectedStockHex": "a6 0f d9 0e b0 0e b0 0e 9a",
+      "replacementHex": "85 0f 5c 0f 3e 0f 3e 0f db",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462122,
+      "byteCount": 11,
+      "expectedStockHex": "f0 0f 85 0f 5c 0f 3e 0f 3e 0f db",
+      "replacementHex": "85 0f 5c 0f 3e 0f 3e 0f db 0e a0",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462156,
+      "byteCount": 11,
+      "expectedStockHex": "f0 0f a7 0f 6a 0f 69 0f 2b 0f f5",
+      "replacementHex": "a7 0f 6a 0f 69 0f 2b 0f f5 0e 90",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462184,
+      "byteCount": 17,
+      "expectedStockHex": "f0 0f cf 0f cf 0f 7d 0f 7e 0f 44 0f 33 0f e2 0e bb",
+      "replacementHex": "cf 0f cf 0f 7d 0f 7e 0f 44 0f 33 0f e2 0e bb 0e be",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462218,
+      "byteCount": 19,
+      "expectedStockHex": "f0 0f a6 0f 54 0f 02 0f ef 0e 89 0e 51 0e eb 0d 60 0d 4c",
+      "replacementHex": "a6 0f 54 0f 02 0f ef 0e 8e 0e 20 0e eb 0d 9a 0d 9a 0d 9a",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462256,
+      "byteCount": 11,
+      "expectedStockHex": "f0 0f 2a 0f af 0e 8e 0e 20 0e eb",
+      "replacementHex": "2a 0f af 0e 8e 0e 20 0e eb 0d 9a",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462288,
+      "byteCount": 17,
+      "expectedStockHex": "f0 0f b3 0f cc 0e 9a 0e 4e 0e e2 0d 8d 0d 3b 0d 12",
+      "replacementHex": "b3 0f cc 0e 9a 0e 4e 0e e2 0d 8d 0d 3b 0d 1f 0d 1f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462322,
+      "byteCount": 18,
+      "expectedStockHex": "f0 0f 2d 0f ae 0e 32 0e d3 0d 75 0d 4f 0d f5 0c cc 0c",
+      "replacementHex": "2d 0f ae 0e 32 0e d3 0d 75 0d 4f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462354,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f a7 0f f8 0e 4e 0e f7 0d 69 0d 1f 0d cd 0c 7b 0c 7b 0c",
+      "replacementHex": "a7 0f f8 0e 4e 0e f7 0d 69 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462388,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f 79 0f d1 0e fe 0d a7 0d 40 0d f6 0c a4 0c 7b 0c 7b 0c",
+      "replacementHex": "79 0f d1 0e fe 0d a7 0d 40 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462422,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f 14 0f 43 0e eb 0d 6b 0d 1f 0d cd 0c a4 0c 7b 0c 7b 0c",
+      "replacementHex": "14 0f 43 0e eb 0d 6b 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462456,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f af 0e 30 0e af 0d 33 0d f6 0c cd 0c a4 0c 7b 0c 7b 0c",
+      "replacementHex": "af 0e 30 0e af 0d 33 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462488,
+      "byteCount": 23,
+      "expectedStockHex": "f0 0f ed 0f 9c 0e f4 0d 4a 0d 0b 0d cd 0c a4 0c a4 0c 7b 0c 7b 0c 94",
+      "replacementHex": "ed 0f 9c 0e f4 0d 4a 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462520,
+      "byteCount": 24,
+      "expectedStockHex": "e6 0f cf 0f af 0f 9d 0e b8 0d 37 0d f6 0c a4 0c 7b 0c 7b 0c 7b 0c 7b 0c",
+      "replacementHex": "cf 0f af 0f 9d 0e b8 0d 37 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462742,
+      "byteCount": 3,
+      "expectedStockHex": "f0 0f a6",
+      "replacementHex": "a6 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462776,
+      "byteCount": 3,
+      "expectedStockHex": "f0 0f a6",
+      "replacementHex": "a6 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462810,
+      "byteCount": 3,
+      "expectedStockHex": "f0 0f a6",
+      "replacementHex": "a6 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462840,
+      "byteCount": 7,
+      "expectedStockHex": "f0 0f a6 0f 60 0f 5c",
+      "replacementHex": "a6 0f 60 0f 5c 0f 54",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462872,
+      "byteCount": 9,
+      "expectedStockHex": "a6 0f d9 0e b0 0e b0 0e 9a",
+      "replacementHex": "85 0f 5c 0f 3e 0f 3e 0f db",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462906,
+      "byteCount": 11,
+      "expectedStockHex": "f0 0f 85 0f 5c 0f 3e 0f 3e 0f db",
+      "replacementHex": "85 0f 5c 0f 3e 0f 3e 0f db 0e a0",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462940,
+      "byteCount": 11,
+      "expectedStockHex": "f0 0f a7 0f 6a 0f 69 0f 2b 0f f5",
+      "replacementHex": "a7 0f 6a 0f 69 0f 2b 0f f5 0e 90",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 462968,
+      "byteCount": 17,
+      "expectedStockHex": "f0 0f cf 0f cf 0f 7d 0f 7e 0f 44 0f 33 0f e2 0e bb",
+      "replacementHex": "cf 0f cf 0f 7d 0f 7e 0f 44 0f 33 0f e2 0e bb 0e be",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463002,
+      "byteCount": 19,
+      "expectedStockHex": "f0 0f a6 0f 54 0f 02 0f ef 0e 89 0e 51 0e eb 0d 60 0d 4c",
+      "replacementHex": "a6 0f 54 0f 02 0f ef 0e 8e 0e 20 0e eb 0d 9a 0d 9a 0d 9a",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463040,
+      "byteCount": 11,
+      "expectedStockHex": "f0 0f 2a 0f af 0e 8e 0e 20 0e eb",
+      "replacementHex": "2a 0f af 0e 8e 0e 20 0e eb 0d 9a",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463072,
+      "byteCount": 17,
+      "expectedStockHex": "f0 0f b3 0f cc 0e 9a 0e 4e 0e e2 0d 8d 0d 3b 0d 12",
+      "replacementHex": "b3 0f cc 0e 9a 0e 4e 0e e2 0d 8d 0d 3b 0d 1f 0d 1f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463106,
+      "byteCount": 18,
+      "expectedStockHex": "f0 0f 2d 0f ae 0e 32 0e d3 0d 75 0d 4f 0d f5 0c cc 0c",
+      "replacementHex": "2d 0f ae 0e 32 0e d3 0d 75 0d 4f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463138,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f a7 0f f8 0e 4e 0e f7 0d 69 0d 1f 0d cd 0c 7b 0c 7b 0c",
+      "replacementHex": "a7 0f f8 0e 4e 0e f7 0d 69 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463172,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f 79 0f d1 0e fe 0d a7 0d 40 0d f6 0c a4 0c 7b 0c 7b 0c",
+      "replacementHex": "79 0f d1 0e fe 0d a7 0d 40 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463206,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f 14 0f 43 0e eb 0d 6b 0d 1f 0d cd 0c a4 0c 7b 0c 7b 0c",
+      "replacementHex": "14 0f 43 0e eb 0d 6b 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463240,
+      "byteCount": 20,
+      "expectedStockHex": "f0 0f af 0e 30 0e af 0d 33 0d f6 0c cd 0c a4 0c 7b 0c 7b 0c",
+      "replacementHex": "af 0e 30 0e af 0d 33 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463272,
+      "byteCount": 23,
+      "expectedStockHex": "f0 0f ed 0f 9c 0e f4 0d 4a 0d 0b 0d cd 0c a4 0c a4 0c 7b 0c 7b 0c 94",
+      "replacementHex": "ed 0f 9c 0e f4 0d 4a 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d e6",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 463304,
+      "byteCount": 24,
+      "expectedStockHex": "e6 0f cf 0f af 0f 9d 0e b8 0d 37 0d f6 0c a4 0c 7b 0c 7b 0c 7b 0c 7b 0c",
+      "replacementHex": "cf 0f af 0f 9d 0e b8 0d 37 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d 1f 0d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 464030,
+      "byteCount": 2,
+      "expectedStockHex": "cd 2c",
+      "replacementHex": "00 20",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 469102,
+      "byteCount": 1156,
+      "expectedStockHex": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 b8 0b ac 0d 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 27 f8 2a d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 00 10 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 b8 0b ac 0d 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 10 27 f8 2a d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 d7 83 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80 00 80",
+      "replacementHex": "f4 01 e8 03 dc 05 d0 07 c4 09 b8 0b ac 0d a0 0f 94 11 88 13 7c 15 70 17 6a 18 64 19 5e 1a 58 1b 8c 0a 48 0d 68 10 94 11 70 17 4c 1d 1c 25 f8 2a 70 30 20 35 a4 38 8c 3c 74 40 50 46 20 4e f0 55 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 fc 85 fc 85 fc 85 fc 85 fc 85 43 87 43 87 43 87 43 87 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 5e 8c 32 90 32 90 32 90 78 91 78 91 78 91 78 91 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 32 90 06 94 06 94 06 94 4c 95 4c 95 4c 95 4c 95 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 bf 92 4c 95 93 96 93 96 93 96 93 96 93 96 93 96 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 d0 89 78 91 06 94 93 96 93 96 93 96 93 96 93 96 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 8a 88 d0 89 17 8b 5e 8c 5e 8c 5e 8c 5e 8c 5e 8c 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 28 82 28 82 28 82 6f 83 6f 83 6f 83 6f 83 6f 83 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f e2 80 e2 80 e2 80 28 82 28 82 28 82 28 82 28 82 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f e2 80 e2 80 e2 80 e2 80 e2 80 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 00 00 10 10 f4 01 e8 03 dc 05 d0 07 c4 09 b8 0b ac 0d a0 0f 94 11 88 13 7c 15 70 17 6a 18 64 19 5e 1a 58 1b 8c 0a 48 0d 68 10 94 11 70 17 4c 1d 1c 25 f8 2a 70 30 20 35 a4 38 8c 3c 74 40 50 46 20 4e f0 55 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 fc 85 fc 85 fc 85 fc 85 fc 85 43 87 43 87 43 87 43 87 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 5e 8c 32 90 32 90 32 90 78 91 78 91 78 91 78 91 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 32 90 06 94 06 94 06 94 4c 95 4c 95 4c 95 4c 95 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 bf 92 4c 95 93 96 93 96 93 96 93 96 93 96 93 96 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 d0 89 78 91 06 94 93 96 93 96 93 96 93 96 93 96 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f fc 85 8a 88 d0 89 17 8b 5e 8c 5e 8c 5e 8c 5e 8c 5e 8c 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 28 82 28 82 28 82 6f 83 6f 83 6f 83 6f 83 6f 83 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f e2 80 e2 80 e2 80 28 82 28 82 28 82 28 82 28 82 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f e2 80 e2 80 e2 80 e2 80 e2 80 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f 9b 7f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471379,
+      "byteCount": 1,
+      "expectedStockHex": "01",
+      "replacementHex": "00",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471634,
+      "byteCount": 5,
+      "expectedStockHex": "14 05 ef 06 6c",
+      "replacementHex": "dc 05 d6 06 d0",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471644,
+      "byteCount": 10,
+      "expectedStockHex": "b8 0b b2 0c 74 0e 3c 0f 68 10",
+      "replacementHex": "be 0a b8 0b b2 0c ac 0d a0 0f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471662,
+      "byteCount": 36,
+      "expectedStockHex": "5e 1a 26 1b b8 3d 92 3b 02 3a 02 3a 3a 39 78 37 40 38 dc 37 14 37 14 37 a4 38 02 3a a4 38 b0 36 a8 2f 6e 28",
+      "replacementHex": "64 19 58 1b 41 32 ab 33 e2 34 0e 36 da 3f ae 4c 14 50 14 50 14 50 4c 4f 84 4e 90 4c 38 4a e0 47 50 46 5c 44",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471726,
+      "byteCount": 24,
+      "expectedStockHex": "11 51 5c 4f f2 4b ab 4a e6 49 63 49 3d 4a ab 4a 3d 4a 3d 4a 3d 4a 3d 4a",
+      "replacementHex": "55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471864,
+      "byteCount": 30,
+      "expectedStockHex": "40 6a 00 78 80 7c 80 7e 00 85 80 8b 80 93 33 93 8f 92 8f 92 ba 8e 48 91 e1 8a 70 8a ee 86",
+      "replacementHex": "f3 67 00 78 cd 88 00 99 a6 a9 da b9 80 ca 00 c0 00 c0 00 c0 00 c0 00 c0 00 c0 00 c0 00 c0",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471926,
+      "byteCount": 5,
+      "expectedStockHex": "14 05 ef 06 6c",
+      "replacementHex": "dc 05 d6 06 d0",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471936,
+      "byteCount": 12,
+      "expectedStockHex": "b8 0b b2 0c 74 0e 3c 0f 68 10 cc 10",
+      "replacementHex": "be 0a b8 0b b2 0c ac 0d a0 0f 94 11",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 471954,
+      "byteCount": 36,
+      "expectedStockHex": "5e 1a 26 1b e4 3e be 3c 2e 3b 02 3a 3a 39 78 37 40 38 dc 37 14 37 14 37 e8 35 4c 36 52 35 bc 34 ec 2c 6e 28",
+      "replacementHex": "64 19 58 1b 41 32 ab 33 e2 34 0e 36 da 3f ae 4c 14 50 14 50 14 50 4c 4f 84 4e 90 4c 38 4a e0 47 50 46 5c 44",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 513966,
+      "byteCount": 78,
+      "expectedStockHex": "00 00 cd 0c 9a 19 66 26 33 33 66 66 33 b3 f9 ff 00 00 cd 0c 9a 19 66 26 33 33 66 66 33 b3 f9 ff 00 00 cd 0c 9a 19 66 26 33 33 66 66 33 b3 f9 ff 00 00 cd 0c 9a 19 66 26 33 33 66 66 33 b3 f9 ff 00 00 cd 0c 9a 19 66 26 33 33 66 66 33 b3",
+      "replacementHex": "99 d9 70 dd 47 e1 1e e5 cc ec 51 f8 ff ff f9 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f9 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f9 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f9 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 514424,
+      "byteCount": 2,
+      "expectedStockHex": "0a 3f",
+      "replacementHex": "71 3d",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 516966,
+      "byteCount": 4,
+      "expectedStockHex": "cd 6c cd 6c",
+      "replacementHex": "98 79 00 80",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 516982,
+      "byteCount": 4,
+      "expectedStockHex": "cd 6c cd 6c",
+      "replacementHex": "cc 6c 00 80",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 516998,
+      "byteCount": 4,
+      "expectedStockHex": "cd 6c cd 6c",
+      "replacementHex": "cc 6c 00 80",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 517016,
+      "byteCount": 2,
+      "expectedStockHex": "cd 6c",
+      "replacementHex": "00 80",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 517060,
+      "byteCount": 6,
+      "expectedStockHex": "66 46 9a 59 9a 59",
+      "replacementHex": "c8 4c 9a 59 fa 5f",
+      "mapName": null,
+      "category": null
+    },
+    {
+      "offset": 517076,
+      "byteCount": 6,
+      "expectedStockHex": "66 46 66 46 cd 4c",
+      "replacementHex": "c8 4c 94 59 fa 5f",
+      "mapName": null,
+      "category": null
+    }
+  ]
+}

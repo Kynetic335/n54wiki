@@ -86,12 +86,12 @@ describe('getRomGateStatus', () => {
     expect(getRomGateStatus('INA0S')).toBe('READY')
   })
 
-  it('returns NEEDS_AUDIT for IJE0S (all packages safeForApp: false)', () => {
-    expect(getRomGateStatus('IJE0S')).toBe('NEEDS_AUDIT')
+  it('returns READY for IJE0S (promoted 2026-06-08, OWNER_ACCEPT)', () => {
+    expect(getRomGateStatus('IJE0S')).toBe('READY')
   })
 
-  it('returns NOT_BUILT for IKM0S (no v12 manifest entries)', () => {
-    expect(getRomGateStatus('IKM0S')).toBe('NOT_BUILT')
+  it('returns READY for IKM0S (built 2026-06-09, v90 OTS)', () => {
+    expect(getRomGateStatus('IKM0S')).toBe('READY')
   })
 
   it('returns NOT_BUILT for an unknown ROM', () => {
@@ -115,22 +115,25 @@ describe('listReadyPackagesForRom', () => {
     expect(pkgs.every((p) => p.safeForApp)).toBe(true)
   })
 
-  it('returns 0 READY packages for IJE0S', () => {
-    expect(listReadyPackagesForRom('IJE0S')).toHaveLength(0)
+  it('returns 13 READY packages for IJE0S (promoted 2026-06-08, OWNER_ACCEPT)', () => {
+    expect(listReadyPackagesForRom('IJE0S')).toHaveLength(13)
   })
 
-  it('returns 0 packages for IKM0S', () => {
-    expect(listReadyPackagesForRom('IKM0S')).toHaveLength(0)
+  it('returns 16 READY packages for IKM0S (built 2026-06-09, v90 OTS)', () => {
+    const pkgs = listReadyPackagesForRom('IKM0S')
+    expect(pkgs).toHaveLength(16)
+    expect(pkgs.every((p) => p.safeForApp)).toBe(true)
+    expect(pkgs.every((p) => p.romId === 'IKM0S')).toBe(true)
   })
 })
 
 // ─── listActivePackagesForRom ─────────────────────────────────────────────────
 
 describe('listActivePackagesForRom', () => {
-  it('returns 13 active packages for IJE0S (NEEDS_AUDIT but not deprecated)', () => {
+  it('returns 13 active packages for IJE0S (READY after OWNER_ACCEPT promotion)', () => {
     const pkgs = listActivePackagesForRom('IJE0S')
     expect(pkgs).toHaveLength(13)
-    expect(pkgs.every((p) => p.safeForApp === false)).toBe(true)
+    expect(pkgs.every((p) => p.safeForApp === true)).toBe(true)
   })
 
   it('excludes deprecated packages from active list', () => {

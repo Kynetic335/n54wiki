@@ -950,6 +950,29 @@ export const tuneFiles: TuneFile[] = [
 
   // ── IKM0S / Stock Turbo / Stage 3 ──────────────────────────────────────────
   {
+    id: 'ikm0s-stock-stage3-91',
+    displayName: 'IKM0S — Stage 3 — 91oct — Stock Turbo',
+    platform: 'N54',
+    romVersion: 'IKM0S',
+    fuel: '91',
+    stage: 'stage3',
+    turboType: 'stock',
+    transmissionCompatibility: 'MT',
+    protectedFilePath: 'protected-tune-files/IKM0S/stage3/91/n54-ikm0s-s3-91-stock.bin',
+    requiredMods: [...STOCK_STAGE2_REQUIRED, 'FMIC required'],
+    recommendedMods: ['Upgraded HPFP internals', 'Performance plugs gapped 0.020"'],
+    maintenanceChecklist: MAINTENANCE_CHECKLIST,
+    safetyNotes: [
+      'Confirm IKM0S ROM before flashing',
+      'Stage 3 on 91 oct requires conservative review and logs before advancing',
+    ],
+    datalogRequirements: DATALOG_REQUIREMENTS,
+    locked: true,
+    exportable: true,
+    fileExists: false,
+    notes: 'IKM0S — v90-source app-safe package published; raw tune remains private',
+  },
+  {
     id: 'ikm0s-stock-stage3-93',
     displayName: 'IKM0S — Stage 3 — 93oct — Stock Turbo',
     platform: 'N54',

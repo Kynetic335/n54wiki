@@ -60,14 +60,15 @@ export const romFamilies: RomFamily[] = [
       'Select late-production N54 vehicles (region/market specific)',
       'Confirm your ROM version in MHD before selecting this family',
     ],
-    supportedStages: ['stage1plus', 'stage2', 'stage3'],
-    supportedFuels: ['91', '93'],
+    supportedStages: ['stage1', 'stage1plus', 'stage2', 'stage3'],
+    supportedFuels: ['91', '93', 'E30', 'E50'],
     hasPrivateSources: true,
     notes:
-      'Private inventory (2026-05-24): stock original BIN, OTS v90 BINs, current XDF. ' +
-      'No v12 source files found in NEW MAPS. No Flex Fuel or Hybrid Twins variants. ' +
-      'Packages: NOT BUILT — awaiting v12 source files or owner-confirmed v90 validation. ' +
-      'hybrid-base not supported.',
+      'Private inventory: stock original BIN, OTS v90 BINs, current XDF. ' +
+      'No v12 NEW MAPS series exists for IKM0S — packages built from verified v90 OTS ' +
+      '(2026-06-09): Stage 1/1+/2/3 × 91/93/E30/E50 (16 READY). v90 "stage 2+" mapped ' +
+      'to stage3. All regions XDF-evidenced; flag byte 0x0470B2 excluded. 95/ACN91 fuels ' +
+      'held (future). No Flex Fuel or Hybrid Twins variants; hybrid-base not supported.',
   },
   {
     romId: 'INA0S',

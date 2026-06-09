@@ -10,8 +10,8 @@
 //   3. NEEDS_AUDIT — safeForApp === false
 //   4. READY     — safeForApp === true and none of the above
 //
-// NOT_BUILT is a ROM-level status (IKM0S has no manifest entries at all).
-// It is returned by `getRomGateStatus()` when no packages exist for a ROM.
+// NOT_BUILT is a ROM-level status returned by `getRomGateStatus()` when a ROM has
+// no non-deprecated manifest entries. (IKM0S is now BUILT — v90 OTS, 2026-06-09.)
 //
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ import type { PatchPackageManifestEntry } from '@/data/tune-program/patch-packag
 export type PackageGateStatus =
   | 'READY'        // safeForApp: true, v12, no encryption flags
   | 'NEEDS_AUDIT'  // safeForApp: false (e.g. IJE0S — 150+ unmatched XDF regions)
-  | 'NOT_BUILT'    // ROM has no v12 manifest entries (IKM0S)
+  | 'NOT_BUILT'    // ROM has no non-deprecated manifest entries
   | 'DEPRECATED'   // sourceMapVersion === 'v1-deprecated' (archived v1 packages)
   | 'BLOCKED'      // encryptionApproved or mhdEncryptionAllowed true
 
@@ -59,8 +59,8 @@ export function isPackageAllowed(pkg: PatchPackageManifestEntry): boolean {
 
 export type RomGateStatus =
   | 'READY'        // ≥1 READY package exists for this ROM
-  | 'NEEDS_AUDIT'  // all packages are NEEDS_AUDIT (IJE0S)
-  | 'NOT_BUILT'    // no manifest entries at all for this ROM (IKM0S)
+  | 'NEEDS_AUDIT'  // all non-deprecated packages are NEEDS_AUDIT
+  | 'NOT_BUILT'    // no non-deprecated manifest entries for this ROM
 
 /**
  * Returns the aggregate ROM-level gate status.

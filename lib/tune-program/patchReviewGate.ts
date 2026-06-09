@@ -31,6 +31,7 @@
 
 import type { AppSafePatchPackage, PatchApplyResult } from '@/types/tune-program'
 import { ROM_SIZE } from '@/lib/tune-program/patchApplyEngine'
+import { getRomGateStatus } from '@/lib/tune-program/packageGates'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -44,24 +45,28 @@ const fail = (reason: string): GateFail => ({ pass: false, reason })
 // ─── ROM support gate ─────────────────────────────────────────────────────────
 
 /**
- * ROMs with validated patch packages in v1.
- * Other ROMs are gated out — packages don't exist yet.
- */
-export const REVIEW_SUPPORTED_ROMS = ['I8A0S', 'INA0S'] as const
-export type ReviewSupportedRom = typeof REVIEW_SUPPORTED_ROMS[number]
-
-/**
- * Gate: romId must be in REVIEW_SUPPORTED_ROMS.
- * I8A0S: Standard OTS (stage1+/2/3 × 91/93/E50) + N20 MAP packages — all READY.
- * INA0S: Standard OTS (stage1+/2/3 × 91/93/E50) + N20 MAP packages — all READY (v12).
- * IJE0S: needs-audit (150+ unmatched XDF regions per package) — blocked until audit passes.
- * IKM0S: not built yet — no v12 source files found.
+ * Gate: the ROM must have at least one READY package in the manifest.
+ *
+ * DATA-DRIVEN — no ROM is locked by name. A ROM passes iff its manifest data
+ * yields a READY package (getRomGateStatus). The instant any ROM's packages are
+ * promoted to READY, this gate opens for it automatically; the instant a ROM has
+ * only NEEDS_AUDIT or no packages, it closes. I8A0S / IJE0S / IKM0S / INA0S are
+ * all evaluated identically.
+ *
+ * I8A0S, IJE0S, INA0S: READY (v12 packages validated).
+ * IKM0S: READY for 16 validated v90-source packages.
  */
 export function gateRomSupported(romId: string): GateResult {
-  if ((REVIEW_SUPPORTED_ROMS as readonly string[]).includes(romId)) return PASS
+  const status = getRomGateStatus(romId)
+  if (status === 'READY') return PASS
+  if (status === 'NEEDS_AUDIT') {
+    return fail(
+      `${romId} packages are still being audited and are not yet available for review. ` +
+      'Contact Synergy for availability.'
+    )
+  }
   return fail(
-    `Patch review is only available for ${REVIEW_SUPPORTED_ROMS.join(' and ')} in this version. ` +
-    `${romId} packages are not yet available for owner-review.`
+    `No review packages have been built for ${romId} yet. Contact Synergy for availability.`
   )
 }
 

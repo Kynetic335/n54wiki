@@ -24,15 +24,28 @@ import {
   verifyReviewDownloadGates,
   buildReviewBinForDownload,
   buildReviewManifest,
-  makeReviewFilename,
   makeManifestFilename,
   downloadBlob,
 } from '@/lib/tune-program/reviewBinDownload'
+import { makeCustomerReviewFilename } from '@/lib/tune-program/reviewFilename'
+
+/** Selection metadata used for the review summary + customer filename. */
+export interface ReviewSelection {
+  romId:      string
+  stage:      string
+  fuel:       string
+  /** turbo type token, e.g. 'stock', 'n20-map-hybrid-base' */
+  turboType:  string
+  stageLabel: string
+  turboLabel: string
+  fuelLabel:  string
+}
 
 interface Props {
   result:      PatchApplyResult
   stockBuffer: ArrayBuffer
   pkg:         AppSafePatchPackage
+  selection?:  ReviewSelection
 }
 
 type DownloadPhase =
@@ -41,7 +54,7 @@ type DownloadPhase =
   | { phase: 'done' }
   | { phase: 'error'; message: string }
 
-export default function OwnerReviewDownload({ result, stockBuffer, pkg }: Props) {
+export default function OwnerReviewDownload({ result, stockBuffer, pkg, selection }: Props) {
   const [binPhase,      setBinPhase]      = useState<DownloadPhase>({ phase: 'idle' })
   const [manifestPhase, setManifestPhase] = useState<DownloadPhase>({ phase: 'idle' })
 
@@ -64,8 +77,18 @@ export default function OwnerReviewDownload({ result, stockBuffer, pkg }: Props)
       // Build the patched buffer — lives only in this try block
       const patchedBuffer = await buildReviewBinForDownload(stockBuffer, pkg)
 
-      const ts       = new Date().toISOString().replace(/:/g, '').split('.')[0] + 'Z'
-      const filename = makeReviewFilename(pkg, ts)
+      // Customer-facing filename (e.g. I8A0S_Stage2Plus_E50_StockTurbo_REVIEW.bin)
+      // falls back to package fields when no selection metadata is supplied.
+      const filename = selection
+        ? makeCustomerReviewFilename({
+            romId:     selection.romId || pkg.romId,
+            stage:     selection.stage || pkg.stage,
+            fuel:      selection.fuel  || pkg.fuel,
+            turboType: selection.turboType,
+          })
+        : makeCustomerReviewFilename({
+            romId: pkg.romId, stage: pkg.stage, fuel: pkg.fuel, turboType: 'stock',
+          })
 
       downloadBlob(
         new Blob([patchedBuffer], { type: 'application/octet-stream' }),
@@ -191,11 +214,13 @@ export default function OwnerReviewDownload({ result, stockBuffer, pkg }: Props)
           marginBottom: '1rem',
         }}>
           {[
-            { label: 'Package',  value: pkg.packageId },
-            { label: 'ROM',      value: pkg.romId },
-            { label: 'Stage',    value: pkg.stage },
-            { label: 'Fuel',     value: pkg.fuel.toUpperCase() },
-            { label: 'Regions',  value: String(pkg.patchRegionCount) },
+            { label: 'Package',    value: pkg.packageId },
+            { label: 'ROM',        value: selection?.romId || pkg.romId },
+            { label: 'Stage',      value: selection?.stageLabel || pkg.stage },
+            { label: 'Fuel',       value: selection?.fuelLabel || pkg.fuel.toUpperCase() },
+            { label: 'Turbo type', value: selection?.turboLabel || 'Stock Turbo' },
+            { label: 'Status',     value: 'READY' },
+            { label: 'Patch count', value: String(pkg.patchRegionCount) },
             { label: 'Mismatches', value: String(result.stockMismatchCount), danger: result.stockMismatchCount > 0 },
           ].map(({ label, value, danger }) => (
             <div key={label}>
@@ -207,6 +232,18 @@ export default function OwnerReviewDownload({ result, stockBuffer, pkg }: Props)
               </p>
             </div>
           ))}
+        </div>
+
+        {/* ── Review-only disclaimer (exact wording) ───────── */}
+        <div style={{
+          background: '#0d1117', border: '1px solid #21262d', borderRadius: '0.5rem',
+          padding: '0.65rem 0.85rem', marginBottom: '1rem',
+        }}>
+          <p style={{ margin: 0, fontSize: '0.78rem', color: '#8b949e', lineHeight: 1.6 }}>
+            <strong style={{ color: '#c9d1d9' }}>Review-only disclaimer:</strong>{' '}
+            This is a review-mode generated BIN. Verify the file in TunerPro/WinOLS and confirm
+            checksums before flashing. Use at your own risk.
+          </p>
         </div>
 
         {/* ── Download buttons ─────────────────────────────── */}
@@ -253,7 +290,7 @@ export default function OwnerReviewDownload({ result, stockBuffer, pkg }: Props)
             {binPhase.phase === 'building' ? 'Building…'
               : binPhase.phase === 'done'  ? 'Downloaded'
               : binPhase.phase === 'error' ? 'Failed'
-              : 'Download Review BIN for TunerPro'}
+              : 'Download Review BIN'}
           </button>
 
           {/* Manifest download */}

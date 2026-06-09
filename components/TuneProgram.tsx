@@ -18,6 +18,7 @@ import {
   stageToManifestId,
   fuelToManifestId,
 } from '@/lib/tune-program/patchReviewGate'
+import { resolveGenerateBin } from '@/lib/tune-program/generateBinGate'
 import type { AppSafePatchPackage, PatchApplyResult } from '@/types/tune-program'
 
 // ─── N54 Tune Program — v3 Review Mode ────────────────────────────────────────
@@ -356,19 +357,41 @@ export default function TuneProgram() {
 
   const verResult = uploadState.status === 'done' ? uploadState.result : null
 
-  // ── isReady: ROM + category + stage + fuel + valid file ─────────────
-  const isReady =
-    romFamily !== '' &&
-    packageCategory !== '' &&
-    stage !== '' &&
-    fuel !== '' &&
-    uploadState.status === 'done' &&
-    uploadState.result.isSafeToContinue
+  // ── Generate BIN decision — data-driven (manifest + validator) ──────
+  // Decides if the selected ROM/Stage/Fuel/Turbo package is READY + valid.
+  // Does NOT depend on the uploaded file — drives the "package status" label
+  // and disables Generate BIN with a precise reason before any upload.
+  const manifestPackageType: 'standard-ots' | 'n20-map' =
+    packageCategory === 'standard-ots' ? 'standard-ots' : 'n20-map'
+  const genDecision = resolveGenerateBin({
+    romId:       romFamily,
+    stage:       stage ? stageToManifestId(stage) : '',
+    fuel:        fuel ? fuelToManifestId(fuel) : '',
+    packageType: packageCategory ? manifestPackageType : ('' as 'standard-ots' | 'n20-map'),
+  })
+  const packageAvailable = genDecision.enabled
 
-  // ── Run Patch Review ──────────────────────────────────────────────────
-  // REVIEW MODE ONLY: loads package, applies patches in-memory, returns SHA-256.
-  // The patched buffer is never returned. No download. No BIN output.
-  // Gated by: ROM = I8A0S, package exists + safeForApp, buffer = 2MB.
+  // ── Hard BIN gate for Generate BIN ────────────────────────────────────
+  // Three conditions must ALL be true before Generate BIN is enabled:
+  //   1. Extension is exactly .bin (not .ori/.org)
+  //   2. Size is exactly 2,097,152 bytes
+  //   3. SHA-256 matches the known stock hash for the selected ROM
+  // Unknown-2MB BINs (hashMatchStatus === 'unknown-2mb') are blocked.
+  // ROM-mismatch BINs (wrong ROM selected) are blocked.
+  // This is a hard pre-generate stop — the download gate is a second layer.
+  const isStockBinVerified =
+    uploadState.status === 'done' &&
+    uploadState.result.extensionStatus === 'preferred' &&   // .bin only
+    uploadState.result.sizeValid &&                         // exactly 2,097,152
+    uploadState.result.hashMatchStatus === 'known-stock'    // exact SHA-256 match
+
+  // ── isReady: package READY + stock BIN verified ─────────────────────
+  const isReady = packageAvailable && isStockBinVerified
+
+  // ── Generate BIN (review mode) ────────────────────────────────────────
+  // Loads the app-safe package, applies patches in-memory, returns SHA-256 +
+  // enables the Review BIN download. Gated data-driven by resolveGenerateBin:
+  // package must be READY + valid, ROM must have a known stock hash, buffer 2MB.
   async function handleRunReview() {
     if (uploadState.status !== 'done' || !isReady) return
 
@@ -422,7 +445,7 @@ export default function TuneProgram() {
         </Link>
         <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
           <Link href="/wiki" style={{ color: '#a0a0a0', textDecoration: 'none', fontSize: '0.9rem' }}>Wiki</Link>
-          <Link href="/tune-program" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>Tune Program</Link>
+          <Link href="/tune-app" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>Tune App</Link>
           <a href="https://synergybmwtuning.com" target="_blank" rel="noopener noreferrer"
             style={{ fontSize: '0.82rem', fontWeight: 600, padding: '0.3rem 0.75rem', borderRadius: '0.4rem', background: '#2563eb', color: '#fff', textDecoration: 'none', whiteSpace: 'nowrap' }}>
             Synergy Tuning
@@ -437,7 +460,7 @@ export default function TuneProgram() {
         <div style={{ marginBottom: '2rem' }}>
           <div style={{ display: 'inline-block', background: '#1a1a2e', border: '1px solid #2563eb44', borderRadius: '2rem', padding: '0.25rem 0.9rem', marginBottom: '1rem' }}>
             <span style={{ fontSize: '0.78rem', color: '#6699ff', fontWeight: 500 }}>
-              Synergy BMW Tuning — Tune Program (v3 Review Mode)
+              Synergy BMW Tuning — Tune App (Review Mode)
             </span>
           </div>
           <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '0.75rem', lineHeight: 1.1 }}>
@@ -942,9 +965,9 @@ export default function TuneProgram() {
             </span>
             {patchState.phase === 'loading' ? 'Loading patch package…'
               : patchState.phase === 'running' ? 'Applying patches in-memory…'
-              : patchState.phase === 'done'    ? 'Review complete — see results below'
-              : patchState.phase === 'error'   ? 'Review failed — see error below'
-              : 'Run Patch Review'}
+              : patchState.phase === 'done'    ? 'BIN generated — review below'
+              : patchState.phase === 'error'   ? 'Generate failed — see error below'
+              : 'Generate BIN'}
             {isReady && patchState.phase === 'idle' && (
               <span style={{ opacity: 0.65, fontSize: '0.82rem' }}>
                 — {romFamily} / {
@@ -956,17 +979,66 @@ export default function TuneProgram() {
             )}
           </button>
 
-          {/* Not-ready hint */}
+          {/* Not-ready hint — exact reason for each blocked state */}
           {!isReady && (
             <p style={{ fontSize: '0.8rem', color: '#444', marginTop: '0.5rem' }}>
               {!romFamily          ? 'Select a ROM family to begin.'
                 : !packageCategory ? 'Select a package category to continue.'
                 : !stage           ? 'Select a stage to continue.'
                 : !fuel            ? 'Select a fuel to continue.'
-                : uploadState.status === 'none'    ? `Upload your ${romFamily} stock BIN to continue.`
+                : !packageAvailable && !genDecision.enabled
+                                   ? `Generate BIN unavailable — ${genDecision.reason}: ${genDecision.detail}`
+                : uploadState.status === 'none'    ? `Upload your ${romFamily} stock BIN (.bin, exactly 2,097,152 bytes).`
                 : uploadState.status === 'reading' ? 'Verifying file…'
+                // Hard SHA gate messages — explain exactly which check failed
+                : uploadState.status === 'done' && uploadState.result.extensionStatus !== 'preferred'
+                                   ? `File must be a .bin file — ${uploadState.result.extension || 'no extension'} not accepted for Generate BIN.`
+                : uploadState.status === 'done' && !uploadState.result.sizeValid
+                                   ? `File is ${uploadState.result.fileSize.toLocaleString()} bytes — must be exactly 2,097,152 bytes.`
+                : uploadState.status === 'done' && uploadState.result.hashMatchStatus === 'rom-mismatch'
+                                   ? `SHA-256 matches ${uploadState.result.hashMatchedRom ?? 'a different ROM'}, not ${romFamily}. Select the correct ROM in MHD and re-upload.`
+                : uploadState.status === 'done' && uploadState.result.hashMatchStatus !== 'known-stock'
+                                   ? `SHA-256 does not match the known stock hash for ${romFamily}. Upload the unmodified original stock BIN.`
                 : 'Fix verification errors before continuing.'}
             </p>
+          )}
+
+          {/* Package status chip + BIN verification status */}
+          {romFamily && packageCategory && stage && fuel && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.6rem' }}>
+              {/* Package gate status */}
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                padding: '0.3rem 0.7rem', borderRadius: '0.4rem',
+                background: packageAvailable ? '#052e16' : '#1a1200',
+                border: `1px solid ${packageAvailable ? '#16a34a55' : '#854d0e55'}`,
+              }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: packageAvailable ? '#4ade80' : '#d97706' }}>
+                  {packageAvailable ? '✓ Package READY' : `✗ ${genDecision.enabled ? '' : genDecision.reason}`}
+                </span>
+              </div>
+              {/* BIN verification gate status */}
+              {uploadState.status === 'done' && (
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                  padding: '0.3rem 0.7rem', borderRadius: '0.4rem',
+                  background: isStockBinVerified ? '#052e16' : '#1a0000',
+                  border: `1px solid ${isStockBinVerified ? '#16a34a55' : '#dc262644'}`,
+                }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: isStockBinVerified ? '#4ade80' : '#f87171' }}>
+                    {isStockBinVerified
+                      ? `✓ Stock BIN verified (${romFamily})`
+                      : uploadState.result.hashMatchStatus === 'unknown-2mb'
+                        ? '✗ SHA-256 not in known-stock DB'
+                        : uploadState.result.hashMatchStatus === 'rom-mismatch'
+                          ? `✗ SHA matches ${uploadState.result.hashMatchedRom ?? 'different ROM'}`
+                          : uploadState.result.extensionStatus !== 'preferred'
+                            ? `✗ Must be .bin (got ${uploadState.result.extension || 'none'})`
+                            : '✗ BIN not verified'}
+                  </span>
+                </div>
+              )}
+            </div>
           )}
 
           {/* ── Loading / running indicator ─────────────────── */}
@@ -1018,12 +1090,27 @@ export default function TuneProgram() {
 
               <PatchReviewPanel result={patchState.result} showRegionDetail={false} />
 
-              {/* ── Owner Review Download (only after clean review) ─── */}
+              {/* ── Download Review BIN (only after clean review) ─── */}
               {uploadState.status === 'done' && (
                 <OwnerReviewDownload
                   result={patchState.result}
                   stockBuffer={uploadState.buffer}
                   pkg={patchState.pkg}
+                  selection={{
+                    romId:      romFamily,
+                    stage,
+                    fuel,
+                    turboType:  packageCategory === 'standard-ots' ? 'stock' : packageCategory,
+                    stageLabel:
+                      packageCategory === 'n20-map-stock-turbo' ? 'Stock Turbo N20 MAP (Stage 3)' :
+                      packageCategory === 'n20-map-hybrid-base'  ? 'Hybrid Base N20 MAP' :
+                      (STAGES.find((s) => s.value === stage)?.label ?? stage),
+                    turboLabel:
+                      packageCategory === 'n20-map-stock-turbo' ? 'Stock Turbo (N20 MAP scaled)' :
+                      packageCategory === 'n20-map-hybrid-base'  ? 'Hybrid Turbo (base)' :
+                      'Stock Turbo',
+                    fuelLabel:  fuel === 'pump' ? 'Pump' : fuel,
+                  }}
                 />
               )}
 
@@ -1038,7 +1125,7 @@ export default function TuneProgram() {
                   <span style={{ fontSize: '1.1rem' }}>🔒</span>
                   <div style={{ flex: 1 }}>
                     <p style={{ margin: 0, fontWeight: 700, fontSize: '0.82rem', color: '#93c5fd' }}>
-                      DOWNLOAD / EXPORT DISABLED — REVIEW MODE ONLY
+                      FLASH-READY / MHD-ENCRYPTED EXPORT DISABLED — REVIEW MODE ONLY
                     </p>
                   </div>
                   <span style={{ fontSize: '0.68rem', fontFamily: 'monospace', color: '#1d4ed8', background: '#0a0f1a', border: '1px solid #1e3a8a', padding: '0.15rem 0.45rem', borderRadius: '0.3rem' }}>
@@ -1047,17 +1134,17 @@ export default function TuneProgram() {
                 </div>
                 <div style={{ padding: '1rem 1.1rem' }}>
                   <p style={{ margin: '0 0 0.75rem', fontSize: '0.82rem', color: '#475569', lineHeight: 1.65 }}>
-                    This step only proves the selected patch package can apply cleanly to the verified stock BIN.
-                    Download and export are intentionally disabled in this review build.
-                    No patched BIN was returned — the apply engine discards the buffer immediately after hashing.
+                    The Review BIN above is a review-mode artifact for verification in TunerPro/WinOLS — not a
+                    flash-ready, customer-ready, or MHD-encrypted file. VIN locking and MHD encryption are
+                    intentionally disabled in this build and require a separate owner-approved step.
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                     {[
                       'This is not a flashing tool. It does not connect to your car or DME.',
-                      'The patched BIN SHA-256 shown above is for owner review only — it is not a flashable file.',
-                      'Flashing requires MHD Flasher or N54 Quickflash (external). The app never produces a download.',
+                      'The Review BIN is for inspection only — confirm checksums before any flash.',
+                      'Flashing requires MHD Flasher or N54 Quickflash (external) — the app does not flash.',
                       'MHD-locked (.mhd) packages require owner approval and are produced separately, outside this app.',
-                      'Review-mode output is not customer-ready. Real delivery requires owner export + VIN locking.',
+                      'Review-mode output is not customer-ready. Final delivery requires owner export + VIN locking.',
                     ].map((w, i) => (
                       <div key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
                         <span style={{ color: '#1e40af', fontSize: '0.7rem', marginTop: '0.2rem', flexShrink: 0 }}>⚠</span>
@@ -1122,7 +1209,7 @@ export default function TuneProgram() {
             <strong style={{ color: '#444' }}> I8A0S:</strong> Standard OTS + N20 MAP packages READY.{' '}
             <strong style={{ color: '#444' }}>INA0S:</strong> N20 MAP packages READY (no Standard OTS).{' '}
             <strong style={{ color: '#444' }}>IJE0S:</strong> needs audit (150 unmatched offsets per package).{' '}
-            <strong style={{ color: '#444' }}>IKM0S:</strong> not built yet.
+            <strong style={{ color: '#444' }}>IKM0S:</strong> 16 validated v90-source packages are ready; 95 and ACN91 selections remain unavailable.
           </p>
         </div>
 

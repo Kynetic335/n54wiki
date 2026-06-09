@@ -10,7 +10,7 @@
 //   NOT MHD-locked. External flasher required for any real-world use.
 //
 // Flow:
-//   Step 1: Select ROM (I8A0S / INA0S = READY; IJE0S = NEEDS_AUDIT; IKM0S = NOT_BUILT)
+//   Step 1: Select ROM (I8A0S / INA0S / IJE0S / IKM0S = READY for registered packages)
 //   Step 2: Select package from matrix (READY only; NEEDS_AUDIT shown disabled)
 //   Step 3: Upload stock BIN (validated: extension + size + SHA-256 match)
 //   Step 4: Run review (applies patches in browser, shows per-region results)
@@ -48,7 +48,7 @@ const ROM_DESCRIPTIONS: Record<RomId, string> = {
   I8A0S: 'MT 135i/335i/Z4/1M — MSD80 — most common',
   INA0S: '2010+ 135i/335i — MSD81 — later revision',
   IJE0S: 'AT 135i/335i — MSD80/81 — audit pending',
-  IKM0S: 'Regional/late N54 — no v12 source maps yet',
+  IKM0S: 'Regional/late N54 — 16 validated v90-source packages',
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
