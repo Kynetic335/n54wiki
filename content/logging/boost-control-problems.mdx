@@ -1,0 +1,51 @@
+---
+title: Logging Boost Control Problems
+description: "Boost-control problems show up as actual boost missing target, oscillation, or WGDC behaving abnormally relative to boost error."
+---
+
+
+# Logging Boost Control Problems
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Boost-control problems show up as actual boost missing target, oscillation, or WGDC behaving abnormally relative to boost error.
+
+## Why it matters
+
+Reading WGDC against boost target vs actual separates mechanical issues (leaks, vacuum, wastegates) from tuning.
+
+## How it works
+
+Healthy control tracks target with sensible WGDC; problems show as pegged WGDC, oscillation, or persistent error.
+
+## Common symptoms or failure modes
+
+- Underboost
+- Overboost
+- Oscillation
+- WGDC pegged
+
+## What to check in logs
+
+- Boost target vs actual
+- WGDC
+
+## Mechanical checks first
+
+High WGDC + low boost = mechanical/leak. Smoke-test before tuning.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [WGDC basics](/wiki/boost/wgdc-basics)
+- [Boost oscillation](/wiki/diagnostics/boost-oscillation)
+- [Map: WGDC correction](/wiki/maps/wgdc-correction)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

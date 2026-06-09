@@ -1,0 +1,95 @@
+---
+title: 30FF Underboost
+description: "30FF is one of the most common N54 fault codes. It means the DME saw actual boost fall short of the boost it requested."
+---
+
+# 30FF Underboost
+
+> **Source confidence:** High confidence (symptom behavior). Exact code text — verify by scan.
+
+## What the code means
+
+30FF is one of the most commonly reported N54 fault codes. In plain terms, the DME asked for a certain amount of boost (its target) and the engine did not reach it (actual fell short by more than the allowed margin), so the DME logged a boost-deviation / underboost fault.
+
+30FF is a **result code**, not a root cause. It tells you boost came up short. It does not tell you *why*. The job is to find the cause — and on the N54 the cause is mechanical far more often than it is tuning.
+
+The exact wording and threshold of the code is DME/ROM specific. **Verify by scan / Verify by ROM ID.**
+
+## Common causes
+
+Ordered roughly most-to-least common in the real world:
+
+- **Boost leak** — cracked or popped charge pipe, loose intercooler coupler, split intercooler end tank, bad clamp.
+- **Vacuum leak in the boost-control system** — cracked vacuum lines, failed check valve, leaking vacuum reservoir/canister.
+- **Failed or sticking diverter valves (DVs)** — leak past the compressor on lift/under load.
+- **Failing wastegate / wastegate rattle** — worn wastegate linkage on aging turbos, can no longer hold position.
+- **Failing boost-control solenoids** — cannot route vacuum to position the wastegates correctly.
+- **Worn turbos** — past their airflow ceiling, cannot make the requested boost.
+- **Tuning that requests more boost than the hardware/condition can deliver** — see "Tuning-related causes" below.
+
+## What to log
+
+Log a full pull (see [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-pull)) with at least:
+
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC (wastegate duty cycle)](/wiki/logging/wgdc)
+- RPM and gear
+- IAT (to rule out heat)
+
+## What a normal log pattern looks like
+
+- Actual boost rises and tracks close to target through the pull.
+- WGDC sits at a sensible value and is **not pinned at its maximum** to hold boost.
+- No sudden drop in actual boost partway through the pull.
+
+## What a bad log pattern looks like
+
+- **Actual boost well below target**, especially building partway up then falling away.
+- **WGDC pinned high (near max)** while boost still will not reach target — classic sign the DME is trying everything and the air is escaping or the wastegate cannot hold. This points hard at a **mechanical leak or wastegate problem**, not the tune.
+- A sharp boost drop at a specific point can indicate a coupler letting go under pressure.
+
+_Media placeholder: good log vs bad log screenshot (boost target vs actual + WGDC)._
+
+## Mechanical checks first
+
+1. **Smoke test the charge path** — the single most useful test for 30FF. Find leaks at the chargepipe, couplers, intercooler, and intake.
+2. Inspect the **chargepipe** (the plastic factory pipe is a known crack point).
+3. Inspect **vacuum lines** and the boost-control vacuum components for cracks/disconnects.
+4. Check **diverter valves** for wear/leaking.
+5. Listen for **wastegate rattle**; check wastegate arm play on aging turbos.
+
+## Tuning-related causes second
+
+Only after the car is mechanically sound:
+
+- A calibration that targets more boost than the current turbos/fuel/heat conditions can support can throw 30FF even with no leak.
+- Boost-control (WGDC) calibration that does not match the hardware can under-deliver.
+
+Do **not** "fix" 30FF by lowering the fault threshold or masking the code. That hides a real shortfall and can let a leak or failing turbo go unaddressed.
+
+## When to stop tuning
+
+Stop and fix hardware first if:
+
+- WGDC is pinned high and boost still misses target.
+- A smoke test finds any leak.
+- Boost drops suddenly mid-pull.
+
+Do not keep pulling or chasing the number in software until the mechanical side is proven healthy.
+
+## Related pages
+
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Boost Leaks](/wiki/boost/boost-leaks)
+- [Chargepipe](/wiki/boost/chargepipe)
+- [Wastegates](/wiki/boost/wastegates)
+- [Logging: Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [Logging: WGDC](/wiki/logging/wgdc)
+- [Common Codes](/wiki/diagnostics/common-codes)
+
+## Sources
+
+- _Exact 30FF code definition and threshold — Source needed. Verify by scan / ROM ID._
+- _Community-documented N54 boost-fault behavior — Source needed (cite trusted reference)._

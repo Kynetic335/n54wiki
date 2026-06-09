@@ -1,0 +1,50 @@
+---
+title: Logging STFT / LTFT
+description: "Fuel trims (short-term and long-term) show how much the DME is adjusting fueling to hit its target. Large trims indicate the base fueling is off."
+---
+
+
+# Logging STFT / LTFT
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Fuel trims (short-term and long-term) show how much the DME is adjusting fueling to hit its target. Large trims indicate the base fueling is off.
+
+## Why it matters
+
+Trims reveal vacuum leaks, fueling drift, and sensor issues; they provide context for lean/rich complaints.
+
+## How it works
+
+The DME corrects fueling based on feedback; STFT reacts quickly, LTFT learns over time.
+
+## Common symptoms or failure modes
+
+- Large positive trims (lean correction, possible leak)
+- Large negative trims (rich correction)
+
+## What to check in logs
+
+- STFT
+- LTFT
+- Lambda/AFR
+
+## Mechanical checks first
+
+Check for vacuum/intake leaks and sensor health when trims are large.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
+- [Rich condition](/wiki/diagnostics/rich-condition)
+- [Lean condition](/wiki/diagnostics/lean-condition)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

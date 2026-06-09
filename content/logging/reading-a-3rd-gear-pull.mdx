@@ -1,0 +1,81 @@
+---
+title: Reading a 3rd Gear Pull
+description: "A 3rd-gear pull is the standard N54 datalog: a steady WOT pull that loads the engine long enough to read boost, fueling, and timing. How to do it and read it."
+---
+
+# Reading a 3rd Gear Pull
+
+> **Source confidence:** High confidence (method). Specific values — verify by VIN/ROM ID.
+
+## What it is
+
+A "3rd gear pull" is the standard way to datalog the N54. You take a steady wide-open-throttle pull in a higher gear (commonly 3rd) so the engine spends enough **time under load** to show how boost, fueling, ignition, and load behave. A higher gear loads the engine longer than 1st/2nd, making the data clearer and the pull more comparable run to run.
+
+## Why it matters
+
+A consistent, repeatable pull is what makes a log meaningful. Same gear, warmed-up car, similar conditions → you can compare pulls and trust the trends. Random part-throttle driving cannot answer "is boost holding target" or "is it knocking."
+
+## Before you pull (prerequisites)
+
+- Car **warmed up** (coolant and oil at temp).
+- **No active faults**; maintenance current (plugs, coils, fuel system, vacuum lines).
+- A **safe, legal** place — a private setting such as a dyno is ideal. This is an educational diagnostic method, not a guide to do anything illegal on a public road.
+- Logging tool set up with the right channels (below).
+
+## What to log
+
+At minimum:
+
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual) + [WGDC](/wiki/logging/wgdc)
+- [Timing corrections](/wiki/logging/timing-corrections) (per cylinder)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) (+ [LPFP](/wiki/logging/lpfp-pressure) on built fuel systems)
+- [Throttle angle](/wiki/logging/throttle-angle) + pedal
+- [Load requested vs actual](/wiki/logging/load-requested-vs-actual)
+- [IAT](/wiki/logging/iat), coolant/oil temp, gear, RPM
+
+## How to read it — what a good pull looks like
+
+- **Boost:** actual tracks target; WGDC not pinned.
+- **Timing:** little/no pull; cylinders similar.
+- **Fueling:** lambda at target; rail pressure holds target to the top.
+- **Throttle:** stays open while pedal is flat (no closures).
+- **Load:** actual rises with requested.
+- **Temps:** IAT and coolant in a reasonable range; not climbing hard pull to pull.
+
+## How to read it — what a bad pull looks like
+
+- Boost short with **WGDC maxed** → leak/wastegate (see [Low Boost](/wiki/diagnostics/low-boost), [30FF](/wiki/diagnostics/30ff-underboost)).
+- **Negative timing** under load → knock (see [Timing Corrections](/wiki/diagnostics/timing-corrections)).
+- **Rail pressure crashing + lean lambda** → fuel-supply limit (see [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- **Throttle closing** with pedal flat → intervention/limiter (see [Throttle Closures](/wiki/diagnostics/throttle-closures)).
+- IAT climbing each run → heat soak; let it cool.
+
+_Media placeholder: annotated good-pull vs bad-pull log screenshot._
+
+## When to stop
+
+Stop the pull immediately if you see knock (sustained timing pull), a rail-pressure crash with lean lambda, overboost, or rising coolant/oil temps. These are [unsafe-log](/wiki/logging/unsafe-logs) conditions — fix the hardware/fuel/ignition cause before pulling again. **Hardware and fueling get fixed first; tuning comes after the baseline is healthy.**
+
+## Common interpretation mistakes
+
+- Comparing pulls from **different gears / temps / states of tune**.
+- Logging too few channels to see context.
+- Reacting to one noisy sample instead of a repeatable pattern.
+- Treating a mechanical fault (leak, worn pump, bad coil) as a tuning value to adjust.
+
+## Related pages
+
+- [MHD Channels](/wiki/logging/mhd-channels)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
+- [Timing Corrections](/wiki/logging/timing-corrections)
+- [HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Throttle Angle](/wiki/logging/throttle-angle)
+- [Pre-Tune Checklist](/wiki/maintenance/pre-tune-checklist)
+
+## Sources
+
+- _Specific healthy values are car/tune dependent — Verify by VIN/ROM ID._
+- _Trusted reference on N54 datalogging method — Source needed._

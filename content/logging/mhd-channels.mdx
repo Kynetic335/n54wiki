@@ -1,0 +1,70 @@
+---
+title: MHD Channels
+description: "Overview of the datalog channels used to diagnose the N54, what each proves, and how to pick the right channels for the question you are asking."
+---
+
+# MHD Channels
+
+> **Source confidence:** High confidence (concept). Exact channel names/units vary by tool and DME — verify by VIN/ROM ID.
+
+## What the channels mean
+
+A datalogging tool reads values from the DME in real time and records them over a pull so you can review them afterward. "Channels" are those individual values — boost, fuel pressure, timing corrections, temperatures, and so on. MHD is one common N54 tool; the concepts here apply to any logger. Exact channel names, units, and availability depend on the tool and the DME/ROM. **Verify by VIN/ROM ID.**
+
+## Why it matters
+
+You cannot diagnose what you do not log. Picking the right channels — and enough of them to give context — is what turns a vague "it feels flat" into "boost is 4 psi under target with WGDC maxed, so it's a leak." Logging the wrong or too few channels leads to guessing.
+
+## Core channels and what each answers
+
+| Channel | Answers |
+|---|---|
+| [Boost target vs actual](/wiki/logging/boost-target-vs-actual) | Is boost control healthy? Under/overboost? |
+| [WGDC](/wiki/logging/wgdc) | Is the controller working or fighting a leak? |
+| [Timing corrections](/wiki/logging/timing-corrections) | Is the engine knocking? |
+| [Lambda / AFR](/wiki/logging/lambda-afr) | Is the mixture safe (lean/rich)? |
+| [HPFP / rail pressure](/wiki/logging/hpfp-pressure) | Is fuel supply holding under load? |
+| [LPFP pressure](/wiki/logging/lpfp-pressure) | Is the low-side pump the limit? |
+| [Throttle angle](/wiki/logging/throttle-angle) | Torque cuts / closures? |
+| [Load requested vs actual](/wiki/logging/load-requested-vs-actual) | Is the engine meeting its load target? |
+| [IAT](/wiki/logging/iat) | Heat soak / knock risk from intake temp |
+| Coolant / oil temp | Cooling health, when to stop |
+| Gear / RPM | Context to make pulls comparable |
+
+## What normal behavior generally looks like
+
+- Channels move together in ways that make physical sense (boost up, load up, throttle open).
+- No channel pinned at a limit while the result it controls falls short.
+- Repeatable pull to pull on a warmed-up car.
+
+## What abnormal behavior can suggest
+
+- A control output pinned (e.g. WGDC maxed) with the controlled value short → mechanical limit.
+- Safety channels reacting (timing pull, lean lambda, rail-pressure drop) → stop and diagnose.
+- One channel implausible vs the others → possible sensor fault or wrong scaling.
+
+## Which diagnostics use these channels
+
+Essentially all of them — see [Diagnostics](/wiki/diagnostics). Each diagnostic page lists the specific channels that prove or disprove that issue.
+
+## Common interpretation mistakes
+
+- Logging too few channels to see context (e.g. boost without WGDC).
+- Comparing pulls taken in different gears, temps, or states of tune.
+- Trusting a channel from a faulty sensor or wrong sensor scaling.
+- Reacting to a single noisy sample instead of a repeatable trend.
+
+_Media placeholder: example MHD log view screenshot._
+
+## Related pages
+
+- [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-pull)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
+- [Diagnostics hub](/wiki/diagnostics)
+- [Existing Datalogging Guide](/wiki/datalogging/guide)
+
+## Sources
+
+- _Tool-specific channel names/units — Source needed. Verify by tool + ROM ID._

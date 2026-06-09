@@ -1,0 +1,57 @@
+---
+title: Logging Throttle Angle
+description: "Throttle angle shows how far the DME opened the throttle. Compared with pedal input it reveals torque interventions and throttle closures."
+---
+
+# Logging Throttle Angle
+
+> **Source confidence:** High confidence (concept). Limiter behavior — verify by VIN/ROM ID.
+
+## What the channel means
+
+Throttle angle is how far the DME has actually opened the throttle plate. The N54 is torque-controlled: the **pedal** requests torque, and the DME decides the **throttle angle** needed to deliver it. So throttle angle is best read **next to pedal position** — the difference between "what the driver asked" and "what the DME allowed" is where the diagnosis lives.
+
+## Why it matters
+
+When throttle angle drops while the pedal is still flat, the DME chose to make less torque — a **throttle closure**. That is the fingerprint of a protective intervention or a limiter, and it explains a whole class of "the car cut / hesitated" complaints.
+
+## What normal behavior generally looks like
+
+- During a WOT pull, throttle angle goes to (near) full and **stays there** while the pedal is flat.
+- Throttle tracks pedal smoothly in part-throttle driving.
+
+## What abnormal behavior can suggest
+
+- **Throttle angle dropping with pedal at 100%** → a closure. Then check *why*:
+  - Lines up with **knock / high IAT / rail-pressure drop** → protection; fix that cause.
+  - Happens at a repeatable **torque/load ceiling** with no protective trigger → a calibration **limiter** or drivetrain cap.
+- Throttle not matching pedal in normal driving → possible throttle body or pedal sensor fault.
+
+## Which diagnostics use this channel
+
+- [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections) (as a protective trigger)
+
+## Common interpretation mistakes
+
+- Reading throttle angle **without pedal position** — you cannot tell a closure from normal lift.
+- Assuming every closure is a "tune limiter" without checking protective triggers first.
+- Removing a limiter to stop a closure that was actually protection (knock/heat/fuel).
+- Ignoring sensor faults as a cause of odd throttle behavior.
+
+_Media placeholder: throttle angle vs pedal log screenshot._
+
+## Related pages
+
+- [Load Requested vs Actual](/wiki/logging/load-requested-vs-actual)
+- [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures)
+- [Throttle Closures (Load/Torque)](/wiki/load-torque/throttle-closures)
+- [Torque Limiters](/wiki/load-torque/torque-limiters)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Map: Throttle Torque Intervention](/wiki/maps/throttle-torque-intervention)
+
+## Sources
+
+- _Torque-intervention/limiter values are car/tune specific — Verify by VIN/ROM ID._
+- _Trusted reference on N54 torque model — Source needed._

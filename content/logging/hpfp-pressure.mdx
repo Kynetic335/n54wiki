@@ -1,0 +1,61 @@
+---
+title: Logging HPFP Pressure
+description: "High-side fuel rail pressure target vs actual shows whether the fuel system holds under load. A drop under demand is a hard fuel-supply limit."
+---
+
+# Logging HPFP Pressure
+
+> **Source confidence:** High confidence (concept). Pressure values — verify by VIN/ROM ID.
+
+## What the channel means
+
+This channel pair shows the **high-pressure (rail) fuel pressure** the DME is targeting versus the actual rail pressure the HPFP maintains. Because the N54 is direct injection, rail pressure must stay high for the injectors to deliver fuel. Actual rail pressure holding its target under load is a core fuel-system health signal.
+
+## Why it matters
+
+When the pumps cannot supply the fuel the engine demands, rail pressure falls below target — a **fuel pressure crash** — which drives the mixture lean under boost. That is one of the most dangerous conditions for the engine, so this channel is a primary safety signal on any high-load pull.
+
+## What normal behavior generally looks like
+
+- Actual rail pressure **tracks target** through the entire pull, including high rpm.
+- No drop-off as demand peaks.
+- Behavior repeats pull to pull.
+
+## What abnormal behavior can suggest
+
+- **Actual holding target then falling away** at high rpm/load → HPFP at its limit, or LPFP starving it. See [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash), [HPFP Failure](/wiki/diagnostics/hpfp-failure).
+- A drop paired with **sagging [LPFP pressure](/wiki/logging/lpfp-pressure)** → low-side supply is the limit.
+- A crash paired with **lean [lambda](/wiki/logging/lambda-afr)** → the dangerous combination; stop.
+- Pressure not building at start → long-crank / HPFP weakness.
+
+## Which diagnostics use this channel
+
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Long Crank](/wiki/diagnostics/long-crank)
+
+## Common interpretation mistakes
+
+- Logging rail pressure **without lambda** — you miss whether a drop actually went lean.
+- Assuming a crash is a tuning value to adjust rather than a hardware limit to fix/upgrade.
+- Ignoring the **low side** ([LPFP](/wiki/logging/lpfp-pressure)) — the HPFP can only deliver what it is fed.
+- Confusing normal startup pressure build with a fault.
+
+_Media placeholder: rail pressure target vs actual log screenshot (healthy vs crash)._
+
+## Related pages
+
+- [LPFP Pressure](/wiki/logging/lpfp-pressure)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [Fuel Limits](/wiki/logging/fuel-limits)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [HPFP](/wiki/fuel/hpfp)
+- [Fuel Rail Pressure](/wiki/fuel/fuel-rail-pressure)
+- [Map: Fuel Pressure Target](/wiki/maps/fuel-pressure-target)
+
+## Sources
+
+- _Rail pressure targets are car/tune specific — Verify by VIN/ROM ID._
+- _N54 HPFP capacity references — Source needed._

@@ -1,0 +1,74 @@
+---
+title: Throttle Closures (Diagnosis)
+description: "A throttle closure is the DME closing the throttle to cut torque mid-pull even though the pedal is down. It signals a limiter or protection event."
+---
+
+# Throttle Closures (Diagnosis)
+
+> **Source confidence:** High confidence (behavior). Limiter values are car/tune dependent — verify by VIN/ROM ID.
+
+## What the symptom means
+
+The N54 uses a torque-based control model: the pedal asks for torque, and the DME opens the throttle (and manages boost/fuel/spark) to deliver it. A **throttle closure** is when the DME **closes the throttle even though the pedal is still down**, because something told the torque model to back off. The driver feels a hesitation, surge, or cut mid-pull.
+
+A closure is the DME doing its job. The diagnostic question is *what asked for less torque* — protection, a limiter, or a fault.
+
+## Common causes
+
+- **Protective intervention** — knock/timing pull, high IAT, overheating, or fuel-pressure problems making the DME reduce torque.
+- **Torque limiter reached** — calibration cap on requested/delivered torque (including drivetrain protection, e.g. automatic transmission limits).
+- **Load/boost ceiling** in the calibration.
+- **Sensor fault** feeding the torque model bad data (throttle/pedal/airflow).
+- **Component fault** triggering torque reduction.
+
+## What to log
+
+- [Throttle angle](/wiki/logging/throttle-angle)
+- Pedal position
+- Torque request (if exposed)
+- [Load requested vs actual](/wiki/logging/load-requested-vs-actual)
+- Supporting safety channels: [timing corrections](/wiki/logging/timing-corrections), [IAT](/wiki/logging/iat), [rail pressure](/wiki/logging/hpfp-pressure)
+
+## What a normal log pattern looks like
+
+- Throttle angle tracks pedal demand and stays open through a WOT pull.
+- Requested and actual load rise together.
+- No sudden throttle drop while the pedal is flat.
+
+## What a bad log pattern looks like
+
+- **Throttle angle dropping while pedal stays at 100%** — the signature of a closure.
+- A closure that lines up with a **protective trigger** (timing pull, high IAT, rail-pressure drop) → protection, fix that cause.
+- A closure with **no protective trigger**, at a repeatable torque/load point → likely a **limiter** in the calibration or a drivetrain cap.
+
+_Media placeholder: throttle-closure log screenshot (throttle angle vs pedal)._
+
+## Mechanical checks first
+
+1. Check the **safety channels** for what triggered protection (knock, heat, fuel pressure).
+2. Rule out **sensor faults** (throttle body, pedal, airflow) and scan for codes.
+3. Confirm the engine is otherwise healthy before assuming a software limiter.
+
+## Tuning-related causes second
+
+Only after protection and sensor faults are ruled out: a closure at a steady torque/load ceiling is usually a calibration limiter. These exist for protection (including transmission/drivetrain). Changing limiters affects safety margins and driveline stress and must be done with full understanding of why the limit exists — never blindly to "remove a cut."
+
+## When to stop tuning
+
+Stop if closures are protection-driven (knock, heat, fuel) — fix the root cause first. Do not raise or remove limiters to chase a closure you have not explained.
+
+## Related pages
+
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Throttle Closures (Load/Torque)](/wiki/load-torque/throttle-closures)
+- [Torque Limiters](/wiki/load-torque/torque-limiters)
+- [Automatic Transmission Limits](/wiki/parts/automatic-transmission-limits)
+- [Logging: Throttle Angle](/wiki/logging/throttle-angle)
+- [Logging: Load Requested vs Actual](/wiki/logging/load-requested-vs-actual)
+- [Map: Throttle Torque Intervention](/wiki/maps/throttle-torque-intervention)
+
+## Sources
+
+- _Torque limiter and intervention values are car/tune specific — Verify by VIN/ROM ID._
+- _Trusted reference on N54 torque-model behavior — Source needed._

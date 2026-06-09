@@ -1,0 +1,76 @@
+---
+title: Overboost
+description: "Overboost is actual boost rising above the DME's target. It triggers protection, can cut power, and on the N54 is usually a boost-control hardware fault."
+---
+
+# Overboost
+
+> **Source confidence:** High confidence (behavior). Exact thresholds — verify by VIN/ROM ID.
+
+## What the symptom means
+
+Overboost is when actual boost rises **above** the boost the DME is targeting, by more than the allowed margin. The DME treats overboost as dangerous — too much boost for the requested torque raises cylinder pressure and knock risk — so it intervenes, often cutting fuel/throttle and dropping into [limp mode](/wiki/diagnostics/limp-mode).
+
+A short, small spike above target during fast spool can be normal transient behavior. **Sustained** overboost, or a large spike, is the problem.
+
+## Common causes
+
+- **Stuck or slow wastegate** — not opening enough to bleed exhaust, so boost climbs.
+- **Boost-control solenoid fault** — commanding the wastegate incorrectly.
+- **Vacuum routing problem** — wastegate actuator not seeing the pressure/vacuum it should.
+- **Boost-control (WGDC) calibration too aggressive** for the hardware.
+- **Mechanical binding** in the wastegate linkage.
+
+## What to log
+
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
+- RPM, gear
+
+## What a normal log pattern looks like
+
+- Actual boost rises to target and settles, with at most a small brief overshoot during spool.
+- WGDC modulates sensibly to hold target.
+
+## What a bad log pattern looks like
+
+- Actual boost **climbing past target and staying there**, or spiking hard.
+- WGDC behavior inconsistent with the result (e.g. commanding the wastegate open but boost still climbing → mechanical wastegate problem).
+- A power cut / limp event right after the spike.
+
+_Media placeholder: overboost spike log screenshot._
+
+## Mechanical checks first
+
+1. Inspect the **wastegate** for free, full movement (no binding/sticking).
+2. Check **boost-control solenoids** and their operation.
+3. Verify **vacuum routing** to the wastegate actuators.
+4. Look for any restriction preventing the wastegate from opening.
+
+## Tuning-related causes second
+
+After hardware is confirmed good:
+
+- A WGDC base/correction calibration that is too aggressive can cause overshoot.
+- Boost target changes without matching boost-control tuning can overshoot.
+
+Do **not** raise the overboost threshold to silence the protection. Overboost protection exists to prevent engine damage.
+
+## When to stop tuning
+
+Stop immediately if you see sustained overboost or repeated overboost-triggered cuts. Overboost can damage the engine. Fix the wastegate/solenoid/vacuum side before any further tuning.
+
+## Related pages
+
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Wastegates](/wiki/boost/wastegates)
+- [Boost Solenoids](/wiki/boost/boost-solenoids)
+- [Overboost / Underboost](/wiki/boost/overboost-underboost)
+- [Logging: Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [Logging: WGDC](/wiki/logging/wgdc)
+
+## Sources
+
+- _Exact overboost thresholds and protection behavior — Source needed. Verify by VIN/ROM ID._

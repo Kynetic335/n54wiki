@@ -1,0 +1,82 @@
+---
+title: Low Boost
+description: "Low boost is actual boost falling short of target. On the N54 the cause is usually mechanical — a leak, vacuum fault, or worn boost-control hardware."
+---
+
+# Low Boost
+
+> **Source confidence:** High confidence (diagnostic approach). Specific values — verify by VIN/ROM ID.
+
+## What the symptom means
+
+Low boost (underboost) is when the engine does not reach the boost pressure the DME is requesting. It feels like the car is "flat" or sluggish, and it frequently triggers a boost-deviation fault such as [30FF](/wiki/diagnostics/30ff-underboost). Low boost is a symptom, not a diagnosis — the value being low is the clue, not the answer.
+
+## Common causes
+
+- **Charge-path leak** — cracked chargepipe, popped intercooler coupler, split end tank, bad clamp.
+- **Boost-control vacuum leak** — cracked lines, failed check valve, leaking reservoir/canister.
+- **Diverter valve failure** — leaking on lift / under load.
+- **Wastegate wear / rattle** — cannot hold position on aging turbos.
+- **Boost solenoid failure** — cannot actuate the wastegate correctly.
+- **Worn or damaged turbos** — past their useful airflow ceiling.
+- **Clogged or restrictive intake / dirty filter** — restricts airflow.
+- **Tuning that asks for more than the hardware can deliver** (see below).
+
+## What to log
+
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
+- RPM, gear, IAT
+
+## What a normal log pattern looks like
+
+- Actual boost climbs and stays near target across the pull.
+- WGDC is at a reasonable, non-maxed level.
+- Spool is smooth and repeatable pull to pull.
+
+## What a bad log pattern looks like
+
+- Actual boost noticeably below target.
+- **WGDC pinned near maximum while boost is still low** — strong sign of a leak or a wastegate that cannot hold. The controller is "asking for everything" and not getting it.
+- Boost that builds then bleeds off (leak that opens under pressure).
+
+_Media placeholder: good log vs bad log screenshot (low boost vs healthy)._
+
+## Mechanical checks first
+
+1. **Smoke test** the entire charge path — highest-value first step.
+2. Inspect the **chargepipe** and all couplers/clamps.
+3. Inspect **vacuum lines** and boost-control vacuum parts.
+4. Check **diverter valves**.
+5. Check for **wastegate rattle** and arm play.
+6. Inspect the **intake/filter** for restriction.
+
+## Tuning-related causes second
+
+After the car is proven leak-free and the boost hardware is healthy:
+
+- The calibration may request boost the current turbos/fuel/heat cannot support.
+- Boost-control (WGDC base/correction) calibration may not match the hardware.
+
+Never lower the underboost detection threshold to make a code disappear. That hides a genuine shortfall.
+
+## When to stop tuning
+
+Stop and fix the car first if a smoke test finds a leak, if WGDC is maxed with low boost, or if boost falls off mid-pull. Tuning cannot seal a leak or rebuild a worn turbo.
+
+## Related pages
+
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Boost Leaks](/wiki/boost/boost-leaks)
+- [Chargepipe](/wiki/boost/chargepipe)
+- [Diverter Valves](/wiki/boost/diverter-valves)
+- [Wastegates](/wiki/boost/wastegates)
+- [Logging: Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [Logging: WGDC](/wiki/logging/wgdc)
+
+## Sources
+
+- _Trusted reference for N54 underboost diagnosis — Source needed._
+- _Specific boost values are car/tune dependent — Verify by VIN/ROM ID._

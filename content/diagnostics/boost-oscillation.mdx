@@ -1,0 +1,72 @@
+---
+title: Boost Oscillation
+description: "Boost oscillation is boost hunting up and down around target instead of holding steady. It points to a boost-control problem — usually mechanical."
+---
+
+# Boost Oscillation
+
+> **Source confidence:** High confidence (behavior). Specifics — verify by VIN/ROM ID.
+
+## What the symptom means
+
+Boost oscillation (also called boost hunting or surging) is when actual boost cannot settle — it bounces above and below target repeatedly instead of holding a steady line. The driver often feels it as a surging or pulsing sensation under load. It indicates the boost-control loop is unstable or fighting something it cannot control.
+
+## Common causes
+
+- **Vacuum leak** in the boost-control system — the wastegate actuator gets an inconsistent signal.
+- **Failing boost-control solenoid** — erratic actuation.
+- **Worn wastegate / rattle** — slop in the linkage makes position unstable.
+- **Diverter valve fluttering / leaking**.
+- **Boost-control (WGDC) calibration too aggressive** — closed-loop correction over-reacts and hunts (a true tuning cause, but confirm mechanically first).
+
+## What to log
+
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
+- RPM, gear
+
+## What a normal log pattern looks like
+
+- Actual boost converges to target and **holds a steady line**.
+- WGDC settles, making small smooth adjustments.
+
+## What a bad log pattern looks like
+
+- Actual boost **sawing up and down** around target.
+- WGDC **swinging back and forth** trying to catch up, often out of phase with boost — a controller that is hunting.
+
+If WGDC is erratic *and* you can find a vacuum/solenoid/wastegate fault, the hardware is the cause. If hardware is proven good and the oscillation remains, the boost-control calibration is the likely cause.
+
+_Media placeholder: oscillating boost log screenshot._
+
+## Mechanical checks first
+
+1. **Smoke test** and inspect vacuum lines / reservoirs for leaks.
+2. Test the **boost-control solenoids**.
+3. Check the **wastegate** for play / rattle.
+4. Inspect **diverter valves**.
+
+## Tuning-related causes second
+
+After hardware is confirmed healthy, oscillation can be a closed-loop boost-control tuning issue: correction gains too aggressive cause the loop to overshoot and hunt. This is addressed in the boost-control calibration — see [WGDC Correction Map](/wiki/maps/wgdc-correction) — but only once leaks and failing parts are ruled out.
+
+## When to stop tuning
+
+Stop and inspect hardware if oscillation appears with any sign of a vacuum/solenoid/wastegate fault. Do not paper over a mechanical leak by softening the controller.
+
+## Related pages
+
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Overboost](/wiki/diagnostics/overboost)
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Vacuum Canisters](/wiki/boost/vacuum-canisters)
+- [Boost Solenoids](/wiki/boost/boost-solenoids)
+- [Wastegates](/wiki/boost/wastegates)
+- [Logging: WGDC](/wiki/logging/wgdc)
+- [Logging: Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [Map: WGDC Correction](/wiki/maps/wgdc-correction)
+
+## Sources
+
+- _Trusted reference for N54 boost-control instability — Source needed._
+- _Closed-loop boost behavior is car/tune dependent — Verify by VIN/ROM ID._

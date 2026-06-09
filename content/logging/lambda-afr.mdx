@@ -1,0 +1,50 @@
+---
+title: Logging Lambda / AFR
+description: "Lambda/AFR channels show the air-fuel mixture. Lambda is fuel-agnostic; AFR is fuel-specific."
+---
+
+
+# Logging Lambda / AFR
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Lambda/AFR channels show the air-fuel mixture. Lambda is fuel-agnostic; AFR is fuel-specific.
+
+## Why it matters
+
+Mixture under load reveals lean (dangerous) or rich conditions and confirms whether fueling matches the target.
+
+## How it works
+
+Oxygen/wideband sensing reports mixture; the DME targets a lambda under load.
+
+## Common symptoms or failure modes
+
+- Lean under load (high lambda)
+- Rich (low lambda)
+
+## What to check in logs
+
+- Lambda/AFR
+- STFT/LTFT
+- Fuel rail pressure
+
+## Mechanical checks first
+
+Confirm sensor health and actual ethanol blend before judging fueling.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
+- [Lean condition](/wiki/diagnostics/lean-condition)
+- [Map: lambda target](/wiki/maps/lambda-target)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

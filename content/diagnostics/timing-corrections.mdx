@@ -1,0 +1,79 @@
+---
+title: Timing Corrections (Diagnosis)
+description: "Negative timing corrections mean the DME is pulling ignition advance because it detected knock. It is a top safety signal in any N54 log."
+---
+
+# Timing Corrections (Diagnosis)
+
+> **Source confidence:** High confidence (behavior). Acceptable amounts are car/tune dependent — verify by VIN/ROM ID.
+
+## What the symptom means
+
+Timing correction is the ignition advance the DME **removes** (negative correction) when its knock detection hears abnormal combustion, and sometimes adds back once conditions improve. Negative corrections under load mean the engine knocked and the DME protected it by retarding timing. It is one of the most important safety signals in any N54 log.
+
+Small, brief corrections can be normal. **Repeatable, sustained, or large** negative corrections under load are the warning.
+
+## Common causes
+
+- **Low-quality or wrong fuel** — lower octane than the tune expects, or stale/contaminated fuel.
+- **Wrong ethanol content** — less ethanol than the tune assumes lowers knock resistance.
+- **Heat** — high IAT from heat soak, weak intercooling, or back-to-back pulls.
+- **Worn or wrong-gap spark plugs** — break down under boost.
+- **Weak ignition coils.**
+- **Carbon buildup / mechanical condition.**
+- **A calibration with too much timing for the fuel/conditions** (a tuning cause — addressed last, carefully).
+
+## What to log
+
+- [Timing corrections (per cylinder if available)](/wiki/logging/timing-corrections)
+- [IAT](/wiki/logging/iat)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- RPM, gear, load
+
+## What a normal log pattern looks like
+
+- Little to no timing being pulled under load.
+- Any small corrections are brief and recover.
+- All cylinders behave similarly.
+
+## What a bad log pattern looks like
+
+- **Sustained negative corrections** through the pull.
+- Corrections that **grow as IAT climbs** (heat-related).
+- **One cylinder pulling much more than the others** — points at a cylinder-specific hardware issue (plug, coil, injector) rather than the whole tune.
+- Timing pull paired with a **lean** lambda (fuel-supply problem causing knock).
+
+_Media placeholder: timing-correction log screenshot (per-cylinder)._
+
+## Mechanical checks first
+
+1. Confirm **fuel grade** and **actual ethanol content**.
+2. Check **IAT / heat** — let the car cool, improve intercooling, avoid back-to-back pulls.
+3. Inspect / replace **spark plugs** (correct gap and heat range).
+4. Swap-test **coils**, especially if one cylinder is worse.
+5. Rule out **fuel-supply** lean (see rail-pressure crash).
+
+## Tuning-related causes second
+
+Only after fuel, heat, plugs, coils, and fueling are verified should ignition timing in the calibration be revisited. Pulling timing in the tune to silence knock on a car with bad plugs or bad fuel hides the real problem.
+
+## When to stop tuning
+
+**Stop the pull** if you see sustained or growing timing pull, or any cylinder knocking hard. Knock is destructive. Do not keep loading the engine to "see if it holds."
+
+## Related pages
+
+- [Misfire](/wiki/diagnostics/misfire)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Timing Corrections (Ignition)](/wiki/ignition/timing-corrections)
+- [Knock Detection](/wiki/ignition/knock-detection)
+- [Spark Plugs](/wiki/ignition/spark-plugs)
+- [Coils](/wiki/ignition/coils)
+- [Logging: Timing Corrections](/wiki/logging/timing-corrections)
+- [Logging: IAT](/wiki/logging/iat)
+
+## Sources
+
+- _Acceptable timing-correction amounts are car/fuel/tune specific — Verify by VIN/ROM ID._
+- _Trusted reference on N54 knock behavior — Source needed._

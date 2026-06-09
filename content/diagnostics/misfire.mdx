@@ -1,0 +1,77 @@
+---
+title: Misfire
+description: "A misfire is a failed or incomplete combustion event in a cylinder. On the tuned N54 it usually traces to coils, plugs, or fueling — not the tune."
+---
+
+# Misfire
+
+> **Source confidence:** High confidence (diagnostic approach). Specifics — verify by VIN/ROM ID.
+
+## What the symptom means
+
+A misfire is a combustion event that fails or burns incompletely in a cylinder. The DME detects it from crankshaft-speed irregularities and counts misfires **per cylinder**, setting a fault code when counts cross a threshold. Misfires feel like a stumble, shake, or sudden power loss, and on the N54 they very commonly appear **under boost**, where cylinder pressure is highest and weak ignition shows up first.
+
+Per-cylinder counts are the most useful clue: a problem on one cylinder points at that cylinder's hardware, while all cylinders misfiring points at something shared (fuel, boost, a leak).
+
+## Common causes
+
+- **Worn or wrong-gap spark plugs** — top cause on tuned cars; spark blows out under boost.
+- **Weak / failing ignition coils.**
+- **Fuel-supply problems** — rail pressure crash → lean misfire under load.
+- **Failing or mis-coded injectors.**
+- **Carbon buildup** on intake valves (direct injection).
+- **Vacuum / boost leaks** upsetting a cylinder.
+- **Over-aggressive ignition timing** causing knock-related misfire (tuning cause, last).
+
+## What to log
+
+- Misfire counters **per cylinder**
+- [Timing corrections](/wiki/logging/timing-corrections)
+- [Lambda / AFR](/wiki/logging/lambda-afr) and [rail pressure](/wiki/logging/hpfp-pressure)
+- RPM, gear, load
+
+## What a normal log pattern looks like
+
+- Misfire counters stay at or near zero through the pull.
+- No single cylinder standing out.
+
+## What a bad log pattern looks like
+
+- **Counts climbing on one cylinder** → that cylinder's plug/coil/injector.
+- **Counts on all cylinders rising under boost** → shared cause: fueling (rail pressure crash, lean), a boost leak, or too-aggressive timing.
+- Misfires arriving exactly when boost peaks → ignition breaking down under pressure (plugs/coils first suspects).
+
+_Media placeholder: per-cylinder misfire log screenshot._
+
+## Mechanical checks first
+
+1. Inspect / replace **spark plugs**; confirm correct gap and heat range.
+2. **Swap-test coils** — move a suspect coil to another cylinder and see if the misfire follows.
+3. Check **fueling** (rail pressure under load, injector condition/coding).
+4. Consider **walnut blasting** if carbon buildup is likely.
+5. Smoke-test for **vacuum/boost leaks**.
+
+## Tuning-related causes second
+
+Only after ignition, fueling, and mechanical condition are verified should the calibration's ignition timing be considered. Adding fuel or pulling timing in the tune to mask a misfire from a dead coil or worn plug just hides a hardware fault.
+
+## When to stop tuning
+
+Stop loading the engine if misfires appear under boost — especially if paired with timing pull or a lean condition. Fix the ignition/fuel hardware first.
+
+## Related pages
+
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Coil Failure](/wiki/diagnostics/coil-failure)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
+- [Rough Idle](/wiki/diagnostics/rough-idle)
+- [Misfire Diagnosis (Ignition)](/wiki/ignition/misfire-diagnosis)
+- [Spark Plugs](/wiki/ignition/spark-plugs)
+- [Coils](/wiki/ignition/coils)
+- [Logging: Timing Corrections](/wiki/logging/timing-corrections)
+- [Logging: Lambda / AFR](/wiki/logging/lambda-afr)
+
+## Sources
+
+- _Misfire-count thresholds are DME/ROM specific — Verify by VIN/ROM ID._
+- _Trusted reference on N54 misfire causes — Source needed._

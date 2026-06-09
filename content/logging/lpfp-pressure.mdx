@@ -1,0 +1,57 @@
+---
+title: Logging LPFP Pressure
+description: "Low-side fuel pressure shows whether the in-tank pump can feed the HPFP. A sag under load means the LPFP is the limit — common on high-power/E-builds."
+---
+
+# Logging LPFP Pressure
+
+> **Source confidence:** High confidence (concept). Pressure values — verify by VIN/ROM ID.
+
+## What the channel means
+
+LPFP pressure is the **low-side supply pressure** from the in-tank low-pressure pump that feeds the high-pressure pump (HPFP). It is the bottom of the fuel chain. The HPFP can only pressurize what the LPFP delivers, so low-side health sets the ceiling for the whole fuel system.
+
+## Why it matters
+
+On stock-ish cars the LPFP is rarely the limit. On **higher-power builds and high-ethanol blends** — which need much more fuel volume — the LPFP often runs out **before** the HPFP. When the low side sags, the HPFP gets starved and high-side rail pressure crashes. Logging LPFP pressure is how you tell whether the limit is the low side or the high side.
+
+## What normal behavior generally looks like
+
+- Low-side pressure **holds steady** through the pull.
+- No sag as fuel demand peaks at high rpm/load.
+
+## What abnormal behavior can suggest
+
+- **Low-side pressure dropping under sustained load** → LPFP at its limit; it is starving the HPFP. See [LPFP Failure](/wiki/diagnostics/lpfp-failure).
+- LPFP sag occurring **just before** the high-side [rail pressure crash](/wiki/diagnostics/fuel-pressure-crash) → confirms the low side is the root limit.
+- Erratic low-side pressure → wiring/connector or failing pump.
+
+## Which diagnostics use this channel
+
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+
+## Common interpretation mistakes
+
+- Looking only at **rail (high-side) pressure** and missing that the low side caused the crash.
+- Blaming the HPFP when the LPFP was actually starving it.
+- Forgetting that **higher ethanol = more volume** — a low side that was fine on pump gas may sag on E-blends.
+- Treating a supply limit as a tuning value to dial around instead of a pump to upgrade.
+
+_Media placeholder: LPFP pressure log screenshot (steady vs sagging)._
+
+## Related pages
+
+- [HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Fuel Limits](/wiki/logging/fuel-limits)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [LPFP](/wiki/fuel/lpfp)
+- [Ethanol Blends](/wiki/fuel/ethanol-blends)
+- [Parts: LPFP](/wiki/parts/lpfp)
+
+## Sources
+
+- _Low-side pressure targets are car/tune specific — Verify by VIN/ROM ID._
+- _N54 LPFP capacity / ethanol demand references — Source needed._

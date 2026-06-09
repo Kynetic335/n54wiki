@@ -1,0 +1,66 @@
+---
+title: Boost Target vs Actual
+description: "The boost target and actual channels show what the DME wants versus what it gets. Their gap is the single most useful boost-diagnosis signal on the N54."
+---
+
+# Boost Target vs Actual
+
+> **Source confidence:** High confidence (concept). Specific values — verify by VIN/ROM ID.
+
+## What the channels mean
+
+These two channels are read together:
+
+- **Boost target** — the manifold pressure the DME is requesting based on load/torque demand.
+- **Boost actual** — the manifold pressure the boost/MAP sensor actually reports.
+
+The relationship between them — do they match, does actual fall short, does it overshoot — is the foundation of boost diagnosis on the N54.
+
+## Why it matters
+
+Almost every boost complaint ("flat", "surging", "limp mode") is answered first by these two lines plus [WGDC](/wiki/logging/wgdc). Target vs actual tells you *whether* there is a problem; WGDC and the mechanical checks tell you *why*.
+
+## What normal behavior generally looks like
+
+- Actual rises during spool and then **tracks target closely** for the rest of the pull.
+- At most a small, brief overshoot during fast spool, which settles.
+- Behavior repeats pull to pull on a warm car.
+
+## What abnormal behavior can suggest
+
+- **Actual below target** → underboost. With WGDC pinned high, strongly suggests a leak or wastegate that cannot hold. See [Low Boost](/wiki/diagnostics/low-boost), [30FF](/wiki/diagnostics/30ff-underboost).
+- **Actual above target (sustained)** → overboost; stuck wastegate, solenoid, or vacuum fault. See [Overboost](/wiki/diagnostics/overboost).
+- **Actual hunting around target** → oscillation; vacuum/solenoid/wastegate or over-aggressive control. See [Boost Oscillation](/wiki/diagnostics/boost-oscillation).
+- **Actual building then falling** mid-pull → a leak opening under pressure.
+
+## Which diagnostics use this channel
+
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+
+## Common interpretation mistakes
+
+- Reading actual **without** WGDC — you lose the "is the controller maxed?" clue.
+- Treating normal brief spool overshoot as a fault.
+- Comparing boost between different gears, IAT, or fuel — not apples to apples.
+- Assuming a low number means "needs more boost in the tune" when it is really a leak.
+
+_Media placeholder: boost target vs actual log screenshot (healthy vs underboost)._
+
+## Related pages
+
+- [WGDC](/wiki/logging/wgdc)
+- [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-pull)
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Boost Leaks](/wiki/boost/boost-leaks)
+- [Map: Boost Target](/wiki/maps/boost-target)
+
+## Sources
+
+- _Boost target values are car/tune specific — Verify by VIN/ROM ID._
+- _Sensor range/scaling notes — Source needed._

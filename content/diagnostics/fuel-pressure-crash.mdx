@@ -1,0 +1,77 @@
+---
+title: Fuel Pressure Crash
+description: "A fuel pressure crash is when high-side rail pressure falls below target under load. It is a hard fuel-supply limit and a stop-now condition."
+---
+
+# Fuel Pressure Crash
+
+> **Source confidence:** High confidence (behavior). Exact pressure values — verify by VIN/ROM ID.
+
+## What the symptom means
+
+A fuel pressure crash is when the **high-pressure (rail) fuel pressure drops below the DME's target** during load — usually the high-rpm, high-demand part of a pull. The fuel system simply cannot keep up with the fuel the engine is asking for. Because the N54 is direct injection, rail pressure that falls away means the injectors cannot deliver enough fuel, which drives the mixture **lean under boost** — one of the most dangerous conditions for the engine.
+
+This is almost always a **fuel-supply (hardware) limit**, not a tuning value to dial around.
+
+## Common causes
+
+- **Failing or worn HPFP** (high-pressure pump) — the classic N54 cause.
+- **Weak or undersized LPFP** (low-pressure pump) starving the HPFP — common on higher-power or high-ethanol builds.
+- **Injectors at their limit** for the fuel demanded.
+- **Clogged fuel filter / supply restriction.**
+- **Higher ethanol content than the fuel system was built for** — ethanol needs more fuel volume.
+- **A calibration demanding more fuel than the pumps/injectors can supply** (the tune exposed a hardware limit).
+
+## What to log
+
+- [HPFP / rail pressure target vs actual](/wiki/logging/hpfp-pressure)
+- [LPFP pressure](/wiki/logging/lpfp-pressure)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- RPM, gear, load
+
+## What a normal log pattern looks like
+
+- Actual rail pressure **tracks target** through the whole pull, including up top.
+- LPFP pressure holds steady.
+- Lambda stays at the commanded target (no unexpected lean spike).
+
+## What a bad log pattern looks like
+
+- Actual rail pressure **holding target then dropping away** as rpm/demand climb — the "crash."
+- LPFP pressure sagging (points at the low-side pump as the limit).
+- **Lambda going lean** at the same moment rail pressure falls — the dangerous combination.
+
+_Media placeholder: rail-pressure-crash log screenshot (target vs actual + lambda)._
+
+## Mechanical checks first
+
+1. Test **HPFP** health — does rail pressure hold target under load?
+2. Test **LPFP / low-side supply** pressure under demand.
+3. Confirm **actual ethanol content** matches what the fuel system was set up for.
+4. Check **fuel filter / supply** for restriction.
+5. Inspect injectors if fueling is uneven.
+
+## Tuning-related causes second
+
+The tune does not "cause" a crash so much as **reveal a supply limit** by asking for more fuel. The correct response is to add fuel-system capacity (upgraded LPFP/HPFP, or port injection on big builds), not to keep demanding fuel the pumps cannot deliver.
+
+## When to stop tuning
+
+**Stop the pull immediately** if rail pressure crashes and lambda goes lean. This is an unsafe-log condition — continuing risks engine damage. Fix or upgrade the fuel system before any further load.
+
+## Related pages
+
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [HPFP](/wiki/fuel/hpfp)
+- [LPFP](/wiki/fuel/lpfp)
+- [Fuel Rail Pressure](/wiki/fuel/fuel-rail-pressure)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
+- [Logging: Fuel Limits](/wiki/logging/fuel-limits)
+
+## Sources
+
+- _Exact rail pressure targets and crash thresholds — Source needed. Verify by VIN/ROM ID._
+- _N54 HPFP/LPFP capacity references — Source needed (cite trusted reference)._

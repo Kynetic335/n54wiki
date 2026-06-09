@@ -1,0 +1,60 @@
+---
+title: Logging Timing Corrections
+description: "Timing-correction channels show how much ignition advance the DME pulls per cylinder when it detects knock — the key safety signal in any N54 pull."
+---
+
+# Logging Timing Corrections
+
+> **Source confidence:** High confidence (concept). Acceptable amounts — verify by VIN/ROM ID.
+
+## What the channel means
+
+Timing-correction channels show the ignition advance the DME **removes** (negative) when its knock detection hears abnormal combustion, and sometimes restores once conditions improve. On the N54 these are typically available **per cylinder**, which makes them powerful for isolating problems.
+
+## Why it matters
+
+Knock is destructive. Timing corrections are the engine's own defense, and watching them is how you confirm a pull is safe. Sustained or growing negative corrections mean the engine is knocking and the tune/fuel/heat/hardware combination is at or past its limit.
+
+## What normal behavior generally looks like
+
+- Little to no timing pulled under load.
+- Any small corrections are brief and recover.
+- All cylinders behave **similarly**.
+
+## What abnormal behavior can suggest
+
+- **Sustained negative corrections** under load → knock; check fuel grade, ethanol content, heat, plugs.
+- **Corrections growing with [IAT](/wiki/logging/iat)** → heat-related (heat soak, weak intercooling).
+- **One cylinder pulling much more than the rest** → cylinder-specific hardware (plug, coil, injector), not the whole tune.
+- Timing pull alongside **lean [lambda](/wiki/logging/lambda-afr) or a [rail-pressure crash](/wiki/logging/hpfp-pressure)** → fuel-supply-driven knock.
+
+## Which diagnostics use this channel
+
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Misfire](/wiki/diagnostics/misfire)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Timing Problems](/wiki/logging/timing-problems)
+
+## Common interpretation mistakes
+
+- Panicking over a single tiny, brief correction vs a repeatable trend.
+- Reading total/averaged timing without checking **per-cylinder** — you miss a single bad cylinder.
+- Ignoring **IAT and fuel** context, then blaming the tune for heat- or fuel-driven knock.
+- "Fixing" knock by pulling timing in the tune on a car with bad plugs or bad fuel — that hides the real fault.
+
+_Media placeholder: per-cylinder timing-correction log screenshot._
+
+## Related pages
+
+- [IAT](/wiki/logging/iat)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [Timing Problems](/wiki/logging/timing-problems)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Knock Detection](/wiki/ignition/knock-detection)
+- [Timing Corrections (Ignition)](/wiki/ignition/timing-corrections)
+- [Map: Timing Correction](/wiki/maps/timing-correction)
+
+## Sources
+
+- _Acceptable timing-pull amounts are car/fuel/tune specific — Verify by VIN/ROM ID._
+- _Trusted reference on N54 knock behavior — Source needed._
