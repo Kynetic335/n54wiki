@@ -47,8 +47,8 @@ export const romFamilies: RomFamily[] = [
     notes:
       'Private inventory: stock original BIN, v12 OTS maps, Hybrid Twins V12. ' +
       'Stock SHA-256: 25adcdcc54f698154315f50731db033c5aa48136e93b20a4de8e9e87cba59c18. ' +
-      'ALL IJE0S packages: NEEDS_AUDIT (150+ unmatched XDF regions per package — run full ' +
-      'unmatched-region-audit.mjs before promoting any IJE0S package). ' +
+      'ALL IJE0S packages: READY (owner-accepted V90 packages, OWNER_ACCEPT 2026-06-08; ' +
+      '14 IDENT + 2 CHECKSUM regions stripped). Review BIN only. ' +
       'XHP TCU tune strongly recommended for AT cars at Stage 2 and above.',
   },
   {

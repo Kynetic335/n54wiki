@@ -19,6 +19,7 @@ import {
   fuelToManifestId,
 } from '@/lib/tune-program/patchReviewGate'
 import { resolveGenerateBin } from '@/lib/tune-program/generateBinGate'
+import { getRomGateStatus, listReadyPackagesForRom } from '@/lib/tune-program/packageGates'
 import type { AppSafePatchPackage, PatchApplyResult } from '@/types/tune-program'
 
 // ─── N54 Tune Program — v3 Review Mode ────────────────────────────────────────
@@ -38,8 +39,14 @@ import type { AppSafePatchPackage, PatchApplyResult } from '@/types/tune-program
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─── ROM Families ─────────────────────────────────────────────────────────────
-// reviewStatus:       current package availability for owner-review
-// stages:             standard OTS stages with READY packages (N20 MAP stages auto-set by category)
+// NOTE: the review-status badge is NOT hardcoded here. It is DERIVED from the
+// real package manifest/gate data at render time via deriveRomStatus() so the
+// label can never go stale relative to the published packages.
+//
+// heldVariantCount:    count of intentionally-unbuilt fuel variants (held/future)
+//                      surfaced as the "/ N MISSING" part of a PARTIAL READY badge.
+// statusNote:          accurate one-line availability note shown in Step 2.
+// stages:              standard OTS stages with READY packages (N20 MAP stages auto-set by category)
 // availableCategories: package categories with READY packages for this ROM
 const ROM_FAMILIES = [
   {
@@ -48,8 +55,8 @@ const ROM_FAMILIES = [
     desc: 'Most common MSD80 — 135i, 335i, 535i, Z4 35i, 1M (2007–2010). Verify in MHD.',
     badge: 'Most Common',
     badgeColor: '#16a34a',
-    reviewStatus: 'ready',
-    reviewStatusLabel: 'READY',
+    heldVariantCount: 0,
+    statusNote: '',
     // Standard OTS stages — hybrid-base is N20 MAP only (not a standard OTS stage)
     // Stage 1 (basic): no v12 source — starts at Stage 1+
     stages: ['stage1plus', 'stage2', 'stage3'],
@@ -61,10 +68,10 @@ const ROM_FAMILIES = [
     desc: 'Common MSD81 — automatic (ZF 6HP) 135i, 335i, 535i (2007–2010). Verify in MHD.',
     badge: 'AT Cars',
     badgeColor: '#2563eb',
-    reviewStatus: 'needs-audit',
-    reviewStatusLabel: 'Needs Audit',
+    heldVariantCount: 0,
+    statusNote: 'READY — owner-accepted V90 packages. Review BIN only.',
     stages: ['stage1plus', 'stage2', 'stage3'],
-    availableCategories: [] as string[],
+    availableCategories: ['standard-ots', 'n20-map-stock-turbo', 'n20-map-hybrid-base'],
   },
   {
     id: 'IKM0S',
@@ -72,10 +79,12 @@ const ROM_FAMILIES = [
     desc: 'Less common MSD81 — select regional/late-production N54 cars. Confirm in MHD first.',
     badge: 'Verify First',
     badgeColor: '#d97706',
-    reviewStatus: 'not-built',
-    reviewStatusLabel: 'Not Built Yet',
-    stages: ['stage1plus', 'stage2', 'stage3'],
-    availableCategories: [] as string[],
+    // 95 + ACN91 across stage1/1+/2/3 = 8 intentionally-unbuilt fuel variants.
+    heldVariantCount: 8,
+    statusNote: 'PARTIAL READY — 16 v90-source packages available. Some 95/ACN91-CAD94 variants are unavailable.',
+    // IKM0S has native Stage 1 packages (16 READY = stage1/1+/2/3 × 91/93/E30/E50).
+    stages: ['stage1', 'stage1plus', 'stage2', 'stage3'],
+    availableCategories: ['standard-ots'],
   },
   {
     id: 'INA0S',
@@ -83,13 +92,47 @@ const ROM_FAMILIES = [
     desc: 'Later MSD81 — 2010+ 135i, 335i, some 535i. Verify in MHD.',
     badge: 'Later Rev',
     badgeColor: '#7c3aed',
-    reviewStatus: 'ready',
-    reviewStatusLabel: 'READY',
+    heldVariantCount: 0,
+    statusNote: '',
     // v12: Standard OTS (stage1+/2/3 × 91/93/E50) + N20 MAP packages
     stages: ['stage1plus', 'stage2', 'stage3'],
     availableCategories: ['standard-ots', 'n20-map-stock-turbo', 'n20-map-hybrid-base'],
   },
 ]
+
+// ─── Derived ROM review status (data-driven) ──────────────────────────────────
+// Reads the real manifest/gate so the badge reflects published packages, not a
+// stale hardcoded string. heldVariantCount turns a fully-READY ROM that still
+// has intentionally-unbuilt fuel variants into a PARTIAL READY badge.
+type RomReviewStatus = 'ready' | 'partial-ready' | 'needs-audit' | 'not-built'
+
+function deriveRomStatus(
+  romId: string,
+  heldVariantCount = 0,
+): { status: RomReviewStatus; label: string; readyCount: number } {
+  const gate = getRomGateStatus(romId) // READY | NEEDS_AUDIT | NOT_BUILT
+  const readyCount = listReadyPackagesForRom(romId).length
+  if (gate === 'READY') {
+    if (heldVariantCount > 0) {
+      return {
+        status: 'partial-ready',
+        label: `${readyCount} READY / ${heldVariantCount} MISSING`,
+        readyCount,
+      }
+    }
+    return { status: 'ready', label: 'READY', readyCount }
+  }
+  if (gate === 'NEEDS_AUDIT') return { status: 'needs-audit', label: 'Needs Audit', readyCount }
+  return { status: 'not-built', label: 'Not Built Yet', readyCount }
+}
+
+// Badge color tokens per derived status.
+const ROM_STATUS_BADGE: Record<RomReviewStatus, { bg: string; border: string; color: string }> = {
+  'ready':         { bg: '#052e16', border: '#16a34a55', color: '#4ade80' },
+  'partial-ready': { bg: '#0a1f1a', border: '#0d948855', color: '#2dd4bf' },
+  'needs-audit':   { bg: '#1a1200', border: '#854d0e55', color: '#d97706' },
+  'not-built':     { bg: '#1a1a1a', border: '#333',      color: '#555'    },
+}
 
 // ─── Stages ───────────────────────────────────────────────────────────────────
 // v12 OTS stage fuel matrix (standard-ots packages only):
@@ -516,6 +559,8 @@ export default function TuneProgram() {
           <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {ROM_FAMILIES.map((rom) => {
               const active = romFamily === rom.id
+              const st = deriveRomStatus(rom.id, rom.heldVariantCount)
+              const badgeStyle = ROM_STATUS_BADGE[st.status]
               return (
                 <button key={rom.id} onClick={() => handleRomChange(rom.id)}
                   style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', padding: '0.8rem 0.9rem', background: active ? '#0d1f3a' : '#0d0d0d', border: `1px solid ${active ? '#2563eb' : '#1e1e1e'}`, borderRadius: '0.55rem', cursor: 'pointer', textAlign: 'left', width: '100%' }}>
@@ -531,11 +576,11 @@ export default function TuneProgram() {
                         {rom.badge}
                       </span>
                       <span style={{ fontSize: '0.68rem', fontWeight: 700, padding: '0.1rem 0.45rem', borderRadius: '0.3rem',
-                        background: rom.reviewStatus === 'ready' ? '#052e16' : rom.reviewStatus === 'needs-audit' ? '#1a1200' : '#1a1a1a',
-                        border: `1px solid ${rom.reviewStatus === 'ready' ? '#16a34a55' : rom.reviewStatus === 'needs-audit' ? '#854d0e55' : '#333'}`,
-                        color: rom.reviewStatus === 'ready' ? '#4ade80' : rom.reviewStatus === 'needs-audit' ? '#d97706' : '#555',
+                        background: badgeStyle.bg,
+                        border: `1px solid ${badgeStyle.border}`,
+                        color: badgeStyle.color,
                         fontFamily: 'system-ui, sans-serif' }}>
-                        {rom.reviewStatusLabel}
+                        {st.label}
                       </span>
                     </div>
                     <p style={{ margin: 0, fontSize: '0.78rem', color: '#555' }}>{rom.desc}</p>
@@ -558,18 +603,28 @@ export default function TuneProgram() {
             {romFamily ? (() => {
               const rom = ROM_FAMILIES.find(r => r.id === romFamily)
               const availCats = rom?.availableCategories ?? []
+              const st = deriveRomStatus(romFamily, rom?.heldVariantCount)
               if (availCats.length === 0) {
                 return (
                   <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', fontStyle: 'italic' }}>
-                    {rom?.reviewStatus === 'needs-audit'
+                    {st.status === 'needs-audit'
                       ? `${romFamily} packages are still being audited — not yet available for owner-review.`
-                      : `${romFamily} packages have not been built yet — check back for future updates.`}
+                      : `${romFamily} packages are not available yet — check back for future updates.`}
                   </p>
                 )
               }
-              return PACKAGE_CATEGORIES
-                .filter(cat => availCats.includes(cat.value))
-                .map(cat => {
+              const note = rom?.statusNote
+              return (
+                <>
+                  {note ? (
+                    <p style={{ margin: '0 0 0.35rem', fontSize: '0.8rem', fontWeight: 600,
+                      color: ROM_STATUS_BADGE[st.status].color }}>
+                      {note}
+                    </p>
+                  ) : null}
+                  {PACKAGE_CATEGORIES
+                    .filter(cat => availCats.includes(cat.value))
+                    .map(cat => {
                   const active = packageCategory === cat.value
                   const isN20 = cat.value !== 'standard-ots'
                   return (
@@ -586,7 +641,9 @@ export default function TuneProgram() {
                       </div>
                     </button>
                   )
-                })
+                })}
+                </>
+              )
             })() : (
               <p style={{ margin: 0, fontSize: '0.82rem', color: '#444' }}>Select a ROM family first.</p>
             )}
