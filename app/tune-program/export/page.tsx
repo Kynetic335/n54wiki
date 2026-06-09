@@ -28,11 +28,15 @@ function ExportPageInner() {
     const stored = JSON.parse(localStorage.getItem('synergy-tune-requests') ?? '[]') as CustomerRequest[]
     const all = [...sampleCustomers, ...stored]
     const found = all.find((r) => r.id === requestId)
-    if (found) {
-      setRequest(found)
-    } else {
-      setNotFound(true)
-    }
+    // Defer state writes out of the synchronous effect body to avoid
+    // cascading renders (react-hooks/set-state-in-effect).
+    queueMicrotask(() => {
+      if (found) {
+        setRequest(found)
+      } else {
+        setNotFound(true)
+      }
+    })
   }, [requestId])
 
   const tuneFile = request?.selectedTuneFileId

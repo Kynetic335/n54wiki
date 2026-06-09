@@ -15,12 +15,13 @@ export function CalibrationShell({ children }: { children: ReactNode }) {
         </div>
         <div className="cal-navlinks">
           <Link href="/school">School</Link>
+          <Link href="/tune-app">Tune App</Link>
+          <Link href="/xdf-architect">XDF Architect</Link>
           <Link href="/parameters">Maps</Link>
-          <Link href="/guides/n54-log-review">Guides</Link>
-          <Link href="/diagnostics/logs">Diagnostics</Link>
           <Link href="/recipes">Recipes</Link>
+          <Link href="/diagnostics/logs">Diagnostics</Link>
+          <Link href="/guides/n54-log-review">Guides</Link>
           <Link href="/wiki">Wiki</Link>
-          <Link href="/tune-program">Tune Program</Link>
           <Link className="cal-nav-cta" href="/contact">Get a Tune →</Link>
         </div>
       </nav>

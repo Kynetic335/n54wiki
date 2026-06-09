@@ -18,7 +18,7 @@ const journey = [
   { num: '03', label: 'Map Reference', sub: 'Parameters', href: '/parameters' },
   { num: '04', label: 'Workflow Guides', sub: 'Step-by-step', href: '/guides/n54-log-review' },
   { num: '05', label: 'Log Diagnostics', sub: 'Symptom first', href: '/diagnostics/logs' },
-  { num: '06', label: 'Tune Program', sub: 'BIN review', href: '/tune-program' },
+  { num: '06', label: 'Tune App', sub: 'BIN review', href: '/tune-app' },
 ]
 
 const tunerWorkflows = [
@@ -151,23 +151,45 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* XDF Architect product card */}
+      {/* Synergy Tools — 3-up card row */}
       <section className="cal-section">
         <div className="cal-section-head">
           <p className="cal-eyebrow">Synergy Tools</p>
-          <h2>XDF Architect</h2>
+          <h2>The App Ecosystem</h2>
         </div>
-        <Link className="cal-card" href="/xdf-architect" style={{ display: 'block' }}>
-          <div className="cal-card-head">
-            <h3>XDF Architect — Coming Soon</h3>
-            <span className="cal-count">N54</span>
-          </div>
-          <p>
-            Desktop tool for N54 MSD80/81/87 XDF work: identify ROMs from verified version strings,
-            browse the full A2L/DAMOS parameter catalog with available vs missing coverage, and export
-            TunerPro XDF files from verified data only. No BINs modified. No values guessed.
-          </p>
-        </Link>
+        <div className="cal-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+          <Link className="cal-card" href="/school">
+            <div className="cal-card-head">
+              <h3>Tuning School</h3>
+              <span className="cal-count">Free</span>
+            </div>
+            <p>
+              Structured N54 calibration lessons — boost control, WGDC PID, fueling, ignition,
+              VANOS, and HPFP. Learn the theory before touching any map.
+            </p>
+          </Link>
+          <Link className="cal-card" href="/tune-app">
+            <div className="cal-card-head">
+              <h3>Tune App</h3>
+              <span className="cal-count">N54</span>
+            </div>
+            <p>
+              Select your ROM, fuel blend, stage, and turbo hardware. Receive a data-driven
+              base-tune package built on verified MSD80/81 calibration recipes.
+            </p>
+          </Link>
+          <Link className="cal-card" href="/xdf-architect">
+            <div className="cal-card-head">
+              <h3>XDF Architect</h3>
+              <span className="cal-count">Coming Soon</span>
+            </div>
+            <p>
+              Calibration definition and database tool for indexing XDF, DAMOS, A2L, KP, OLS,
+              MAP, DCM, BIN/ORI, CSV/XML/JSON sources and matching uploaded BINs to the correct
+              definition package.
+            </p>
+          </Link>
+        </div>
       </section>
 
       {/* Footer CTA */}

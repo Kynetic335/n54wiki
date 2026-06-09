@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { Layout, Navbar, Footer } from 'nextra-theme-docs'
-import { Search } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import { ClientSearch } from '@/components/wiki/ClientSearch'
 
 export default async function WikiLayout({ children }: { children: ReactNode }) {
   const pageMap = await getPageMap('/wiki')
@@ -51,7 +51,7 @@ export default async function WikiLayout({ children }: { children: ReactNode }) 
           </span>
         </Footer>
       }
-      search={<Search />}
+      search={<ClientSearch />}
       pageMap={pageMap}
       docsRepositoryBase="https://github.com/synergybmwtuning/n54wiki/tree/main"
       editLink="Edit this page on GitHub"

@@ -27,7 +27,9 @@ export function AdminDashboard({ adminPin }: AdminDashboardProps) {
     const stored = JSON.parse(
       localStorage.getItem('synergy-tune-requests') ?? '[]'
     ) as CustomerRequest[]
-    setRequests([...sampleCustomers, ...stored])
+    // Defer state write out of the synchronous effect body to avoid
+    // cascading renders (react-hooks/set-state-in-effect).
+    queueMicrotask(() => setRequests([...sampleCustomers, ...stored]))
   }, [])
 
   const handleStatusChange = (id: string, status: RequestStatus) => {

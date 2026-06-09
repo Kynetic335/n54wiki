@@ -14,10 +14,9 @@ export default function XdfArchitectPage() {
         <p className="tp-eyebrow">Synergy Tools · Coming Soon</p>
         <h1>XDF Architect</h1>
         <p>
-          A standalone desktop tool for N54 MSD80/MSD81/MSD87 calibration definition work.
-          Drop a ROM, identify the software version, browse every verified parameter from
-          the A2L/DAMOS source files, and export a clean TunerPro XDF — with nothing invented
-          and no BINs modified.
+          Synergy XDF Architect is the calibration definition and database tool for indexing
+          XDF, DAMOS, A2L, KP, OLS, MAP, DCM, BIN/ORI, CSV/XML/JSON sources and matching
+          uploaded BINs to the correct definition package.
         </p>
         <div className="tp-hero-actions">
           <Link className="tp-button tp-button-secondary" href="/contact">
