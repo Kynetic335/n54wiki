@@ -1,50 +1,59 @@
 ---
 title: Load Requested vs Actual
-description: "Requested vs actual load shows what load the DME is targeting versus what it achieves — the air-side equivalent of boost target vs actual."
+description: "Requested vs actual load shows what the DME is targeting versus what it achieves — the air-side equivalent of boost target vs actual."
 ---
-
 
 # Load Requested vs Actual
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specific values — verify by VIN/ROM ID.
 
-## What it is
+## What the channels mean
 
-Requested vs actual load shows what load the DME is targeting versus what it achieves — the air-side equivalent of boost target vs actual.
+The N54 is torque/load based. **Requested load** is the load the DME is aiming for (derived from the torque request); **actual load** is the load it measures the engine achieving from airflow/manifold pressure. Read together, they tell you whether the engine is delivering what it intends — and, with [boost target vs actual](/wiki/logging/boost-target-vs-actual), whether a shortfall is air-side or a limiter.
 
 ## Why it matters
 
-Actual lagging requested points at a boost shortfall (often mechanical) or a limiter; a capped request points at the tune.
+Two very different problems look similar from the driver's seat. Requested vs actual separates them: if **actual lags requested**, the engine is falling short (often a mechanical boost shortfall); if **requested itself is capped**, a limiter is holding power down. Knowing which is which decides whether you smoke-test the car or look at the calibration.
 
-## How it works
+## What normal behavior generally looks like
 
-The torque request becomes a requested load; the engine works to achieve it; actual is measured.
+- Requested and actual load **rise together** through the pull.
+- Actual closely tracks requested.
+- Behavior repeats pull to pull on a warm car.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Actual below requested (shortfall)
-- Requested pinned at a ceiling (limiter)
+- **Actual below requested** → boost shortfall: leak, worn turbo, wastegate, or vacuum fault. See [Low Boost](/wiki/diagnostics/low-boost), [30FF](/wiki/diagnostics/30ff-underboost).
+- **Requested pinned at a flat ceiling** → a limiter (load/torque cap), not a hardware shortfall. See [Throttle Closures](/wiki/diagnostics/throttle-closures).
+- Actual dropping with a **throttle closure** → protective/limiter intervention.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- Requested load
-- Actual load
-- Boost target vs actual
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Shortfall vs ceiling are different problems; smoke-test before assuming a limiter.
+- Confusing a **shortfall** (actual < requested) with a **ceiling** (requested capped) — opposite fixes.
+- Reading load without **boost target vs actual** for context.
+- Assuming "add boost in the tune" when actual lags requested due to a leak.
+- Comparing load across different gears/temps/tunes.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: requested vs actual load log screenshot (shortfall vs ceiling)._
 
 ## Related pages
 
-- [What load means](/wiki/load-torque/load-meaning)
-- [Load ceiling](/wiki/load-torque/load-ceiling)
-- [Map: load target](/wiki/maps/load-target)
+- [Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [Throttle Angle](/wiki/logging/throttle-angle)
+- [What Load Means](/wiki/load-torque/load-meaning)
+- [Load Ceiling](/wiki/load-torque/load-ceiling)
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures)
+- [Map: Load Target](/wiki/maps/load-target)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Load values are car/tune specific — Verify by VIN/ROM ID._
+- _N54 torque-model references — Source needed._

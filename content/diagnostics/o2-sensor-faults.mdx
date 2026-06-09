@@ -1,0 +1,69 @@
+---
+title: O2 Sensor Faults
+description: "O2 (oxygen / wideband) sensor faults make the DME read mixture wrong, which can drive bad fuel trims and mislead lean/rich diagnosis. Verify the sensor before trusting lambda."
+---
+
+# O2 Sensor Faults
+
+> **Source confidence:** High confidence (concept). Exact code text and sensor layout — verify by scan / VIN/ROM ID.
+
+## What the symptom means
+
+Oxygen (O2) sensors report the exhaust mixture so the DME can control fueling. The N54 uses sensors before and after the catalysts (pre-cat sensing for fuel control, post-cat for monitoring); exact layout varies — **verify by VIN/ROM ID**. A faulty O2 sensor reports the **wrong mixture**, so the DME corrects fueling based on bad data. That can cause large fuel trims, a false lean or rich reading, and misleading log lambda. Before trusting any lean/rich conclusion, confirm the sensor is healthy.
+
+## Common causes
+
+- **Aged / slow / lazy sensor** (degraded response).
+- **Contaminated or failed sensor** (e.g. from oil/coolant burning, leaded race fuel).
+- **Wiring / connector / heater-circuit fault.**
+- **Exhaust leak near the sensor** skewing the reading.
+
+## What to log
+
+- [Lambda / AFR](/wiki/logging/lambda-afr) (and per-bank if available)
+- [STFT / LTFT](/wiki/logging/stft-ltft)
+- Scan for O2 / heater / catalyst-monitor codes
+
+## What a healthy pattern looks like
+
+- Lambda responds quickly and reads plausibly.
+- Fuel trims small and similar between banks.
+- No O2 / heater codes stored.
+
+## What a bad pattern can suggest
+
+- **Lambda stuck, slow, or implausible** → degraded/failed sensor.
+- **One bank's trims very different** from the other → sensor (or fueling) on that bank.
+- A "lean" or "rich" reading that **does not match** rail pressure / injector behavior → suspect the sensor, not the fueling.
+- Heater-circuit codes → electrical sensor fault.
+
+_Media placeholder: lambda + fuel-trim log screenshot (lazy vs healthy sensor)._
+
+## Mechanical checks first
+
+1. **Scan** for O2 / heater / monitor codes.
+2. Inspect **wiring / connectors**.
+3. Check for **exhaust leaks** near the sensor.
+4. Compare bank-to-bank behavior; replace a confirmed-bad sensor.
+
+## Tuning-related causes second
+
+An O2 fault is hardware. Do not adjust fueling tables to chase a lambda number from a bad sensor — that bakes in an error. Confirm the sensor is good first, then read fueling.
+
+## When to stop tuning
+
+If lambda is unreliable due to a suspect O2/wideband sensor, stop and verify the sensor. Tuning fueling on bad mixture data is unsafe.
+
+## Related pages
+
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [Logging: Lambda / AFR](/wiki/logging/lambda-afr)
+- [Logging: STFT / LTFT](/wiki/logging/stft-ltft)
+- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
+
+## Sources
+
+- _Exact N54 O2 sensor layout and code definitions — Source needed. Verify by scan / VIN/ROM ID._
+- _O2 sensor degradation references — Source needed._

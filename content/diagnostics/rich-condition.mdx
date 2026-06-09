@@ -1,51 +1,69 @@
 ---
 title: Rich Condition
-description: "A rich condition is too much fuel for the air (lambda below target)."
+description: "A rich condition is too much fuel for the air (lambda below target). It wastes power, fouls plugs, and often points to injectors or a bad sensor."
 ---
-
 
 # Rich Condition
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Target values — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-A rich condition is too much fuel for the air (lambda below target).
+A rich condition is when there is too much fuel for the air — measured lambda runs **below** the DME's target (or AFR lower than commanded). Rich running is generally less immediately dangerous than lean, but it wastes power, fouls spark plugs, can wash cylinders, and usually signals a fueling or sensor problem.
 
-## Why it matters
+## Common causes
 
-Rich running wastes fuel, fouls plugs, and can indicate sensor or fueling calibration issues.
+- **Leaking injectors** — delivering more fuel than commanded.
+- **Faulty O2 / wideband sensor** reporting wrong mixture ([O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)).
+- **Wrong injector coding** after a swap.
+- **Excess fuel from a calibration** richer than needed (tuning cause).
+- **Mechanical issues** affecting combustion/sensing.
 
-## How it works
+## What to log
 
-Excess fuel relative to air (leaking injectors, sensor error, or calibration) makes mixture rich.
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [STFT / LTFT](/wiki/logging/stft-ltft)
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure)
+- RPM, gear, load
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Low lambda/AFR
-- Fuel smell
-- Fouled plugs
+- Lambda at the commanded target.
+- Fuel trims small and stable.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Lambda/AFR
-- STFT/LTFT
-- Fuel trims
+- **Lambda consistently rich with negative fuel trims** → the DME pulling fuel to compensate; suspect leaking injectors or sensor error.
+- Rich on one cylinder/bank → injector or sensor localized to that bank.
+- Rich plus fouled plugs / fuel smell → confirm fueling source.
+
+_Media placeholder: rich-condition log screenshot (lambda + fuel trims)._
 
 ## Mechanical checks first
 
-Check for leaking injectors and sensor health.
+1. Inspect / test **injectors** for leakage; verify **coding**.
+2. Check **O2 / wideband** sensor health.
+3. Rule out mechanical causes affecting combustion.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+If hardware and sensors are confirmed good, a too-rich calibration can be adjusted — but only after ruling out leaking injectors and bad sensors. Do not lean out a tune to mask a leaking injector; fix the injector.
+
+## When to stop tuning
+
+Rich is less urgent than lean, but persistent rich running with fouling means stop and find the fueling/sensor fault before tuning further.
 
 ## Related pages
 
-- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
-- [Injector failure](/wiki/diagnostics/injector-failure)
-- [Logging: STFT/LTFT](/wiki/logging/stft-ltft)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
+- [Logging: Lambda / AFR](/wiki/logging/lambda-afr)
+- [Logging: STFT / LTFT](/wiki/logging/stft-ltft)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Lambda targets are car/tune specific — Verify by VIN/ROM ID._
+- _N54 rich-condition references — Source needed._

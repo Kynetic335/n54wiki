@@ -1,0 +1,62 @@
+---
+title: VANOS Intake Map
+description: "The VANOS intake map commands target intake cam angles across rpm and load, affecting airflow and spool."
+---
+
+
+# VANOS Intake Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The VANOS intake map commands target intake cam angles across rpm and load, affecting airflow and spool.
+
+## Why it matters
+
+Cam timing affects spool and torque shape. Mis-set timing hurts drivability or triggers VANOS faults.
+
+## Related log channels
+
+- Intake VANOS target vs actual
+- Boost target vs actual
+
+## What changes are visible in logs
+
+Changes show as different commanded intake cam angles and altered spool/torque.
+
+## What can go wrong if changed blindly
+
+- Rough running
+- VANOS deviation faults
+- Worse spool
+
+## Mechanical problems that can look like a tuning problem
+
+- Dirty/failed solenoids
+- Low/dirty oil
+- Mechanical VANOS wear
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Intake cam timing](/wiki/vanos/intake-cam-timing)
+- [VANOS faults](/wiki/vanos/faults)
+- [VANOS tuning tables](/wiki/vanos/tuning-tables)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

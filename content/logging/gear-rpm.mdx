@@ -1,48 +1,55 @@
 ---
 title: Logging Gear & RPM
-description: "Gear and RPM provide the context for interpreting a log: which gear a pull was in and the rpm range it covered."
+description: "Gear and RPM are the context channels that make a log readable: which gear a pull was in and the rpm range it covered, so other channels can be compared."
 ---
-
 
 # Logging Gear & RPM
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specifics — verify by VIN/ROM ID.
 
-## What it is
+## What the channels mean
 
-Gear and RPM provide the context for interpreting a log: which gear a pull was in and the rpm range it covered.
+Gear and RPM describe the conditions of a pull rather than the health of any one system. Gear tells you how much the engine was loaded (a higher gear loads it longer); RPM timestamps where in the rev range everything else happened. They are the backbone that makes every other channel interpretable.
 
 ## Why it matters
 
-Comparisons must be apples-to-apples. A standard pull (commonly 3rd gear) in a consistent rpm range makes logs comparable and safer.
+Logs are only comparable when taken under the same conditions. A standardized pull — commonly 3rd gear (see [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-pull)) — in a consistent rpm window lets you compare boost, fueling, and timing across runs and across changes. Without gear/rpm context, two logs cannot be fairly compared.
 
-## How it works
+## What normal behavior generally looks like
 
-These channels timestamp the pull conditions so other channels can be interpreted correctly.
+- A steady WOT pull stays in **one gear** through the rev range.
+- RPM climbs smoothly to the target without unexpected drops or limiter hits.
+- Pulls are repeatable in the same gear/rpm window.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- N/A — context channels
+- **RPM dropping mid-pull** with no shift → a torque cut / [throttle closure](/wiki/diagnostics/throttle-closures) or limiter.
+- A pull that **shifted gears** partway → not a valid comparison; redo it.
+- Hitting a rev limit earlier/later than expected → check [rev-limiter](/wiki/maps/rev-limiters) calibration or a misfire-driven cut.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- Gear
-- RPM
+- Effectively all — gear/rpm provide context for every diagnostic.
+- Especially [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures) and anything compared across pulls.
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Use a consistent, safe gear/rpm window for comparable logs.
+- Comparing pulls taken in **different gears** (different load, not comparable).
+- Comparing different **rpm windows** or partial pulls.
+- Ignoring an unintended **shift** in the middle of a logged pull.
+- Treating a 1st/2nd-gear pull as equivalent to a 3rd-gear pull.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: gear/rpm trace alongside a pull screenshot._
 
 ## Related pages
 
-- [Reading a 3rd gear pull](/wiki/logging/reading-a-3rd-gear-pull)
-- [Unsafe logs](/wiki/logging/unsafe-logs)
-- [MHD channels](/wiki/logging/mhd-channels)
+- [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-pull)
+- [MHD Channels](/wiki/logging/mhd-channels)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures)
+- [Map: Rev Limiters](/wiki/maps/rev-limiters)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Rev limits / gear behavior are car/tune specific — Verify by VIN/ROM ID._
+- _N54 logging-method references — Source needed._

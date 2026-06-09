@@ -1,51 +1,65 @@
 ---
 title: Unsafe Logs
-description: "An unsafe log is one taken under conditions that risk the engine or produce unreliable data — cold engine, knock present, fuel pressure crashing, or o"
+description: "An unsafe log is one taken under conditions that risk the engine or produce unreliable data. Knowing when to stop is part of safe tuning and diagnosis."
 ---
-
 
 # Unsafe Logs
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (safety practice). Specific thresholds — verify by VIN/ROM ID.
 
-## What it is
+## What the channel/topic means
 
-An unsafe log is one taken under conditions that risk the engine or produce unreliable data — cold engine, knock present, fuel pressure crashing, or overheating.
+"Unsafe logs" is not a single channel — it is the practice of recognizing when a pull should be stopped because the engine is at risk or the data is invalid. A log taken with knock present, fuel pressure crashing, overheating, or on a cold/faulty car either endangers the engine or produces conclusions you cannot trust.
 
 ## Why it matters
 
-Acting on an unsafe or invalid log leads to wrong conclusions and possible damage. Knowing when to stop is part of safe tuning.
+Acting on an unsafe or invalid log leads to wrong fixes and, worse, real damage. The single most protective habit in tuning and diagnosis is knowing the conditions that mean **abort the pull now** rather than "see if it holds."
 
-## How it works
+## What normal (safe) behavior generally looks like
 
-If a log shows knock, pressure crash, or overheating, the correct response is to stop and fix the cause, not to keep pulling.
+- Warm engine, no active faults, healthy maintenance.
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual) tracking; [lambda](/wiki/logging/lambda-afr) at target; [rail pressure](/wiki/logging/hpfp-pressure) holding; little/no [timing pull](/wiki/logging/timing-corrections); temps in range.
+- Repeatable, comparable pulls.
 
-## Common symptoms or failure modes
+## What abnormal (stop-now) behavior can suggest
 
-- Knock/timing pull
-- Fuel pressure crash
-- Overheating during the log
+Stop the pull immediately if you see any of:
 
-## What to check in logs
+- **Knock / sustained timing pull** → [Timing Problems](/wiki/logging/timing-problems), [Timing Corrections](/wiki/diagnostics/timing-corrections).
+- **Rail-pressure crash with lean lambda** → [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash), [Fuel Limits](/wiki/logging/fuel-limits).
+- **Overboost** or boost control clearly failing → [Overboost](/wiki/diagnostics/overboost), [Boost Control Problems](/wiki/logging/boost-control-problems).
+- **Rising coolant/oil temp** → [Coolant Temp](/wiki/logging/coolant-temp), [Oil Temp](/wiki/logging/oil-temp).
+- Cold engine, active fault codes, or a known mechanical issue → data is invalid anyway.
 
-- Timing corrections
-- Fuel rail pressure
-- Coolant/oil temp
+## Which diagnostics use this concept
 
-## Mechanical checks first
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Overboost](/wiki/diagnostics/overboost)
 
-Stop immediately and address the mechanical cause if these appear.
+## Common interpretation mistakes
 
-## Related codes or fault patterns
+- "Just one more pull" after seeing knock or a pressure crash.
+- Trusting data from a **cold** or **faulted** car.
+- Logging on public roads instead of a safe, legal setting (e.g. a dyno).
+- Treating a mechanical fault (leak, worn pump, bad coil) as something to tune around instead of fix.
 
-_No verified codes listed yet. Source needed._
+TODO: add real annotated unsafe-log screenshot (knock / rail-pressure crash; own/license-safe image only).
 
 ## Related pages
 
-- [Reading a 3rd gear pull](/wiki/logging/reading-a-3rd-gear-pull)
-- [Timing problems](/wiki/logging/timing-problems)
-- [Fuel limits](/wiki/logging/fuel-limits)
+- [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-pull)
+- [Timing Problems](/wiki/logging/timing-problems)
+- [Fuel Limits](/wiki/logging/fuel-limits)
+- [Boost Control Problems](/wiki/logging/boost-control-problems)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Pre-Tune Checklist](/wiki/maintenance/pre-tune-checklist)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- **Bosch — *Gasoline Engine Management*:** knock control and engine-protection fundamentals (why knock, lean-under-boost, and overheating are stop conditions).
+- **BMW service information (ISTA / TIS):** protection thresholds and fault behavior for the specific chassis. _Verify by VIN/ROM ID._
+- _Community/owner references: practical "abort the pull" experience only — not the sole source for hard specs._
+- _Stop-now thresholds are car/tune specific — Verify by VIN/ROM ID._

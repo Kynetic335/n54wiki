@@ -48,7 +48,7 @@ Log a full pull (see [Reading a 3rd Gear Pull](/wiki/logging/reading-a-3rd-gear-
 - **WGDC pinned high (near max)** while boost still will not reach target — classic sign the DME is trying everything and the air is escaping or the wastegate cannot hold. This points hard at a **mechanical leak or wastegate problem**, not the tune.
 - A sharp boost drop at a specific point can indicate a coupler letting go under pressure.
 
-_Media placeholder: good log vs bad log screenshot (boost target vs actual + WGDC)._
+TODO: add real MHD log screenshot showing boost target vs actual with WGDC pinned high (own/license-safe image only).
 
 ## Mechanical checks first
 
@@ -91,5 +91,8 @@ Do not keep pulling or chasing the number in software until the mechanical side 
 
 ## Sources
 
-- _Exact 30FF code definition and threshold — Source needed. Verify by scan / ROM ID._
-- _Community-documented N54 boost-fault behavior — Source needed (cite trusted reference)._
+- **BMW service information (ISTA / TIS):** authoritative source for the exact 30FF fault definition, set conditions, and threshold. _Verify the specific code text by scan / by VIN/ROM ID._
+- **Bosch — *Gasoline Engine Management* / *Bosch Automotive Handbook*:** turbocharging and charge-pressure (boost) control fundamentals behind boost-deviation faults.
+- **BMW repair/component documentation** for the boost-control hardware (wastegate, charge-pressure actuator and solenoid) on the specific chassis. _Verify by VIN._
+- _Community/owner references (forums, reputable vendors): practical "30FF is usually a leak" experience only — not the sole source for hard specs._
+- _Exact boost-deviation threshold value — Source needed (BMW service data)._

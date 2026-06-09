@@ -1,0 +1,53 @@
+---
+title: Wastegates
+description: "Wastegates bleed exhaust around the turbine to control boost. The N54 uses internal wastegates actuated by a vacuum/pressure system and commanded via "
+---
+
+
+# Wastegates
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Wastegates bleed exhaust around the turbine to control boost. The N54 uses internal wastegates actuated by a vacuum/pressure system and commanded via WGDC.
+
+## Why it matters
+
+Worn wastegates cause rattle, boost control errors, and overboost/underboost faults.
+
+## How it works
+
+The DME commands a wastegate duty cycle; the actuator moves the wastegate to hold the boost target.
+
+## Common symptoms or failure modes
+
+- Wastegate rattle
+- Boost oscillation
+- Over/underboost
+
+## What to check in logs
+
+- Boost target vs actual
+- WGDC
+
+## Mechanical checks first
+
+Check wastegate arm play and actuator function before tuning.
+
+## Related codes or fault patterns
+
+- Underboost/overboost faults (e.g. 30FF, 2-series boost codes) — verify by scan.
+
+## Related pages
+
+- [Wastegate rattle](/wiki/boost/wastegate-rattle)
+- [Boost solenoids](/wiki/boost/boost-solenoids)
+- [WGDC basics](/wiki/boost/wgdc-basics)
+- [Boost diagnostics: low boost](/wiki/diagnostics/low-boost)
+- [Logging: WGDC](/wiki/logging/wgdc)
+- [Map: WGDC base](/wiki/maps/wgdc-base)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

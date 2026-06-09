@@ -1,0 +1,59 @@
+---
+title: Rev Limiters
+description: "Rev limiter maps set the maximum engine rpm and how the limit is enforced (fuel/spark cut)."
+---
+
+
+# Rev Limiters
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+Rev limiter maps set the maximum engine rpm and how the limit is enforced (fuel/spark cut).
+
+## Why it matters
+
+Raising the rev limit stresses valvetrain and rotating assembly. It should respect the engine's mechanical limits.
+
+## Related log channels
+
+- RPM
+- Misfire counters (cut behavior)
+
+## What changes are visible in logs
+
+Changes show as a different rpm ceiling and cut behavior.
+
+## What can go wrong if changed blindly
+
+- Valvetrain/mechanical stress
+- Reliability loss beyond safe rpm
+
+## Mechanical problems that can look like a tuning problem
+
+- Misfires near redline that mimic a limiter
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Logging: gear & rpm](/wiki/logging/gear-rpm)
+- [Misfire diagnosis](/wiki/ignition/misfire-diagnosis)
+- [Stock specs](/wiki/n54-overview/stock-specs)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

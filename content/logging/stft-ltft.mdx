@@ -1,50 +1,63 @@
 ---
 title: Logging STFT / LTFT
-description: "Fuel trims (short-term and long-term) show how much the DME is adjusting fueling to hit its target. Large trims indicate the base fueling is off."
+description: "Short- and long-term fuel trims show how much the DME is correcting fueling to hit its target. Large trims mean the base fueling is off."
 ---
-
 
 # Logging STFT / LTFT
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Acceptable trim ranges — verify by VIN/ROM ID.
 
-## What it is
+## What the channels mean
 
-Fuel trims (short-term and long-term) show how much the DME is adjusting fueling to hit its target. Large trims indicate the base fueling is off.
+Fuel trims are the corrections the DME applies to hit its mixture target. **STFT** (short-term fuel trim) reacts quickly to live feedback; **LTFT** (long-term fuel trim) is the learned, slower-moving correction the DME settles into over time. A trim near zero means the base fueling is close to right. A large positive trim means the DME is **adding** fuel (it saw lean); a large negative trim means it is **pulling** fuel (it saw rich).
 
 ## Why it matters
 
-Trims reveal vacuum leaks, fueling drift, and sensor issues; they provide context for lean/rich complaints.
+Trims reveal problems the raw lambda number alone might hide: vacuum leaks, fueling drift, a failing sensor, or injector issues. They are most useful at idle and steady cruise, where closed-loop fueling is active and trims tell you what the engine is fighting.
 
-## How it works
+## What normal behavior generally looks like
 
-The DME corrects fueling based on feedback; STFT reacts quickly, LTFT learns over time.
+- STFT and LTFT small and stable.
+- Banks (if separate) read similarly.
+- No big swing when the engine is warm and steady.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Large positive trims (lean correction, possible leak)
-- Large negative trims (rich correction)
+- **Large positive trims** → lean correction: unmetered air (vacuum/PCV leak) or weak fueling. See [Lean Condition](/wiki/diagnostics/lean-condition), [Rough Idle](/wiki/diagnostics/rough-idle).
+- **Large negative trims** → rich correction: leaking injector or sensor error. See [Rich Condition](/wiki/diagnostics/rich-condition).
+- **One bank's trims very different** → injector or [O2 sensor](/wiki/diagnostics/o2-sensor-faults) on that bank.
+- Trims drifting after a fuel change → blend/ethanol mismatch.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- STFT
-- LTFT
-- Lambda/AFR
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [Rough Idle](/wiki/diagnostics/rough-idle)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Check for vacuum/intake leaks and sensor health when trims are large.
+- Reading trims **at WOT** to judge fueling — closed-loop trims are an idle/cruise tool; use [lambda](/wiki/logging/lambda-afr) for WOT.
+- Treating a large trim as a tuning value to dial out instead of finding the leak/injector/sensor causing it.
+- Ignoring **bank-to-bank** differences that localize the fault.
+- Judging trims on a cold or not-yet-settled engine.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+TODO: add real fuel-trim log screenshot (balanced vs lean-correcting; own/license-safe image only).
 
 ## Related pages
 
-- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
-- [Rich condition](/wiki/diagnostics/rich-condition)
-- [Lean condition](/wiki/diagnostics/lean-condition)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)
+- [PCV System](/wiki/maintenance/pcv)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- **Bosch — *Gasoline Engine Management*:** closed-loop lambda control and short-term / long-term fuel-trim (mixture adaptation) fundamentals.
+- **BMW service information (ISTA / TIS):** fuel-trim/adaptation behavior and plausibility ranges for the specific DME. _Verify by VIN/ROM ID._
+- _Community/owner references: practical fuel-trim interpretation experience only — not the sole source for hard specs._
+- _Acceptable trim ranges are car/tune specific — Verify by VIN/ROM ID._

@@ -1,0 +1,49 @@
+---
+title: Torque Request
+description: "The N54 uses a torque-based control model: the DME computes a torque request from driver demand and other systems, then schedules air/fuel/spark to me"
+---
+
+
+# Torque Request
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+The N54 uses a torque-based control model: the DME computes a torque request from driver demand and other systems, then schedules air/fuel/spark to meet it.
+
+## Why it matters
+
+Almost everything downstream (load, boost, throttle) serves the torque request. Limiters act on this request to cap output.
+
+## How it works
+
+Driver and system inputs produce a torque request; the DME translates it into load and boost targets.
+
+## Common symptoms or failure modes
+
+- Torque request capped by an intervention/limiter
+
+## What to check in logs
+
+- Torque request if exposed
+- Requested vs actual load
+
+## Mechanical checks first
+
+A capped torque request is software/limiter behavior, not a leak.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Driver demand](/wiki/load-torque/driver-demand)
+- [Torque limiters](/wiki/load-torque/torque-limiters)
+- [Map: torque limiters](/wiki/maps/torque-limiters)
+- [Load to torque](/wiki/load-torque/load-to-torque)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

@@ -1,0 +1,61 @@
+---
+title: MAP / TMAP Scaling
+description: "MAP/TMAP scaling tells the DME how to interpret the boost/temperature sensor signal. It must match the installed sensor (stock, 3.5 bar, or N20 TMAP)."
+---
+
+
+# MAP / TMAP Scaling
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+MAP/TMAP scaling tells the DME how to interpret the boost/temperature sensor signal. It must match the installed sensor (stock, 3.5 bar, or N20 TMAP).
+
+## Why it matters
+
+Wrong scaling makes the DME misread boost (and IAT on a TMAP), corrupting boost control and safety decisions.
+
+## Related log channels
+
+- Boost target vs actual (watch for clipping/implausible values)
+- IAT
+
+## What changes are visible in logs
+
+Correct scaling shows plausible, non-clipped boost and IAT; wrong scaling shows implausible values.
+
+## What can go wrong if changed blindly
+
+- Misread boost
+- Boost control errors
+- Safety decisions based on wrong data
+
+## Mechanical problems that can look like a tuning problem
+
+- Wrong/failed sensor
+- Wiring issues
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [3.5 bar MAP sensor](/wiki/boost/3-5-bar-map-sensor)
+- [N20 TMAP conversion](/wiki/boost/n20-tmap-conversion)
+- [Logging: IAT](/wiki/logging/iat)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

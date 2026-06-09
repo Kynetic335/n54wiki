@@ -1,0 +1,52 @@
+---
+title: XDFs and Definitions
+description: "An XDF (or similar definition file) describes where each calibration map lives inside a ROM and how to interpret its raw bytes as tables, scalars, and"
+---
+
+
+# XDFs and Definitions
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+An XDF (or similar definition file) describes where each calibration map lives inside a ROM and how to interpret its raw bytes as tables, scalars, and axes.
+
+## Why it matters
+
+Without a matched definition, a BIN is just bytes. The definition turns it into readable maps — and it must match the exact ROM ID.
+
+## How it works
+
+The definition stores addresses, sizes, and math (scaling) for each parameter. Tuning software uses it to display maps.
+
+## Common symptoms or failure modes
+
+- Wrong/garbage values shown when a definition does not match the ROM
+
+## What to check in logs
+
+- N/A
+
+## Mechanical checks first
+
+Confirm definition-to-ROM match before trusting any displayed map. This wiki does not distribute private XDFs.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Media
+
+- _Media placeholder: ROM ID screenshot_
+
+## Related pages
+
+- [ROM IDs](/wiki/dme/rom-ids)
+- [BIN files](/wiki/dme/bin-files)
+- [Checksums](/wiki/dme/checksums)
+- [Maps hub](/wiki/maps)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

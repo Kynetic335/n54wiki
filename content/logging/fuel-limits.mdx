@@ -1,51 +1,61 @@
 ---
 title: Logging Fuel Limits
-description: "Fuel limits appear in logs when the system cannot deliver the fuel demanded — rail pressure dropping below target, or mixture going lean under load."
+description: "Fuel limits appear in logs when the system cannot deliver the fuel demanded — rail pressure dropping below target or mixture going lean under load."
 ---
-
 
 # Logging Fuel Limits
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specific values — verify by VIN/ROM ID.
 
-## What it is
+## What the channel/topic means
 
-Fuel limits appear in logs when the system cannot deliver the fuel demanded — rail pressure dropping below target, or mixture going lean under load.
+A fuel limit is the point where the fuel system can no longer deliver what the engine demands. It is not one channel but a pattern: high-side [rail pressure](/wiki/logging/hpfp-pressure) falling below target, low-side [LPFP pressure](/wiki/logging/lpfp-pressure) sagging, and/or [lambda](/wiki/logging/lambda-afr) going lean under load. Together these show the pumps/injectors are maxed out.
 
 ## Why it matters
 
-Hitting a fuel limit is dangerous (lean under boost) and caps power; it is a stop-and-fix condition.
+Hitting a fuel limit under boost is dangerous: lean mixture plus boost is a fast path to knock and damage. It is also a hard ceiling on power — no calibration can pull more fuel than the hardware can supply. Recognizing a fuel limit tells you to **stop and add capacity**, not to keep demanding fuel.
 
-## How it works
+## What normal behavior generally looks like
 
-When pumps/injectors max out, rail pressure falls and mixture leans relative to target.
+- Rail pressure tracks target through the whole pull.
+- LPFP supply steady.
+- Lambda holds the commanded target.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Rail pressure below target
-- Lean under load
-- LPFP pressure dropping
+- **Rail pressure crashing** as demand peaks → HPFP at its limit ([HPFP Failure](/wiki/diagnostics/hpfp-failure), [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- **LPFP pressure sagging first** → low side is the limit ([LPFP Failure](/wiki/diagnostics/lpfp-failure)).
+- **Lambda going lean** at the same moment → the dangerous combination; stop.
+- Limit appearing after a **high-ethanol fill** → blend needs more volume than the system supports.
 
-## What to check in logs
+## Which diagnostics use this concept
 
-- Fuel rail pressure target vs actual
-- LPFP pressure
-- Lambda/AFR
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Address pump/injector capacity; do not push past a fuel limit.
+- Reading rail pressure **without lambda** (or vice versa) and missing the danger.
+- Blaming the HPFP when the **LPFP** sagged first.
+- Treating a fuel limit as a tuning value to dial around instead of a hardware upgrade.
+- Pushing a high-ethanol blend the fuel system was not built for.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: fuel-limit log screenshot (rail crash + lean lambda)._
 
 ## Related pages
 
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
-- [HPFP](/wiki/fuel/hpfp)
-- [LPFP](/wiki/fuel/lpfp)
+- [HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [LPFP Pressure](/wiki/logging/lpfp-pressure)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Ethanol Blends](/wiki/fuel/ethanol-blends)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Fuel-system capacity limits are build specific — Verify by VIN/ROM ID and hardware._
+- _N54 fuel-limit references — Source needed._

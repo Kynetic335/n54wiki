@@ -1,49 +1,57 @@
 ---
 title: Logging IAT
-description: "IAT (intake air temperature) shows the temperature of the charge air entering the engine. Rising IAT raises knock risk and timing pull."
+description: "IAT (intake air temperature) is the temperature of the charge air entering the engine. Rising IAT raises knock risk and explains heat-soak power loss."
 ---
-
 
 # Logging IAT
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specific thresholds — verify by VIN/ROM ID.
 
-## What it is
+## What the channel means
 
-IAT (intake air temperature) shows the temperature of the charge air entering the engine. Rising IAT raises knock risk and timing pull.
+IAT (intake air temperature) is the temperature of the air entering the engine after the turbos and intercooler. On a TMAP-equipped setup the same sensor may also report manifold pressure. Hotter intake air is denser in energy but more prone to knock, so the DME gets more conservative (pulls timing) as IAT climbs. **Verify sensor type/scaling by VIN/ROM ID**, especially on cars converted to an N20 TMAP or higher-range sensor.
 
 ## Why it matters
 
-IAT explains heat-soak power loss and timing corrections; it provides essential context for any pull.
+IAT is the context that explains a lot of "why did it make less power" questions. Heat soak — from repeated pulls, a weak intercooler, or a hot engine bay — drives IAT up, which drives timing pull, which costs power. Without IAT in the log you can misread a heat problem as a tuning problem.
 
-## How it works
+## What normal behavior generally looks like
 
-A sensor reports charge-air temp; higher temps make the DME more conservative.
+- IAT reasonable for ambient conditions and not climbing hard during a single pull.
+- Recovers between pulls with adequate cooldown.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- IAT climbing pull-to-pull
-- Timing pull correlated with high IAT
+- **IAT climbing pull-to-pull** → heat soak; let the car cool, improve intercooling. See [Heat Soak](/wiki/cooling-oil/heat-soak).
+- **Timing pull that tracks rising IAT** → heat-driven knock, not a base-tune fault. See [Timing Corrections](/wiki/diagnostics/timing-corrections).
+- Implausible IAT (very high/low/stuck) → sensor or **wrong scaling** after a sensor conversion.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- IAT
-- Timing corrections
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Timing Problems](/wiki/logging/timing-problems)
+- Heat-related power loss (see [Heat Soak](/wiki/cooling-oil/heat-soak))
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Improve intercooling/heat management rather than masking with the tune.
+- Comparing pulls at **different IAT** and blaming the tune for the hotter one.
+- Ignoring IAT when reading timing corrections.
+- Trusting IAT after a **TMAP/sensor swap** without confirming scaling.
+- Expecting a single number to be "good/bad" without ambient context.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: IAT vs timing-correction log screenshot._
 
 ## Related pages
 
+- [Timing Corrections](/wiki/logging/timing-corrections)
+- [Timing Problems](/wiki/logging/timing-problems)
+- [Coolant Temp](/wiki/logging/coolant-temp)
+- [Heat Soak](/wiki/cooling-oil/heat-soak)
 - [Intercooler](/wiki/boost/intercooler)
-- [Heat soak](/wiki/cooling-oil/heat-soak)
-- [Timing corrections](/wiki/ignition/timing-corrections)
+- [N20 TMAP Conversion](/wiki/boost/n20-tmap-conversion)
+- [Map: MAP / TMAP Scaling](/wiki/maps/map-tmap-scaling)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _IAT thresholds/scaling are car/sensor specific — Verify by VIN/ROM ID._
+- _N54 heat-soak references — Source needed._

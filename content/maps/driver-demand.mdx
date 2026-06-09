@@ -1,0 +1,60 @@
+---
+title: Driver Demand Map
+description: "The driver demand map converts pedal position (and rpm) into a torque request, shaping throttle response and feel."
+---
+
+
+# Driver Demand Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The driver demand map converts pedal position (and rpm) into a torque request, shaping throttle response and feel.
+
+## Why it matters
+
+It changes how the pedal feels without changing peak power. Overly aggressive maps can feel twitchy; lazy maps feel unresponsive.
+
+## Related log channels
+
+- Pedal position
+- Throttle angle
+- Torque request
+
+## What changes are visible in logs
+
+Changes show as a different relationship between pedal input and commanded torque/throttle.
+
+## What can go wrong if changed blindly
+
+- Twitchy or unpredictable response
+- Drivability complaints
+
+## Mechanical problems that can look like a tuning problem
+
+- Throttle body or pedal sensor faults
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Driver demand](/wiki/load-torque/driver-demand)
+- [Throttle closures](/wiki/load-torque/throttle-closures)
+- [Logging: throttle angle](/wiki/logging/throttle-angle)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

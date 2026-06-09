@@ -1,55 +1,74 @@
 ---
 title: Injector Failure
-description: "Injector failure (clogging, leaking, or electrical) causes misfires, rough running, and fueling errors."
+description: "Injector failure — clogging, leaking, electrical, or wrong coding — causes misfires, rough running, and fueling errors on the direct-injection N54."
 ---
-
 
 # Injector Failure
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Specifics — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Injector failure (clogging, leaking, or electrical) causes misfires, rough running, and fueling errors.
+The N54's direct injectors spray fuel into each cylinder at high pressure. A failing injector — clogged, leaking, electrically weak, or simply **mis-coded** after a swap — delivers the wrong amount or pattern of fuel for its cylinder. That shows up as misfires, rough running, uneven fuel trims, or long crank, and is easy to confuse with ignition or tuning faults.
 
-## Why it matters
+## Common causes
 
-Failed injectors mimic tuning and ignition problems; correct coding is also required after replacement.
+- **Clogging / fouling** restricting flow.
+- **Leaking injector** (over-fuels its cylinder → rich/fouling).
+- **Electrical / mechanical failure** of the injector.
+- **Wrong or missing injector coding** after replacement (very common, fully preventable).
 
-## How it works
+## What to log
 
-A faulty injector delivers wrong fuel quantity or pattern, upsetting combustion in that cylinder.
+- Misfire counters **per cylinder**
+- [STFT / LTFT](/wiki/logging/stft-ltft) (and per-bank if available)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) for context
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Misfire
-- Rough idle
-- Fuel trim drift
-- Long crank
+- Misfire counters near zero.
+- Fuel trims small and even across banks.
+- Lambda at target.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Misfire counters by cylinder
-- Fuel trims
+- **One cylinder misfiring** with otherwise good ignition → that injector.
+- **One bank rich/lean** vs the other → injector or sensor on that bank.
+- Rough running right after an **injector swap** → likely wrong/missing coding.
+- Long crank from a leaking injector bleeding pressure down.
+
+_Media placeholder: per-cylinder misfire + fuel-trim log screenshot._
 
 ## Mechanical checks first
 
-Test/inspect injectors; verify coding after replacement.
+1. **Swap-test** / inspect the suspect injector.
+2. Confirm **injector coding** matches the physically installed injectors.
+3. Check **rail pressure** to rule out a system-wide fuel-supply issue.
+4. Inspect plugs/coils to separate ignition misfires from fueling misfires.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Injector problems are hardware/coding, not a tuning value. Do not add or pull fuel in the calibration to mask a leaking or mis-coded injector — correct the injector and its coding.
 
-## Media
+## When to stop tuning
 
-- _Media placeholder: injector index/coding photo_
+If a cylinder is misfiring or a bank is off due to an injector, fix it before tuning. Uneven fueling makes every other reading unreliable.
 
 ## Related pages
 
+- [Misfire](/wiki/diagnostics/misfire)
+- [Rough Idle](/wiki/diagnostics/rough-idle)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Coil Failure](/wiki/diagnostics/coil-failure)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
 - [Injectors](/wiki/fuel/injectors)
-- [Injector coding](/wiki/fuel/injector-coding)
-- [Parts: injectors](/wiki/parts/injectors)
+- [Injector Coding](/wiki/fuel/injector-coding)
+- [Logging: STFT / LTFT](/wiki/logging/stft-ltft)
+- [Logging: Lambda / AFR](/wiki/logging/lambda-afr)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _N54 injector design/coding references — Source needed._
+- _Injector flow/coding specifics — Verify by VIN/ROM ID._

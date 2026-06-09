@@ -1,0 +1,50 @@
+---
+title: Actual Load
+description: "Actual load is the realized load the engine achieves, derived from measured airflow/manifold pressure."
+---
+
+
+# Actual Load
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Actual load is the realized load the engine achieves, derived from measured airflow/manifold pressure.
+
+## Why it matters
+
+Actual falling below requested under load points at a boost shortfall (often mechanical) or an active limiter.
+
+## How it works
+
+The DME measures the achieved load and compares it to the request to manage boost and fueling.
+
+## Common symptoms or failure modes
+
+- Actual below requested under load
+
+## What to check in logs
+
+- Actual load
+- Requested load
+- Boost target vs actual
+
+## Mechanical checks first
+
+Smoke-test for boost leaks when actual load lags requested.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Requested load](/wiki/load-torque/requested-load)
+- [Low boost](/wiki/diagnostics/low-boost)
+- [Map: load target](/wiki/maps/load-target)
+- [Logging: load requested vs actual](/wiki/logging/load-requested-vs-actual)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

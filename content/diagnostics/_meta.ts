@@ -19,6 +19,7 @@ const meta = {
   "coil-failure": "Coil Failure",
   "spark-plug-issues": "Spark Plug Issues",
   "vanos-codes": "VANOS Codes",
+  "o2-sensor-faults": "O2 Sensor Faults",
   "throttle-closures": "Throttle Closures (Diagnosis)",
   "limp-mode": "Limp Mode",
   "30ff-underboost": "30FF Underboost",

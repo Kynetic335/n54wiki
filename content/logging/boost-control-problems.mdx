@@ -1,51 +1,64 @@
 ---
 title: Logging Boost Control Problems
-description: "Boost-control problems show up as actual boost missing target, oscillation, or WGDC behaving abnormally relative to boost error."
+description: "Boost-control problems show up as actual boost missing target, oscillation, or WGDC behaving abnormally. Reading them together separates mechanical from tuning."
 ---
-
 
 # Logging Boost Control Problems
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specific values — verify by VIN/ROM ID.
 
-## What it is
+## What the channel/topic means
 
-Boost-control problems show up as actual boost missing target, oscillation, or WGDC behaving abnormally relative to boost error.
+Boost-control problems are read from two channels together: [boost target vs actual](/wiki/logging/boost-target-vs-actual) and [WGDC](/wiki/logging/wgdc). Boost control is "healthy" when actual tracks target with sensible WGDC. It is "in trouble" when actual misses target, hunts around it, or when WGDC behaves in a way the boost result does not justify. This page ties the boost diagnostics together.
 
 ## Why it matters
 
-Reading WGDC against boost target vs actual separates mechanical issues (leaks, vacuum, wastegates) from tuning.
+These two channels are how you separate a **mechanical** boost fault (leak, vacuum, wastegate, solenoid) from a **tuning** one. The classic tell: WGDC pinned high while boost stays low means the controller is doing everything it can and the air is escaping — a mechanical problem, not a map to change.
 
-## How it works
+## What normal behavior generally looks like
 
-Healthy control tracks target with sensible WGDC; problems show as pegged WGDC, oscillation, or persistent error.
+- Actual boost converges to target and holds.
+- WGDC modulates sensibly, not pinned at max to maintain boost.
+- Repeatable pull to pull.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Underboost
-- Overboost
-- Oscillation
-- WGDC pegged
+- **Boost short + WGDC maxed** → leak, worn wastegate, or worn turbo. See [Low Boost](/wiki/diagnostics/low-boost), [30FF](/wiki/diagnostics/30ff-underboost).
+- **Boost over target** → stuck wastegate / solenoid. See [Overboost](/wiki/diagnostics/overboost).
+- **Boost hunting + WGDC swinging** → oscillation: vacuum/solenoid/wastegate or over-aggressive control. See [Boost Oscillation](/wiki/diagnostics/boost-oscillation).
+- Boost result that does not match WGDC at all → sensor or control fault.
 
-## What to check in logs
+## Which diagnostics use this concept
 
-- Boost target vs actual
-- WGDC
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [2ABC / 3100 Boost Faults](/wiki/diagnostics/2abc-3100-boost-faults)
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-High WGDC + low boost = mechanical/leak. Smoke-test before tuning.
+- Reading boost **without WGDC** (or WGDC without boost) — you lose the diagnosis.
+- "Raise WGDC in the tune" when the controller is already maxed against a leak.
+- Softening boost-control tuning to hide a vacuum/wastegate fault.
+- Comparing boost control across different gears/temps/tunes.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: boost target/actual + WGDC log screenshot (healthy vs maxed)._
 
 ## Related pages
 
-- [WGDC basics](/wiki/boost/wgdc-basics)
-- [Boost oscillation](/wiki/diagnostics/boost-oscillation)
-- [Map: WGDC correction](/wiki/maps/wgdc-correction)
+- [Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Wastegates](/wiki/boost/wastegates)
+- [Boost Solenoids](/wiki/boost/boost-solenoids)
+- [Map: WGDC Base](/wiki/maps/wgdc-base)
+- [Map: WGDC Correction](/wiki/maps/wgdc-correction)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Healthy boost-control ranges are car/tune specific — Verify by VIN/ROM ID._
+- _N54 boost-control references — Source needed._

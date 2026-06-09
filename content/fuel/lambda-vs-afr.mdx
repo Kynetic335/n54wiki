@@ -1,0 +1,49 @@
+---
+title: Lambda vs AFR
+description: "Lambda and AFR (air-fuel ratio) both describe mixture. Lambda is normalized (1.0 = stoichiometric), while AFR is fuel-specific (the stoich AFR differs"
+---
+
+
+# Lambda vs AFR
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Lambda and AFR (air-fuel ratio) both describe mixture. Lambda is normalized (1.0 = stoichiometric), while AFR is fuel-specific (the stoich AFR differs by fuel).
+
+## Why it matters
+
+Lambda is fuel-agnostic, which makes it the safer way to discuss mixture across gasoline and ethanol blends. AFR can mislead if the fuel changes.
+
+## How it works
+
+Lambda 1.0 means exactly enough air for complete combustion of that fuel. Below 1.0 is rich; above 1.0 is lean.
+
+## Common symptoms or failure modes
+
+- Misreading mixture when comparing AFR across different fuels
+
+## What to check in logs
+
+- Lambda / AFR
+- STFT / LTFT
+
+## Mechanical checks first
+
+Confirm the wideband/lambda source is healthy before judging mixture.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Logging: lambda/AFR](/wiki/logging/lambda-afr)
+- [Logging: STFT/LTFT](/wiki/logging/stft-ltft)
+- [Map: lambda target](/wiki/maps/lambda-target)
+- [Lean condition](/wiki/diagnostics/lean-condition)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

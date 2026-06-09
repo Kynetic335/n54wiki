@@ -1,49 +1,66 @@
 ---
 title: Wastegate Rattle (Diagnosis)
-description: "Wastegate rattle is a rattling noise from worn wastegate linkages on aging stock turbos, often at light throttle."
+description: "Wastegate rattle is a metallic rattle from worn wastegate linkages on aging stock turbos, usually at light throttle. It signals turbo wear."
 ---
-
 
 # Wastegate Rattle (Diagnosis)
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Specifics — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Wastegate rattle is a rattling noise from worn wastegate linkages on aging stock turbos, often at light throttle.
+Wastegate rattle is a metallic rattling noise, typically heard at light throttle, idle off-boost, or low rpm, caused by play in the wastegate linkage of worn turbochargers. As the stock turbos age, the wastegate arm and flapper develop slop, and the loose parts rattle when not held shut by boost pressure. It is one of the most common signs of N54 stock-turbo wear.
 
-## Why it matters
+## Common causes
 
-It indicates turbo wear and can correlate with boost-control inconsistency and a falling boost ceiling.
+- **Worn wastegate linkage / flapper** on aging stock turbos (the cause).
+- Mistaken for rattle but actually something else (loose heat shield, exhaust component) — confirm the source.
 
-## How it works
+## What to log
 
-Play in the wastegate arm lets components rattle off-boost.
+Rattle is primarily an **audible/mechanical** diagnosis, but logs help judge whether boost control is also affected:
 
-## Common symptoms or failure modes
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual)
+- [WGDC](/wiki/logging/wgdc)
 
-- Rattle at low throttle/idle off-boost
-- Inconsistent boost
+## What a healthy pattern looks like
 
-## What to check in logs
+- No rattle off-boost.
+- Boost tracks target; WGDC steady and not maxed.
 
-- Boost target vs actual
-- WGDC
+## What a bad pattern can suggest
+
+- Audible rattle at light throttle **plus** inconsistent boost control (boost not holding, WGDC working hard) → significant wastegate wear affecting performance.
+- Rattle without boost issues yet → early wear; monitor, plan for turbo service.
+
+_Media placeholder: (audio not applicable) — boost target vs actual + WGDC log screenshot for correlation._
 
 ## Mechanical checks first
 
-Confirm the noise source; severe rattle means turbo service, not a tune change.
+1. Confirm the noise is the **wastegate** (not a heat shield / exhaust rattle).
+2. Check **wastegate arm play** on the turbos.
+3. Assess severity — rattle worsens as wear increases.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Wastegate rattle is **mechanical wear**, not a tuning condition. There is no map that fixes worn linkages. Severe rattle means turbo repair/replacement. Do not try to compensate for failing wastegates in the boost-control calibration.
+
+## When to stop tuning
+
+If rattle is paired with boost-control problems (oscillation, underboost), address the turbos/wastegates before tuning boost. Tuning cannot restore worn hardware.
 
 ## Related pages
 
-- [Boost: wastegate rattle](/wiki/boost/wastegate-rattle)
-- [Stock turbo limits](/wiki/boost/stock-turbo-limits)
+- [Low Boost](/wiki/diagnostics/low-boost)
+- [Boost Oscillation](/wiki/diagnostics/boost-oscillation)
+- [Overboost](/wiki/diagnostics/overboost)
 - [Wastegates](/wiki/boost/wastegates)
+- [Wastegate Rattle (Boost)](/wiki/boost/wastegate-rattle)
+- [Stock Turbo Limits](/wiki/boost/stock-turbo-limits)
+- [Logging: Boost Target vs Actual](/wiki/logging/boost-target-vs-actual)
+- [Logging: WGDC](/wiki/logging/wgdc)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Trusted reference on N54 wastegate rattle — Source needed._
+- _Turbo wear specifics — Verify by inspection / VIN._

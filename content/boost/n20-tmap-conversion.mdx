@@ -1,0 +1,48 @@
+---
+title: N20 TMAP Conversion
+description: "An N20 TMAP conversion adapts a higher-range temperature/manifold-absolute-pressure sensor from the N20 engine to extend the N54's readable boost rang"
+---
+
+
+# N20 TMAP Conversion
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+An N20 TMAP conversion adapts a higher-range temperature/manifold-absolute-pressure sensor from the N20 engine to extend the N54's readable boost range. Requires matching calibration scaling.
+
+## Why it matters
+
+It is a common way to read higher boost than the stock sensor allows on big builds — but the scaling must be set correctly or boost is misread.
+
+## How it works
+
+The TMAP combines temperature and pressure sensing; the calibration must apply the correct scaling for the substituted sensor.
+
+## Common symptoms or failure modes
+
+- Misread boost/IAT if scaling is wrong
+
+## What to check in logs
+
+- Boost target vs actual
+- IAT
+
+## Mechanical checks first
+
+Confirm correct sensor and scaling; mismatch produces wrong boost/IAT readings.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [3.5 bar MAP sensor](/wiki/boost/3-5-bar-map-sensor)
+- [Map: MAP/TMAP scaling](/wiki/maps/map-tmap-scaling)
+- [Logging: IAT](/wiki/logging/iat)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

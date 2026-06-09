@@ -1,0 +1,61 @@
+---
+title: WGDC Correction Map
+description: "The WGDC correction (closed-loop) logic trims duty cycle to drive actual boost toward target. It corrects for conditions the base map cannot anticipat"
+---
+
+
+# WGDC Correction Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The WGDC correction (closed-loop) logic trims duty cycle to drive actual boost toward target. It corrects for conditions the base map cannot anticipate.
+
+## Why it matters
+
+Aggressive correction can oscillate; weak correction can leave persistent error. It must be tuned against real logs.
+
+## Related log channels
+
+- WGDC
+- Boost target vs actual
+
+## What changes are visible in logs
+
+Changes show as different correction behavior and how quickly/cleanly boost converges to target.
+
+## What can go wrong if changed blindly
+
+- Oscillation/hunting
+- Slow convergence
+- Masking a mechanical leak
+
+## Mechanical problems that can look like a tuning problem
+
+- Boost leaks
+- Failing solenoids/wastegates
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Boost control problems](/wiki/logging/boost-control-problems)
+- [Boost oscillation](/wiki/diagnostics/boost-oscillation)
+- [Map: WGDC base](/wiki/maps/wgdc-base)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

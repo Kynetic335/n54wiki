@@ -1,54 +1,72 @@
 ---
 title: HPFP Failure
-description: "HPFP failure is a common N54 issue causing long crank, fuel pressure crashes, rough running, and limp mode."
+description: "HPFP failure is a well-known N54 problem. A weak high-pressure pump causes long crank, rail-pressure crashes under load, rough running, and limp mode."
 ---
-
 
 # HPFP Failure
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (well-documented N54 issue). Pressure values — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-HPFP failure is a common N54 issue causing long crank, fuel pressure crashes, rough running, and limp mode.
+The HPFP (high-pressure fuel pump) raises fuel to the high rail pressure direct injection needs. When it weakens or fails, it can no longer build or hold that pressure — especially at startup and under load. HPFP problems are one of the most documented N54 issues and the cause behind many long-crank, lean-under-load, and limp-mode complaints.
 
-## Why it matters
+## Common causes
 
-The HPFP is a known weak point; failure limits or stops fueling under load.
+- **Worn / failing HPFP** internals (the failure itself).
+- A **weak LPFP starving** the HPFP, which looks like HPFP failure ([LPFP Failure](/wiki/diagnostics/lpfp-failure)).
+- Fuel contamination affecting the pump.
 
-## How it works
+## What to log
 
-A worn/failed HPFP cannot maintain rail pressure, especially under demand.
+- [HPFP / rail pressure target vs actual](/wiki/logging/hpfp-pressure) — at start and under load
+- [LPFP pressure](/wiki/logging/lpfp-pressure) — to confirm the low side is feeding it
+- [Lambda / AFR](/wiki/logging/lambda-afr) — lean under load is the danger
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Long crank
-- Rail pressure crash
-- Limp mode
-- Rough running
+- Rail pressure builds quickly at start and **tracks target** through the whole pull.
+- LPFP supply steady.
+- Lambda stays at target.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Fuel rail pressure target vs actual
+- **Rail pressure holding then crashing** under load → HPFP at/over its limit ([Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- **Slow/low pressure build at start** → long crank ([Long Crank](/wiki/diagnostics/long-crank)).
+- Crash paired with **lean lambda** → dangerous; stop.
+- If LPFP also sags first, the **low side** may be the real cause.
+
+_Media placeholder: rail-pressure-crash log screenshot (target vs actual)._
 
 ## Mechanical checks first
 
-Confirm rail pressure behavior; replace the pump if failing. Mechanical issue.
+1. Test **rail pressure hold** under load and at start.
+2. Verify **LPFP** is feeding the HPFP adequately (rule out low-side cause).
+3. Scan for fuel-pressure codes ([29DC](/wiki/diagnostics/29dc-fuel-pressure)).
+4. Replace a confirmed-failing HPFP.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-- Fuel pressure faults (e.g. 29DC) — verify by scan.
+The tune does not cause HPFP failure; it can **expose** a marginal pump by demanding more fuel. The fix is fuel-system capacity (replacement/upgraded HPFP, supporting LPFP), not dialing back targets to limp along on a dying pump.
 
-## Media
+## When to stop tuning
 
-- _Media placeholder: HPFP photo_
+**Stop immediately** if rail pressure crashes and lambda goes lean. Fix/replace the pump before any further load.
 
 ## Related pages
 
+- [Long Crank](/wiki/diagnostics/long-crank)
+- [No Start](/wiki/diagnostics/no-start)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [29DC Fuel Pressure](/wiki/diagnostics/29dc-fuel-pressure)
+- [2AAF Fuel Pump Plausibility](/wiki/diagnostics/2aaf-fuel-pump-plausibility)
 - [HPFP](/wiki/fuel/hpfp)
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
 - [Parts: HPFP](/wiki/parts/hpfp)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _N54 HPFP failure documentation — Source needed (cite trusted reference)._
+- _Rail-pressure targets/thresholds — Verify by VIN/ROM ID._

@@ -1,0 +1,63 @@
+---
+title: Fuel Scalar
+description: "A fuel scalar adjusts overall fueling to match injector/fuel characteristics so commanded mixture matches actual."
+---
+
+
+# Fuel Scalar
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+A fuel scalar adjusts overall fueling to match injector/fuel characteristics so commanded mixture matches actual.
+
+## Why it matters
+
+Incorrect scaling makes lambda targets miss and trims grow. It must match the actual injectors and fuel.
+
+## Related log channels
+
+- Lambda/AFR
+- STFT/LTFT
+- Fuel rail pressure
+
+## What changes are visible in logs
+
+Changes show as shifted fuel trims and measured mixture relative to target.
+
+## What can go wrong if changed blindly
+
+- Lean/rich offset across the range
+- Large fuel trims
+- Drivability/idle issues
+
+## Mechanical problems that can look like a tuning problem
+
+- Wrong injector coding
+- Leaking injectors
+- Wrong ethanol content
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Injector coding](/wiki/fuel/injector-coding)
+- [Logging: STFT/LTFT](/wiki/logging/stft-ltft)
+- [Map: lambda target](/wiki/maps/lambda-target)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

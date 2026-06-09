@@ -1,47 +1,59 @@
 ---
 title: Logging Coolant Temp
-description: "Coolant temperature is a core health channel. Rising coolant temps under load can trigger protection and timing pull."
+description: "Coolant temperature is a core health channel. Rising coolant temps under load can trigger protection and timing pull, and signal cooling-system trouble."
 ---
-
 
 # Logging Coolant Temp
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specific thresholds — verify by VIN/ROM ID.
 
-## What it is
+## What the channel means
 
-Coolant temperature is a core health channel. Rising coolant temps under load can trigger protection and timing pull.
+Coolant temperature is the engine's primary temperature reading. The DME uses it for fueling, for protection thresholds, and to decide when to reduce power or enter limp mode if the engine gets too hot. On the N54 the electric water pump and thermostat manage it, and both are known wear items.
 
 ## Why it matters
 
-It reveals cooling-system health and explains power loss from heat.
+Coolant temp tells you whether the cooling system is keeping up and whether heat is the reason for a power complaint. Climbing coolant temps under sustained load can bring on timing pull and protective cuts, and a sudden climb can mean a failing water pump — a stop-now condition to avoid heat damage.
 
-## How it works
+## What normal behavior generally looks like
 
-A sensor reports coolant temp; the DME manages cooling and protection around it.
+- Coolant temp warms to operating range and holds steady.
+- Stable under load with adequate cooling.
+- Recovers normally after a pull.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Climbing coolant temp under load
+- **Climbing coolant temp under load** → cooling-system limit (radiator, water pump, thermostat, airflow).
+- **Sudden spike** → possible water-pump failure; stop. See [Water Pump Failure](/wiki/cooling-oil/water-pump-failure).
+- Slow warm-up / never reaching range → stuck-open thermostat.
+- Power loss/timing pull tracking high coolant temp → heat-driven protection.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- Coolant temp
+- [Limp Mode](/wiki/diagnostics/limp-mode) (overheat protection)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections) (heat context)
+- Cooling faults (see [Water Pump Failure](/wiki/cooling-oil/water-pump-failure))
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Confirm water pump/thermostat/radiator health before blaming the tune.
+- Treating heat-driven power loss as a tuning fault.
+- Ignoring a rising trend until it becomes an overheat.
+- Confusing coolant temp with [IAT](/wiki/logging/iat) or [oil temp](/wiki/logging/oil-temp) — different signals.
+- Pulling hard on a not-yet-warm or already-hot engine.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: coolant-temp log screenshot (steady vs climbing)._
 
 ## Related pages
 
-- [Coolant temps](/wiki/cooling-oil/coolant-temps)
-- [Electric water pump](/wiki/cooling-oil/electric-water-pump)
-- [Heat soak](/wiki/cooling-oil/heat-soak)
+- [Oil Temp](/wiki/logging/oil-temp)
+- [IAT](/wiki/logging/iat)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Limp Mode](/wiki/diagnostics/limp-mode)
+- [Electric Water Pump](/wiki/cooling-oil/electric-water-pump)
+- [Water Pump Failure](/wiki/cooling-oil/water-pump-failure)
+- [Thermostat](/wiki/cooling-oil/thermostat)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Coolant-temp protection thresholds are car specific — Verify by VIN/ROM ID._
+- _N54 cooling-system references — Source needed._

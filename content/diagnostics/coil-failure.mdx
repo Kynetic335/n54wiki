@@ -1,49 +1,67 @@
 ---
 title: Coil Failure
-description: "Coil failure causes misfires, especially under boost, and is a routine N54 wear item."
+description: "A failing ignition coil cannot reliably fire under boost, causing load-dependent misfires. A routine N54 wear item, easily isolated by swap-testing."
 ---
-
 
 # Coil Failure
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Specifics — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Coil failure causes misfires, especially under boost, and is a routine N54 wear item.
+The N54 uses one coil per cylinder (coil-on-plug). A weak or failing coil cannot deliver a strong enough spark, and the problem shows up most under boost, where high cylinder pressure makes the spark hardest to sustain. The result is a misfire on that cylinder, often felt as a stumble under load. Coils are a normal N54 wear item.
 
-## Why it matters
+## Common causes
 
-A weak coil cannot reliably fire under high cylinder pressure, causing load-dependent misfires.
+- **Worn / degraded coil** firing weakly (the failure).
+- **Bad connector / wiring** to the coil.
+- Coil stressed by **worn plugs / wrong gap** (fix plugs too).
 
-## How it works
+## What to log
 
-The coil degrades and fires weakly; the affected cylinder misfires under load.
+- Misfire counters **per cylinder**
+- [Timing corrections](/wiki/logging/timing-corrections) (knock vs ignition misfire context)
+- RPM, gear, load
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Misfire under boost
-- Rough idle
-- Stumble
+- Misfire counters near zero, including under boost.
+- No single cylinder standing out.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Misfire counters by cylinder
+- **One cylinder's misfire count climbing under boost** → that coil (or plug) on that cylinder.
+- Misfire that **follows the coil** when you move it to another cylinder → confirmed coil.
+- All cylinders misfiring → look past coils to fueling/boost/shared causes.
+
+_Media placeholder: per-cylinder misfire log screenshot (under boost)._
 
 ## Mechanical checks first
 
-Swap-test coils to isolate; replace failing units.
+1. **Swap-test**: move the suspect coil to another cylinder; if the misfire follows, the coil is bad.
+2. Inspect the **connector / wiring**.
+3. Check the **spark plug** on that cylinder (gap/wear) — coils and plugs work together.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Coil failure is hardware. Do not add fuel or pull timing in the tune to hide a coil misfire — replace the coil. Masking it leaves a misfiring cylinder under boost.
+
+## When to stop tuning
+
+Stop loading the engine if a coil misfire appears under boost. Replace the failing coil (and plug if due) before tuning.
 
 ## Related pages
 
-- [Coils](/wiki/ignition/coils)
 - [Misfire](/wiki/diagnostics/misfire)
-- [Parts: coils](/wiki/parts/coils)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
+- [Rough Idle](/wiki/diagnostics/rough-idle)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Coils](/wiki/ignition/coils)
+- [Parts: Coils](/wiki/parts/coils)
+- [Logging: Timing Corrections](/wiki/logging/timing-corrections)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _N54 coil wear references — Source needed._
+- _Misfire-count thresholds — Verify by VIN/ROM ID._

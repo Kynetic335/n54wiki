@@ -1,0 +1,63 @@
+---
+title: Throttle Torque Intervention
+description: "This logic governs when and how the DME closes the throttle to intervene on torque (protection, limiting, smoothing)."
+---
+
+
+# Throttle Torque Intervention
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+This logic governs when and how the DME closes the throttle to intervene on torque (protection, limiting, smoothing).
+
+## Why it matters
+
+It directly causes throttle closures seen in logs. Misunderstanding it leads to chasing the wrong cause for power cuts.
+
+## Related log channels
+
+- Throttle angle
+- Pedal position
+- Torque request
+- Requested vs actual load
+
+## What changes are visible in logs
+
+Changes show as different throttle-closure behavior relative to torque demand.
+
+## What can go wrong if changed blindly
+
+- Unexpected power cuts
+- Drivability issues
+- Masking the real limiter
+
+## Mechanical problems that can look like a tuning problem
+
+- Throttle body faults
+- Pedal sensor faults
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: good log vs bad log screenshot_
+
+## Related pages
+
+- [Throttle closures](/wiki/load-torque/throttle-closures)
+- [Diagnostics: throttle closures](/wiki/diagnostics/throttle-closures)
+- [Logging: throttle angle](/wiki/logging/throttle-angle)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

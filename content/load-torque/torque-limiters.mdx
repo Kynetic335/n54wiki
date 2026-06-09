@@ -1,0 +1,48 @@
+---
+title: Torque Limiters
+description: "Torque limiters are calibration limits that cap the torque the DME will request or deliver, for protection and drivability."
+---
+
+
+# Torque Limiters
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Torque limiters are calibration limits that cap the torque the DME will request or deliver, for protection and drivability.
+
+## Why it matters
+
+A limiter can hold power below what the hardware could make, showing up as a flat ceiling in logs.
+
+## How it works
+
+The torque request is clamped to the limiter value; downstream load/boost follow the clamp.
+
+## Common symptoms or failure modes
+
+- Flat torque/load ceiling regardless of more pedal/boost
+
+## What to check in logs
+
+- Torque request
+- Requested vs actual load
+
+## Mechanical checks first
+
+A flat ceiling that is not a leak usually means a limiter.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Map: torque limiters](/wiki/maps/torque-limiters)
+- [Load ceiling](/wiki/load-torque/load-ceiling)
+- [Throttle closures](/wiki/load-torque/throttle-closures)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

@@ -1,0 +1,62 @@
+---
+title: WGDC Base Map
+description: "The WGDC base map sets the baseline wastegate duty cycle the boost-control system starts from before corrections."
+---
+
+
+# WGDC Base Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The WGDC base map sets the baseline wastegate duty cycle the boost-control system starts from before corrections.
+
+## Why it matters
+
+A poor base makes the controller work harder and can cause overshoot or slow response. It interacts tightly with the correction map.
+
+## Related log channels
+
+- WGDC
+- Boost target vs actual
+
+## What changes are visible in logs
+
+Changes appear as a different baseline WGDC and altered spool/overshoot behavior.
+
+## What can go wrong if changed blindly
+
+- Boost overshoot
+- Oscillation
+- Underboost if too low
+
+## Mechanical problems that can look like a tuning problem
+
+- Vacuum leaks
+- Failing solenoids
+- Worn wastegates
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [WGDC basics](/wiki/boost/wgdc-basics)
+- [Map: WGDC correction](/wiki/maps/wgdc-correction)
+- [Logging: WGDC](/wiki/logging/wgdc)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

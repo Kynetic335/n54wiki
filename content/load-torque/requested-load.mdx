@@ -1,0 +1,50 @@
+---
+title: Requested Load
+description: "Requested load is the load target the DME calculates from the torque request and driver demand before limiters."
+---
+
+
+# Requested Load
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Requested load is the load target the DME calculates from the torque request and driver demand before limiters.
+
+## Why it matters
+
+Comparing requested vs actual load is the core check for whether the car is delivering what it intends to.
+
+## How it works
+
+Driver demand becomes a torque request, which becomes a requested load that boost/throttle work to achieve.
+
+## Common symptoms or failure modes
+
+- Requested load capped below expectation (limiter active)
+
+## What to check in logs
+
+- Requested load
+- Actual load
+- Boost target
+
+## Mechanical checks first
+
+If requested load itself is capped, look at limiters, not hardware.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Actual load](/wiki/load-torque/actual-load)
+- [Load ceiling](/wiki/load-torque/load-ceiling)
+- [Map: load target](/wiki/maps/load-target)
+- [Logging: load requested vs actual](/wiki/logging/load-requested-vs-actual)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

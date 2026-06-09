@@ -1,51 +1,76 @@
 ---
 title: Lean Condition
-description: "A lean condition is too little fuel for the air (lambda above target). Under boost this is dangerous."
+description: "A lean condition is too little fuel for the air (lambda above target). Lean under boost is dangerous and usually a fuel-supply or unmetered-air problem."
 ---
-
 
 # Lean Condition
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Target values — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-A lean condition is too little fuel for the air (lambda above target). Under boost this is dangerous.
+A lean condition is when there is too little fuel for the amount of air — measured lambda runs **above** the DME's target (or AFR higher than commanded). At idle/cruise a small lean drift may just be a vacuum leak. **Lean under boost is the dangerous one**: it raises combustion temperature and knock risk and can damage the engine quickly.
 
-## Why it matters
+## Common causes
 
-Lean under load raises knock and damage risk; common causes include fuel supply limits, leaks, or wrong ethanol content.
+- **Fuel-supply limit** — [HPFP](/wiki/diagnostics/hpfp-failure) / [LPFP](/wiki/diagnostics/lpfp-failure) cannot hold rail pressure under load (see [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- **Higher ethanol content than the tune assumes** — needs more fuel volume.
+- **Vacuum / intake leak** — unmetered air (more common at idle/cruise).
+- **Failing or clogged injectors.**
+- **Faulty O2 / wideband sensor** reporting wrong mixture ([O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)).
+- **A calibration leaner than the fuel/hardware supports** (tuning cause, addressed carefully).
 
-## How it works
+## What to log
 
-If fuel cannot keep up with air (pump/injector limits, or more ethanol than the tune assumes), mixture goes lean.
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [STFT / LTFT](/wiki/logging/stft-ltft)
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) and [LPFP pressure](/wiki/logging/lpfp-pressure)
+- RPM, gear, load
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- High lambda/AFR under load
-- Timing pull
-- Possible damage
+- Lambda sits at the commanded target, including under boost (commonly richer under load for safety).
+- Fuel trims small.
+- Rail pressure holds target.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Lambda/AFR
-- Fuel rail pressure target vs actual
-- STFT/LTFT
+- **Lambda going lean as rail pressure drops** under load → fuel-supply limit; **stop**.
+- **Lean with large positive fuel trims** at idle/cruise → unmetered air (vacuum leak).
+- Lean only on one bank/cylinder → injector or sensor issue.
+- Lean matching a known **high ethanol** fill the tune was not set for → blend mismatch.
+
+_Media placeholder: lean-under-load log screenshot (lambda + rail pressure)._
 
 ## Mechanical checks first
 
-Check fuel supply (HPFP/LPFP), leaks, and actual ethanol blend.
+1. Check **rail pressure under load** (HPFP/LPFP capacity).
+2. Confirm **actual ethanol content** vs the tune.
+3. Smoke-test for **vacuum/intake leaks**.
+4. Inspect **injectors** and **O2/wideband** sensor health.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Only after fuel supply, blend, leaks, injectors, and sensors are verified should lambda targets in the calibration be revisited. Never command a leaner mixture to chase power past what the fuel system can safely support.
+
+## When to stop tuning
+
+**Stop the pull immediately** on any lean condition under boost. Lean + boost is a fast path to engine damage.
 
 ## Related pages
 
-- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
-- [Ethanol blends](/wiki/fuel/ethanol-blends)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)
+- [Logging: Lambda / AFR](/wiki/logging/lambda-afr)
+- [Logging: STFT / LTFT](/wiki/logging/stft-ltft)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Lambda targets are car/tune specific — Verify by VIN/ROM ID._
+- _N54 lean-condition references — Source needed._

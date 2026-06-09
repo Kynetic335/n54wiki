@@ -1,0 +1,50 @@
+---
+title: ROM Matching
+description: "ROM matching is the process of confirming that a definition (and any reference data) corresponds to the exact ROM ID your DME runs."
+---
+
+
+# ROM Matching
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+ROM matching is the process of confirming that a definition (and any reference data) corresponds to the exact ROM ID your DME runs.
+
+## Why it matters
+
+A mismatched definition reads the wrong addresses, producing meaningless or dangerous interpretations of maps.
+
+## How it works
+
+Read the ROM ID from the car, then select only the definition built for that ROM ID. Never assume cross-compatibility.
+
+## Common symptoms or failure modes
+
+- Garbage map values
+- Axes/scaling that look implausible
+
+## What to check in logs
+
+- ROM ID field via diagnostic software
+
+## Mechanical checks first
+
+Always start from the ROM ID. Verify by ROM ID before anything else.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [ROM IDs](/wiki/dme/rom-ids)
+- [BIN files](/wiki/dme/bin-files)
+- [XDFs and definitions](/wiki/dme/xd-fs-and-definitions)
+- [Checksums](/wiki/dme/checksums)
+- [Maps hub](/wiki/maps)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

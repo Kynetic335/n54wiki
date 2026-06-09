@@ -37,7 +37,7 @@ Boost oscillation (also called boost hunting or surging) is when actual boost ca
 
 If WGDC is erratic *and* you can find a vacuum/solenoid/wastegate fault, the hardware is the cause. If hardware is proven good and the oscillation remains, the boost-control calibration is the likely cause.
 
-_Media placeholder: oscillating boost log screenshot._
+TODO: add real MHD log screenshot showing oscillating boost vs target with WGDC hunting (own/license-safe image only).
 
 ## Mechanical checks first
 
@@ -68,5 +68,7 @@ Stop and inspect hardware if oscillation appears with any sign of a vacuum/solen
 
 ## Sources
 
-- _Trusted reference for N54 boost-control instability — Source needed._
-- _Closed-loop boost behavior is car/tune dependent — Verify by VIN/ROM ID._
+- **Bosch — *Gasoline Engine Management* / *Bosch Automotive Handbook*:** closed-loop charge-pressure control fundamentals (why an unstable loop hunts).
+- **BMW service information (ISTA / TIS):** boost-control component diagnosis (vacuum system, solenoids, wastegate) for the specific chassis. _Verify by VIN._
+- _Community/owner references: practical boost-hunting experience only — not the sole source for hard specs._
+- _Closed-loop boost-control calibration behavior is car/tune dependent — Verify by VIN/ROM ID._

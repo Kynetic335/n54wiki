@@ -1,0 +1,62 @@
+---
+title: Lambda Target Map
+description: "The lambda target map sets the commanded air-fuel mixture across load and rpm (typically richer under boost for safety)."
+---
+
+
+# Lambda Target Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The lambda target map sets the commanded air-fuel mixture across load and rpm (typically richer under boost for safety).
+
+## Why it matters
+
+Mixture affects power, knock margin, and component temps. Too lean under boost is dangerous; too rich wastes power and fouls plugs.
+
+## Related log channels
+
+- Lambda/AFR
+- STFT/LTFT
+- Fuel rail pressure
+
+## What changes are visible in logs
+
+Changes show as a different commanded lambda and measured mixture under load.
+
+## What can go wrong if changed blindly
+
+- Lean under boost (knock/damage)
+- Overly rich (power loss, fouling)
+
+## Mechanical problems that can look like a tuning problem
+
+- Fuel-supply limits
+- Leaking injectors
+- Sensor faults
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
+- [Lean condition](/wiki/diagnostics/lean-condition)
+- [Logging: lambda/AFR](/wiki/logging/lambda-afr)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

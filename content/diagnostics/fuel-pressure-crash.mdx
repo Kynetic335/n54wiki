@@ -41,7 +41,7 @@ This is almost always a **fuel-supply (hardware) limit**, not a tuning value to 
 - LPFP pressure sagging (points at the low-side pump as the limit).
 - **Lambda going lean** at the same moment rail pressure falls — the dangerous combination.
 
-_Media placeholder: rail-pressure-crash log screenshot (target vs actual + lambda)._
+TODO: add real HPFP crash log screenshot (rail pressure target vs actual with lambda going lean; own/license-safe image only).
 
 ## Mechanical checks first
 
@@ -73,5 +73,8 @@ The tune does not "cause" a crash so much as **reveal a supply limit** by asking
 
 ## Sources
 
-- _Exact rail pressure targets and crash thresholds — Source needed. Verify by VIN/ROM ID._
-- _N54 HPFP/LPFP capacity references — Source needed (cite trusted reference)._
+- **NHTSA recall / BMW Service Action — N54 high-pressure fuel pump:** the N54 HPFP was the subject of a documented US recall campaign and an extended warranty for HPFP failures. _Verify the exact campaign / Service Information Bulletin number by VIN at nhtsa.gov and via a BMW dealer._
+- **BMW service information (ISTA / TIS):** authoritative source for fuel-pressure fault definitions and rail-pressure target/limit data. _Verify by VIN/ROM ID._
+- **Bosch — *Gasoline Engine Management*:** direct-injection high-pressure fuel system (HDP high-pressure pump, rail-pressure control) fundamentals.
+- _Community/owner references: practical HPFP/LPFP failure and capacity experience only — not the sole source for hard specs._
+- _Exact rail-pressure targets and crash thresholds — Source needed (BMW service data). Verify by VIN/ROM ID._

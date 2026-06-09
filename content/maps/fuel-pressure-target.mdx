@@ -1,0 +1,61 @@
+---
+title: Fuel Pressure Target
+description: "The fuel pressure target map sets the rail pressure the HPFP is commanded to maintain across conditions."
+---
+
+
+# Fuel Pressure Target
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The fuel pressure target map sets the rail pressure the HPFP is commanded to maintain across conditions.
+
+## Why it matters
+
+Targeting more pressure than the pump can supply causes a crash under load. The target must respect HPFP/LPFP capacity.
+
+## Related log channels
+
+- Fuel rail pressure target vs actual
+- LPFP pressure
+
+## What changes are visible in logs
+
+Changes show as a different commanded rail pressure and whether actual can hold it.
+
+## What can go wrong if changed blindly
+
+- Pressure crash if beyond pump capacity
+- Lean under load
+- Limp mode
+
+## Mechanical problems that can look like a tuning problem
+
+- Worn HPFP/LPFP
+- Supply restriction
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Fuel rail pressure](/wiki/fuel/fuel-rail-pressure)
+- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Logging: HPFP pressure](/wiki/logging/hpfp-pressure)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

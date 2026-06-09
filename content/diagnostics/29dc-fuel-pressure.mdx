@@ -1,50 +1,71 @@
 ---
 title: 29DC Fuel Pressure
-description: "29DC is a commonly referenced N54 fuel-pressure fault. Confirm the exact definition by scanning your car."
+description: "29DC is a commonly referenced N54 fuel-pressure fault. It points to the high-pressure side not meeting target — usually a failing HPFP."
 ---
-
 
 # 29DC Fuel Pressure
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (commonly reported). Exact code text — verify by scan / VIN/ROM ID.
 
-## What it is
+## What the code means
 
-29DC is a commonly referenced N54 fuel-pressure fault. Confirm the exact definition by scanning your car.
+29DC is a frequently reported N54 **fuel-pressure** fault. In practice it relates to the high-pressure (rail) side not meeting its commanded pressure — the system expected a rail pressure and did not get it. It is strongly associated with **HPFP** weakness and shows up with long crank, rail-pressure crashes under load, and limp mode. Confirm the exact wording on your car — **verify by scan.**
 
-## Why it matters
+## Common causes
 
-It typically points to fuel-supply problems (HPFP/LPFP) and is associated with long crank and pressure crashes.
+- **Failing / worn HPFP** (most common).
+- **Weak LPFP starving** the HPFP, surfacing as a high-side fault.
+- Fuel-system **leak-down** or contamination.
+- Sensor/wiring fault on the fuel-pressure circuit.
 
-## How it works
+## What to log / scan
 
-When rail pressure cannot meet target/plausibility, the DME logs the fault.
+- **Scan to confirm 29DC** and read freeze-frame.
+- [HPFP / rail pressure target vs actual](/wiki/logging/hpfp-pressure) at start and under load
+- [LPFP pressure](/wiki/logging/lpfp-pressure)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Long crank
-- Rail pressure crash
-- Limp mode
+- Rail pressure builds quickly at start and tracks target under load.
+- LPFP supply steady.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Fuel rail pressure target vs actual
-- LPFP pressure
+- **Rail pressure crashing under load** with 29DC stored → HPFP at its limit ([HPFP Failure](/wiki/diagnostics/hpfp-failure), [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- **Slow start-up build** → long crank.
+- LPFP sag first → low side is the real cause ([LPFP Failure](/wiki/diagnostics/lpfp-failure)).
+
+_Media placeholder: rail-pressure log screenshot with 29DC freeze-frame._
 
 ## Mechanical checks first
 
-Check HPFP/LPFP; usually a mechanical fuel-supply issue.
+1. Test **rail pressure** behavior (start + load).
+2. Verify the **LPFP** is feeding the HPFP.
+3. Inspect fuel-pressure **sensor/wiring**.
+4. Replace a confirmed-failing HPFP.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-- 29DC — verify exact meaning by scan.
+29DC is a hardware/supply fault, not a tuning value. Do not clear it or lower fuel-pressure targets to limp along — fix the pump/supply.
+
+## When to stop tuning
+
+**Stop** if 29DC appears with a rail-pressure crash and lean lambda. Repair the fuel system before further load.
 
 ## Related pages
 
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
-- [HPFP failure](/wiki/diagnostics/hpfp-failure)
-- [Common codes](/wiki/diagnostics/common-codes)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Long Crank](/wiki/diagnostics/long-crank)
+- [No Start](/wiki/diagnostics/no-start)
+- [2AAF Fuel Pump Plausibility](/wiki/diagnostics/2aaf-fuel-pump-plausibility)
+- [HPFP](/wiki/fuel/hpfp)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Exact 29DC definition — Source needed. Verify by scan / VIN/ROM ID._
+- _N54 fuel-pressure fault references — Source needed._

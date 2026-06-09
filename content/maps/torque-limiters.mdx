@@ -1,0 +1,61 @@
+---
+title: Torque Limiters
+description: "Torque limiter maps cap the torque the DME will request or deliver, for protection and drivability (including drivetrain protection)."
+---
+
+
+# Torque Limiters
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+Torque limiter maps cap the torque the DME will request or deliver, for protection and drivability (including drivetrain protection).
+
+## Why it matters
+
+Limiters can hold power below hardware capability and cause throttle closures. Changing them affects protection and drivetrain stress.
+
+## Related log channels
+
+- Torque request
+- Requested vs actual load
+- Throttle angle
+
+## What changes are visible in logs
+
+A limiter shows as a flat torque/load ceiling and possible throttle closures.
+
+## What can go wrong if changed blindly
+
+- Removing drivetrain protection
+- Throttle closures if conflicting
+- Stress on transmission/clutch
+
+## Mechanical problems that can look like a tuning problem
+
+- Boost leaks (look like a shortfall, not a cap)
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Torque limiters](/wiki/load-torque/torque-limiters)
+- [Throttle closures](/wiki/load-torque/throttle-closures)
+- [Map: throttle torque intervention](/wiki/maps/throttle-torque-intervention)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

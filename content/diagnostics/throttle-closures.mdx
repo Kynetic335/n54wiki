@@ -41,7 +41,7 @@ A closure is the DME doing its job. The diagnostic question is *what asked for l
 - A closure that lines up with a **protective trigger** (timing pull, high IAT, rail-pressure drop) → protection, fix that cause.
 - A closure with **no protective trigger**, at a repeatable torque/load point → likely a **limiter** in the calibration or a drivetrain cap.
 
-_Media placeholder: throttle-closure log screenshot (throttle angle vs pedal)._
+TODO: add real MHD log screenshot showing throttle angle dropping while pedal stays at 100% (own/license-safe image only).
 
 ## Mechanical checks first
 
@@ -70,5 +70,7 @@ Stop if closures are protection-driven (knock, heat, fuel) — fix the root caus
 
 ## Sources
 
-- _Torque limiter and intervention values are car/tune specific — Verify by VIN/ROM ID._
-- _Trusted reference on N54 torque-model behavior — Source needed._
+- **Bosch — *Gasoline Engine Management* / *Bosch Automotive Handbook*:** torque-based engine-management structure and torque-demand / throttle (ETC) intervention fundamentals.
+- **BMW service information (ISTA / TIS):** torque-intervention and electronic-throttle fault definitions for the specific chassis. _Verify by VIN/ROM ID._
+- _Community/owner references: practical "find the protective trigger before touching limiters" experience only — not the sole source for hard specs._
+- _Torque-limiter and intervention values are car/tune specific — Verify by VIN/ROM ID._

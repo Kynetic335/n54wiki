@@ -1,0 +1,63 @@
+---
+title: Load Target Map
+description: "The load target map sets the load the DME aims to achieve across rpm and conditions. It is upstream of boost and a central tuning map."
+---
+
+
+# Load Target Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The load target map sets the load the DME aims to achieve across rpm and conditions. It is upstream of boost and a central tuning map.
+
+## Why it matters
+
+Load target shapes how much air/torque the engine requests. Raising it without supporting fuel, boost control, and limiters causes problems.
+
+## Related log channels
+
+- Requested load
+- Actual load
+- Boost target vs actual
+
+## What changes are visible in logs
+
+Changes appear as a different requested-load curve and corresponding boost/torque behavior.
+
+## What can go wrong if changed blindly
+
+- Requesting more than fuel/boost can support
+- Hitting limiters or protection
+- Lean or knock if unsupported
+
+## Mechanical problems that can look like a tuning problem
+
+- Boost leaks
+- Fuel-supply limits
+- Worn turbos
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [What load means](/wiki/load-torque/load-meaning)
+- [Load ceiling](/wiki/load-torque/load-ceiling)
+- [Logging: load requested vs actual](/wiki/logging/load-requested-vs-actual)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

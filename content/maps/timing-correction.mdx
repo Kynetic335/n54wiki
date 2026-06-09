@@ -1,0 +1,62 @@
+---
+title: Timing Correction Map
+description: "Timing correction logic governs how the DME removes (and restores) advance in response to knock detection."
+---
+
+
+# Timing Correction Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+Timing correction logic governs how the DME removes (and restores) advance in response to knock detection.
+
+## Why it matters
+
+It is a protection system. Tampering with it to hide knock removes safety and risks damage.
+
+## Related log channels
+
+- Timing corrections by cylinder
+- IAT
+
+## What changes are visible in logs
+
+Changes show as different correction magnitude/behavior in logs.
+
+## What can go wrong if changed blindly
+
+- Masking real knock
+- Engine damage
+- False sense of safety
+
+## Mechanical problems that can look like a tuning problem
+
+- Fuel quality
+- Heat
+- Mechanical knock sources
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Knock detection](/wiki/ignition/knock-detection)
+- [Diagnostics: timing corrections](/wiki/diagnostics/timing-corrections)
+- [Logging: timing problems](/wiki/logging/timing-problems)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

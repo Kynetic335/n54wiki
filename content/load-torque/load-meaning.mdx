@@ -1,0 +1,49 @@
+---
+title: What Load Means
+description: "Engine load is the DME's measure of how much air (and thus torque potential) the engine is taking in, often expressed as a percentage relative to a re"
+---
+
+
+# What Load Means
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Engine load is the DME's measure of how much air (and thus torque potential) the engine is taking in, often expressed as a percentage relative to a reference. It is central to the N54 control model.
+
+## Why it matters
+
+Boost, fueling, and timing are scheduled against load. Reading requested vs actual load tells you whether the engine is meeting its target.
+
+## How it works
+
+The DME estimates load from airflow/manifold pressure and uses it as the main axis for many maps.
+
+## Common symptoms or failure modes
+
+- Actual load falling short of requested (a shortfall to diagnose)
+
+## What to check in logs
+
+- Requested load
+- Actual load
+
+## Mechanical checks first
+
+Load shortfalls can be mechanical (boost leak) or limiter-driven; check both.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Throttle closures](/wiki/load-torque/throttle-closures)
+- [Map: boost target](/wiki/maps/boost-target)
+- [Map: load target](/wiki/maps/load-target)
+- [Logging: load requested vs actual](/wiki/logging/load-requested-vs-actual)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

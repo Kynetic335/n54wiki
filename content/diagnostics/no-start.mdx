@@ -1,49 +1,79 @@
 ---
 title: No Start
-description: "A no-start is when the engine cranks but will not fire (or will not crank). Causes range from fuel pressure to electrical/sensor faults."
+description: "A no-start is when the engine cranks but will not fire, or will not crank at all. Diagnose systematically: fuel, spark, signals, power."
 ---
-
 
 # No Start
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (approach). Specifics — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-A no-start is when the engine cranks but will not fire (or will not crank). Causes range from fuel pressure to electrical/sensor faults.
+A no-start is when the engine fails to run. Split it into two cases:
 
-## Why it matters
+- **Cranks but will not fire** — the starter turns the engine but it never catches. Usually fuel, spark, or a key signal is missing.
+- **Will not crank** — the engine does not turn over. Usually electrical (battery, starter, safety interlocks).
 
-Systematic diagnosis (fuel, spark, signals) is needed; fuel pressure is a common N54 culprit.
+The N54 needs three things to start: fuel pressure, spark, and correct sensor/sync signals. Missing any one prevents starting.
 
-## How it works
+## Common causes
 
-The engine needs fuel pressure, spark, and correct sensor signals to start; any missing element prevents starting.
+- **Fuel pressure** — failed HPFP or LPFP (no/low rail pressure). Common N54 cause of crank-no-fire.
+- **Fuel system leak-down** or empty/contaminated fuel.
+- **Ignition** — multiple coil/plug failures (less common as a total no-start).
+- **Crank/cam sensor or sync fault** — DME cannot time injection/spark.
+- **Battery / starter / electrical** — for no-crank.
+- **Security / immobilizer or other interlocks.**
 
-## Common symptoms or failure modes
+## What to log / scan
 
-- Cranks but no start
-- No crank in some cases
+- **Scan for fault codes first** — fastest path on a no-start.
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) and [LPFP pressure](/wiki/logging/lpfp-pressure) during cranking
+- Battery voltage / cranking
+- Crank/cam sensor signals if available
 
-## What to check in logs
+## What a healthy pattern looks like
 
-- Fuel rail pressure
-- Fault codes
+- Rail pressure builds during cranking to its start target.
+- Sensors report valid crank/cam signals.
+- Battery holds adequate voltage while cranking.
+
+## What a bad pattern can suggest
+
+- **No rail pressure build while cranking** → fuel-supply failure (HPFP/LPFP).
+- **No/low battery voltage or no crank** → electrical.
+- **Missing crank/cam signal** → sensor/sync fault.
+- Stored fuel-pressure codes ([29DC](/wiki/diagnostics/29dc-fuel-pressure), [2AAF](/wiki/diagnostics/2aaf-fuel-pump-plausibility)) → fuel system.
+
+_Media placeholder: cranking log screenshot (rail pressure + voltage)._
 
 ## Mechanical checks first
 
-Scan for codes; check fuel pressure, battery, and key sensors.
+1. **Scan codes.**
+2. Check **fuel pressure** during cranking (HPFP/LPFP).
+3. Check **battery / starter / grounds**.
+4. Check **crank/cam sensors** and connectors.
+5. Confirm fuel quantity/quality.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+A no-start is essentially never a tuning value to adjust — it is hardware, electrical, or a sensor/sync problem. Do not attempt to "tune around" a no-start.
+
+## When to stop tuning
+
+A no-start car is not tunable. Restore reliable starting (fuel/spark/signals) before any tuning work.
 
 ## Related pages
 
-- [Long crank](/wiki/diagnostics/long-crank)
-- [HPFP failure](/wiki/diagnostics/hpfp-failure)
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Long Crank](/wiki/diagnostics/long-crank)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [29DC Fuel Pressure](/wiki/diagnostics/29dc-fuel-pressure)
+- [2AAF Fuel Pump Plausibility](/wiki/diagnostics/2aaf-fuel-pump-plausibility)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _N54 no-start diagnostic references — Source needed._
+- _Sensor/sync and security behavior — Verify by VIN/ROM ID._

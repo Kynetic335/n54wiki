@@ -1,49 +1,69 @@
 ---
 title: VANOS Codes
-description: "VANOS codes indicate the cam cannot reach/hold its target position, usually due to solenoids, oil, or mechanical wear."
+description: "VANOS codes mean a camshaft cannot reach or hold its commanded timing. On the N54 the cause is usually solenoids, oil condition, or mechanical wear."
 ---
-
 
 # VANOS Codes
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Exact code text — verify by scan / VIN/ROM ID.
 
-## What it is
+## What the codes mean
 
-VANOS codes indicate the cam cannot reach/hold its target position, usually due to solenoids, oil, or mechanical wear.
+VANOS is BMW's variable camshaft timing system. The DME commands a target cam angle (intake and exhaust) and watches the actual position. A **VANOS code** is set when actual cannot reach or hold target within tolerance. These codes cause rough running, performance loss, and sometimes limp behavior — and on the N54 they are usually a **mechanical / oil** problem, not a tuning one. Exact code numbers vary; **verify by scan.**
 
-## Why it matters
+## Common causes
 
-These cause rough running and performance loss and are usually fixed mechanically, not in the tune.
+- **Dirty or failing VANOS solenoids** (very common) — cannot route oil to move the cam.
+- **Low or dirty oil / wrong oil** — VANOS is oil-actuated.
+- **Mechanical VANOS wear** (units/seals).
+- Sensor / wiring issues affecting cam position reading.
 
-## How it works
+## What to log / scan
 
-The DME flags target-vs-actual cam deviation and sets a code.
+- **Scan for the specific VANOS code(s).**
+- VANOS **target vs actual** position (intake and exhaust) if available
+- RPM, oil temp for context
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Rough idle
-- Performance loss
-- Stored VANOS codes
+- Actual cam position **tracks target** at idle and through the rev range.
+- No stored VANOS codes.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- VANOS target vs actual
+- **Actual not reaching/holding target** → solenoid, oil, or mechanical fault.
+- Codes that **clear after solenoid cleaning / oil service** → confirms the cause.
+- Worse when oil is old/dirty → oil-related.
+
+_Media placeholder: VANOS target-vs-actual log screenshot._
 
 ## Mechanical checks first
 
-Clean/replace solenoids and check oil before tuning.
+1. Check **oil level/condition**; confirm correct-spec oil and a recent change.
+2. **Clean or replace VANOS solenoids.**
+3. Inspect for **mechanical VANOS wear** if solenoids/oil are good.
+4. Re-scan after service to confirm.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-- VANOS-related codes — verify by scan.
+VANOS cam-timing tables exist, but a VANOS **code** is almost always hardware/oil — fix that first. Do not change cam-timing tables to suppress a deviation fault caused by a dirty solenoid or old oil.
+
+## When to stop tuning
+
+Resolve VANOS codes before tuning cam timing. The DME cannot hit commanded cam targets if the hardware cannot move the cams.
 
 ## Related pages
 
-- [VANOS faults](/wiki/vanos/faults)
-- [Solenoids](/wiki/vanos/solenoids)
-- [Cleaning / replacement](/wiki/vanos/cleaning-replacement)
+- [Rough Idle](/wiki/diagnostics/rough-idle)
+- [VANOS Overview](/wiki/vanos/overview)
+- [VANOS Solenoids](/wiki/vanos/solenoids)
+- [VANOS Faults](/wiki/vanos/faults)
+- [Intake Cam Timing](/wiki/vanos/intake-cam-timing)
+- [Exhaust Cam Timing](/wiki/vanos/exhaust-cam-timing)
+- [VANOS Cleaning / Replacement](/wiki/vanos/cleaning-replacement)
+- [Oil Change Interval](/wiki/maintenance/oil-change-interval)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Exact VANOS code definitions — Source needed. Verify by scan / VIN/ROM ID._
+- _N54 VANOS solenoid/oil references — Source needed._

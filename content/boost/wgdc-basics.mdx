@@ -1,0 +1,49 @@
+---
+title: WGDC Basics
+description: "WGDC (wastegate duty cycle) is the percentage command the DME sends to the boost-control solenoids to position the wastegates and hold the boost targe"
+---
+
+
+# WGDC Basics
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+WGDC (wastegate duty cycle) is the percentage command the DME sends to the boost-control solenoids to position the wastegates and hold the boost target.
+
+## Why it matters
+
+WGDC is the primary boost-control output. Reading it against boost target vs actual reveals whether boost control is healthy or fighting a leak/mechanical issue.
+
+## How it works
+
+Higher duty generally holds the wastegate more closed (more boost) within the control strategy; the DME trims it to track the target.
+
+## Common symptoms or failure modes
+
+- WGDC pegged high while boost stays low (suggests a leak or mechanical fault)
+
+## What to check in logs
+
+- WGDC
+- Boost target vs actual
+
+## Mechanical checks first
+
+High WGDC with low boost usually means a mechanical/leak problem, not a tune problem.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Logging: WGDC](/wiki/logging/wgdc)
+- [Map: WGDC base](/wiki/maps/wgdc-base)
+- [Map: WGDC correction](/wiki/maps/wgdc-correction)
+- [Boost control problems](/wiki/logging/boost-control-problems)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

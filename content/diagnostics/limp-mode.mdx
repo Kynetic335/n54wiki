@@ -1,51 +1,71 @@
 ---
 title: Limp Mode
-description: "Limp mode is a protective state where the DME drastically reduces power after detecting a fault (boost, fuel pressure, or other)."
+description: "Limp mode is the DME cutting power to protect the engine after detecting a fault. Find and fix the trigger — do not disable the protection."
 ---
-
 
 # Limp Mode
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Exact triggers/thresholds — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Limp mode is a protective state where the DME drastically reduces power after detecting a fault (boost, fuel pressure, or other).
+Limp mode (reduced power / "limp home") is a protective state the DME enters after detecting a serious fault. It sharply limits boost and torque — and may close the throttle and hold rpm down — to protect the engine and drivetrain until the car is restarted or the fault is fixed. Limp mode is a **symptom of an underlying fault**, not a problem to silence. The goal is always to find the trigger.
 
-## Why it matters
+## Common causes (triggers)
 
-It protects the engine; the goal is to find and fix the underlying fault, not to mask it.
+- **Boost faults** — over/underboost, boost-control problems ([2ABC / 3100](/wiki/diagnostics/2abc-3100-boost-faults), [30FF](/wiki/diagnostics/30ff-underboost)).
+- **Fuel-pressure faults** — HPFP/LPFP, rail-pressure crash ([29DC](/wiki/diagnostics/29dc-fuel-pressure), [2AAF](/wiki/diagnostics/2aaf-fuel-pump-plausibility)).
+- **Knock / timing** protection.
+- **Throttle / pedal / torque-model** faults ([Throttle Closures](/wiki/diagnostics/throttle-closures)).
+- **Sensor faults** feeding bad data (boost/MAP, throttle, etc.).
+- Overheating or other protection thresholds.
 
-## How it works
+## What to log / scan
 
-On a serious fault, the DME limits boost/torque and may close the throttle until restarted or fixed.
+- **Scan for stored codes first** — the code points at the trigger.
+- [Boost target vs actual](/wiki/logging/boost-target-vs-actual) + [WGDC](/wiki/logging/wgdc)
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure)
+- [Timing corrections](/wiki/logging/timing-corrections)
+- [Throttle angle](/wiki/logging/throttle-angle) + pedal
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Sudden major power loss
-- CEL
-- Reduced rev/boost
+- No protective cut; boost/fuel/timing/throttle all behave normally through a pull.
+- No stored fault codes.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Fault codes
-- Boost target vs actual
-- Fuel rail pressure
+- A **sudden power cut** lining up with overboost/underboost → boost fault.
+- Cut lining up with a **rail-pressure crash** → fuel fault.
+- Cut with **sustained timing pull** → knock protection.
+- Throttle slamming shut with the pedal flat → torque-model/sensor fault.
+
+_Media placeholder: limp-event log screenshot (multi-channel)._
 
 ## Mechanical checks first
 
-Scan for the triggering code and fix the root cause.
+1. **Scan codes** and read freeze-frame.
+2. Trace the trigger: boost (smoke test, vacuum, wastegates), fuel (pumps, rail pressure), ignition (plugs/coils), or a sensor.
+3. Fix the **root cause**.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Never "fix" limp mode by raising/removing the protection threshold or clearing codes without fixing the cause. That hides a real fault and can let damage happen. Address the trigger; protections exist for a reason.
+
+## When to stop tuning
+
+Limp mode means **stop** until the trigger is found and fixed. Do not keep driving hard or tuning around an active protection event.
 
 ## Related pages
 
-- [Overboost/underboost](/wiki/boost/overboost-underboost)
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
-- [30FF underboost](/wiki/diagnostics/30ff-underboost)
+- [2ABC / 3100 Boost Faults](/wiki/diagnostics/2abc-3100-boost-faults)
+- [30FF Underboost](/wiki/diagnostics/30ff-underboost)
+- [Overboost](/wiki/diagnostics/overboost)
+- [Throttle Closures (Diagnosis)](/wiki/diagnostics/throttle-closures)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Exact limp-mode triggers/thresholds — Source needed. Verify by VIN/ROM ID._

@@ -1,54 +1,72 @@
 ---
 title: LPFP Failure
-description: "LPFP failure or weakness starves the HPFP, causing fuel pressure problems under load."
+description: "LPFP failure or weakness starves the high-pressure pump, causing fuel-pressure problems under load. Common on high-power and high-ethanol builds."
 ---
-
 
 # LPFP Failure
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Pressure values — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-LPFP failure or weakness starves the HPFP, causing fuel pressure problems under load.
+The LPFP (low-pressure fuel pump) is the in-tank pump that feeds the HPFP. When it weakens or fails, the low side cannot supply enough fuel, so the HPFP gets starved and high-side rail pressure falls under load. On higher-power and **high-ethanol** builds — which demand much more fuel volume — the LPFP is often the first part to run out, even when the HPFP is fine.
 
-## Why it matters
+## Common causes
 
-A weak LPFP is a fuel-supply limit, especially on high-power or high-ethanol builds.
+- **Worn / failing in-tank LPFP.**
+- **Undersized stock LPFP** for the power/ethanol level (a capacity limit, not a defect).
+- Wiring / connector / fuel-level sender issues affecting supply.
+- Fuel contamination / clogged strainer.
 
-## How it works
+## What to log
 
-Insufficient low-side supply means the HPFP cannot maintain rail pressure.
+- [LPFP pressure](/wiki/logging/lpfp-pressure) — under load
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) — to see the downstream effect
+- [Lambda / AFR](/wiki/logging/lambda-afr)
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Fuel pressure drop under load
-- Lean condition
-- Limp mode
+- Low-side pressure **holds steady** through the pull.
+- Rail pressure tracks target.
+- Lambda at target.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- LPFP pressure
-- Fuel rail pressure target vs actual
+- **Low-side pressure sagging under load**, then **rail pressure crashing** → LPFP is the root limit ([Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- Sag worse after a **high-ethanol fill** → capacity limit for that blend.
+- Erratic low-side pressure → failing pump or wiring.
+
+_Media placeholder: LPFP-sag-then-rail-crash log screenshot._
 
 ## Mechanical checks first
 
-Test low-side supply; replace/upgrade as the build needs.
+1. Test **low-side supply pressure** under demand.
+2. Check **wiring / connector** and pump current draw if possible.
+3. Confirm **actual ethanol blend** vs what the system was built for.
+4. Upgrade/replace the LPFP if it cannot keep up.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-- Fuel-pressure plausibility faults (e.g. 2AAF) — verify by scan.
+The tune exposes a low-side limit by demanding more fuel; it does not cause the pump to fail. The fix is more low-side capacity (upgraded LPFP), not reducing targets to mask the sag.
 
-## Media
+## When to stop tuning
 
-- _Media placeholder: LPFP bucket photo_
+**Stop** if low-side sag leads to a rail-pressure crash and lean lambda under boost. Upgrade the fuel supply before further load.
 
 ## Related pages
 
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [Long Crank](/wiki/diagnostics/long-crank)
+- [No Start](/wiki/diagnostics/no-start)
+- [2AAF Fuel Pump Plausibility](/wiki/diagnostics/2aaf-fuel-pump-plausibility)
+- [29DC Fuel Pressure](/wiki/diagnostics/29dc-fuel-pressure)
 - [LPFP](/wiki/fuel/lpfp)
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
 - [Parts: LPFP](/wiki/parts/lpfp)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _N54 LPFP capacity / ethanol demand references — Source needed._
+- _Low-side pressure targets — Verify by VIN/ROM ID._

@@ -1,0 +1,61 @@
+---
+title: Boost Limiters
+description: "Boost limiter maps cap allowable boost for protection. They can clamp boost below the requested target under certain conditions."
+---
+
+
+# Boost Limiters
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+Boost limiter maps cap allowable boost for protection. They can clamp boost below the requested target under certain conditions.
+
+## Why it matters
+
+Limiters protect the engine; raising them without supporting hardware removes safety margin and can cause damage.
+
+## Related log channels
+
+- Boost target vs actual
+- WGDC
+
+## What changes are visible in logs
+
+A limiter shows as boost being clamped below request under specific conditions.
+
+## What can go wrong if changed blindly
+
+- Removing protection margin
+- Overboost if mis-set
+- Limp mode
+
+## Mechanical problems that can look like a tuning problem
+
+- Boost leaks
+- Worn turbos masking the true ceiling
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Load ceiling](/wiki/load-torque/load-ceiling)
+- [Overboost/underboost](/wiki/boost/overboost-underboost)
+- [Map: boost target](/wiki/maps/boost-target)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

@@ -1,0 +1,56 @@
+---
+title: LPFP (Low-Pressure Fuel Pump)
+description: "The LPFP is the in-tank low-pressure pump that supplies fuel to the high-pressure pump. It sets the supply side of the fuel system."
+---
+
+
+# LPFP (Low-Pressure Fuel Pump)
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+The LPFP is the in-tank low-pressure pump that supplies fuel to the high-pressure pump. It sets the supply side of the fuel system.
+
+## Why it matters
+
+On higher-power or high-ethanol builds, LPFP supply can become the limit before the HPFP. A weak LPFP starves the HPFP.
+
+## How it works
+
+The LPFP lifts fuel from the tank and maintains low-side pressure to feed the HPFP inlet.
+
+## Common symptoms or failure modes
+
+- Fuel pressure drop at high load
+- Lean condition under sustained load
+- Limp mode on fuel faults
+
+## What to check in logs
+
+- LPFP pressure
+- LPFP duty (if available)
+- Fuel rail pressure target vs actual
+
+## Mechanical checks first
+
+Test low-side supply pressure and inspect wiring/connector before tuning.
+
+## Related codes or fault patterns
+
+- Fuel-pressure plausibility faults (e.g. 2AAF) — verify exact code by scan.
+
+## Media
+
+- _Media placeholder: LPFP bucket photo_
+
+## Related pages
+
+- [HPFP](/wiki/fuel/hpfp)
+- [LPFP failure](/wiki/diagnostics/lpfp-failure)
+- [Logging: LPFP pressure](/wiki/logging/lpfp-pressure)
+- [Parts: LPFP](/wiki/parts/lpfp)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

@@ -40,7 +40,7 @@ Low boost (underboost) is when the engine does not reach the boost pressure the 
 - **WGDC pinned near maximum while boost is still low** — strong sign of a leak or a wastegate that cannot hold. The controller is "asking for everything" and not getting it.
 - Boost that builds then bleeds off (leak that opens under pressure).
 
-_Media placeholder: good log vs bad log screenshot (low boost vs healthy)._
+TODO: add real MHD log screenshot comparing healthy boost vs low boost (boost target vs actual + WGDC; own/license-safe image only).
 
 ## Mechanical checks first
 
@@ -78,5 +78,8 @@ Stop and fix the car first if a smoke test finds a leak, if WGDC is maxed with l
 
 ## Sources
 
-- _Trusted reference for N54 underboost diagnosis — Source needed._
+- **BMW service information (ISTA / TIS):** boost-deviation fault definitions and boost-control component diagnosis for the specific chassis. _Verify by VIN/ROM ID._
+- **Bosch — *Gasoline Engine Management* / *Bosch Automotive Handbook*:** turbocharging and charge-pressure control fundamentals.
+- **BMW repair documentation** for charge-air path and boost-control vacuum components (chargepipe, diverter valves, wastegate, solenoids). _Verify by VIN._
+- _Community/owner references: practical underboost-diagnosis experience only — not the sole source for hard specs._
 - _Specific boost values are car/tune dependent — Verify by VIN/ROM ID._

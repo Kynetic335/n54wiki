@@ -1,49 +1,73 @@
 ---
 title: Long Crank
-description: "Long crank is when the engine takes longer than normal to start, frequently linked to fuel pressure (HPFP/LPFP) on the N54."
+description: "Long crank is extended cranking before the engine fires. On the N54 it is most often an early sign of a failing HPFP or low fuel pressure at start."
 ---
-
 
 # Long Crank
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Pressure values — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Long crank is when the engine takes longer than normal to start, frequently linked to fuel pressure (HPFP/LPFP) on the N54.
+Long crank is when the engine turns over noticeably longer than normal before it catches and starts. To fire promptly, the direct-injection N54 needs fuel rail pressure built quickly at startup. When pressure builds slowly or low, cranking drags out. On the N54 this is a classic early warning of a **failing HPFP**, though it is not the only cause.
 
-## Why it matters
+## Common causes
 
-It is a classic early sign of a failing HPFP, though other causes exist.
+- **Failing / worn HPFP** — slow to build rail pressure at start (most common).
+- **Weak LPFP** — not feeding the HPFP fast enough.
+- **Leak-down** in the fuel system (pressure bleeds off when parked).
+- **Battery / starter weakness** — slow cranking speed.
+- **Sensor or ignition issues** affecting start.
 
-## How it works
+## What to log
 
-If fuel pressure is not built quickly at start, cranking is extended.
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) at start (build speed and value)
+- [LPFP pressure](/wiki/logging/lpfp-pressure) at start
+- Battery voltage / cranking behavior if available
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Extended cranking before start
-- Hard starts when cold/hot
+- Rail pressure builds **quickly** at crank and reaches its start target.
+- LPFP supplies steady low-side pressure.
+- Engine catches promptly.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Fuel rail pressure at start
-- LPFP pressure
+- Rail pressure **building slowly or staying low** at crank → HPFP weakness ([HPFP Failure](/wiki/diagnostics/hpfp-failure)).
+- Low-side sag at start → LPFP issue ([LPFP Failure](/wiki/diagnostics/lpfp-failure)).
+- Pressure that bled off while parked → leak-down.
+- Slow cranking with normal fuel pressure → battery/starter.
+
+_Media placeholder: startup rail-pressure log screenshot._
 
 ## Mechanical checks first
 
-Check HPFP/LPFP and rail pressure; this is usually mechanical.
+1. Test **HPFP** behavior at start (rail pressure build).
+2. Test **LPFP / low-side** supply.
+3. Check **battery and starter**.
+4. Scan for stored **fuel-pressure codes** (e.g. [29DC](/wiki/diagnostics/29dc-fuel-pressure)).
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-- Fuel pressure faults (e.g. 29DC) — verify by scan.
+Long crank is a hardware/fuel-supply symptom, not a tuning value to dial around. Do not mask it in software. If a pump is failing, replace it.
+
+## When to stop tuning
+
+If long crank appears with low/slow rail pressure, address the fuel system before any tuning. A car that barely starts is not a safe tuning baseline.
 
 ## Related pages
 
-- [HPFP failure](/wiki/diagnostics/hpfp-failure)
-- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
+- [No Start](/wiki/diagnostics/no-start)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [29DC Fuel Pressure](/wiki/diagnostics/29dc-fuel-pressure)
+- [2AAF Fuel Pump Plausibility](/wiki/diagnostics/2aaf-fuel-pump-plausibility)
 - [HPFP](/wiki/fuel/hpfp)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Startup rail-pressure targets are car/tune specific — Verify by VIN/ROM ID._
+- _N54 HPFP long-crank references — Source needed._

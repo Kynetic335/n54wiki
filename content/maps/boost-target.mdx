@@ -1,0 +1,64 @@
+---
+title: Boost Target Map
+description: "The boost target map sets the boost pressure the DME aims for. WGDC works to achieve it; sensors confirm actual."
+---
+
+
+# Boost Target Map
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The boost target map sets the boost pressure the DME aims for. WGDC works to achieve it; sensors confirm actual.
+
+## Why it matters
+
+Boost is the most-touched tuning value and the easiest to over-request. The target must match turbo capacity, fueling, and cooling.
+
+## Related log channels
+
+- Boost target
+- Boost actual
+- WGDC
+- IAT
+
+## What changes are visible in logs
+
+A higher target shows as higher commanded boost and increased WGDC effort.
+
+## What can go wrong if changed blindly
+
+- Overboost/limp mode
+- Exceeding turbo/fuel capacity
+- Knock from too much boost for the fuel
+
+## Mechanical problems that can look like a tuning problem
+
+- Boost leaks (look like underboost)
+- Worn wastegates
+- Vacuum leaks
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+
+## Related pages
+
+- [Stock turbo limits](/wiki/boost/stock-turbo-limits)
+- [Low boost](/wiki/diagnostics/low-boost)
+- [Logging: boost target vs actual](/wiki/logging/boost-target-vs-actual)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

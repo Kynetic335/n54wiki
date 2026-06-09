@@ -1,51 +1,78 @@
 ---
 title: Rough Idle
-description: "Rough idle is unstable or shaky idle, with many possible causes on the N54."
+description: "Rough idle is an unstable, shaky, or hunting idle. On the N54 it usually traces to ignition, carbon buildup, vacuum leaks, VANOS, or injectors."
 ---
-
 
 # Rough Idle
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (diagnostic approach). Specifics — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Rough idle is unstable or shaky idle, with many possible causes on the N54.
+Rough idle is an idle that shakes, hunts up and down, or feels unstable, sometimes with a misfire or near-stall. Idle is a low-load, low-airflow condition where small problems show up clearly — a single weak cylinder or a small vacuum leak that you would never feel at speed becomes obvious at idle.
 
-## Why it matters
+## Common causes
 
-It often signals ignition wear, carbon buildup, VANOS issues, injector problems, or vacuum leaks.
+- **Worn or failing spark plugs / coils** — idle misfire on one or more cylinders.
+- **Carbon buildup** on intake valves (direct injection) — disrupts airflow and idle quality.
+- **Vacuum leak** — unmetered air upsets the idle mixture; also disrupts boost-control vacuum.
+- **VANOS fault** — cam timing not holding target at idle.
+- **Failing or mis-coded injectors** — uneven fueling per cylinder.
+- **PCV / crankcase ventilation fault** — acts like a vacuum leak.
+- **Dirty throttle body / idle control issues.**
 
-## How it works
+## What to log
 
-Any disruption to fuel, spark, air metering, or cam timing can destabilize idle.
+- Misfire counters **per cylinder**
+- [STFT / LTFT](/wiki/logging/stft-ltft) (fuel trims)
+- VANOS target vs actual (if available)
+- RPM at idle
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Shaking at idle
-- Misfire at idle
-- Stalling
+- Misfire counters at/near zero at idle.
+- Fuel trims small and stable.
+- VANOS actual tracking target.
+- Steady idle rpm.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Misfire counters
-- Fuel trims
-- VANOS target vs actual
+- **One cylinder's misfire counter climbing** → that cylinder's plug/coil/injector.
+- **Large positive fuel trims** → unmetered air (vacuum/PCV leak) or lean fueling.
+- **VANOS actual not tracking target** → VANOS solenoid/oil/mechanical issue ([VANOS Codes](/wiki/diagnostics/vanos-codes)).
+- Idle improving after carbon cleaning → buildup was the cause.
+
+_Media placeholder: idle log screenshot (per-cylinder misfire + fuel trims)._
 
 ## Mechanical checks first
 
-Check plugs/coils, vacuum lines, VANOS, and carbon buildup first.
+1. Inspect / replace **spark plugs**; **swap-test coils**.
+2. Smoke-test for **vacuum leaks**; inspect **PCV**.
+3. Check **VANOS** (oil condition, solenoids).
+4. Consider **walnut blasting** if carbon is likely.
+5. Verify **injector coding** if injectors were touched.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Idle quality is rarely a tuning fix on the N54 — it is almost always hardware (ignition, vacuum, carbon, VANOS). Do not adjust idle/fueling tables to mask a dead coil, a vacuum leak, or carbon buildup.
+
+## When to stop tuning
+
+If idle is rough, fix the mechanical cause before any further tuning. A rough baseline produces misleading logs.
 
 ## Related pages
 
-- [Walnut blasting](/wiki/maintenance/walnut-blasting)
-- [VANOS faults](/wiki/vanos/faults)
 - [Misfire](/wiki/diagnostics/misfire)
+- [Coil Failure](/wiki/diagnostics/coil-failure)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [VANOS Codes](/wiki/diagnostics/vanos-codes)
+- [Walnut Blasting](/wiki/maintenance/walnut-blasting)
+- [PCV System](/wiki/maintenance/pcv)
+- [Logging: STFT / LTFT](/wiki/logging/stft-ltft)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Trusted reference on N54 rough-idle causes — Source needed._
+- _Idle/fuel-trim specifics are car/tune dependent — Verify by VIN/ROM ID._

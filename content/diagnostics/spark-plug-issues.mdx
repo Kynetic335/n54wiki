@@ -1,49 +1,70 @@
 ---
 title: Spark Plug Issues
-description: "Spark plug issues (wear, wrong gap, wrong heat range) cause misfires that worsen under boost."
+description: "Worn, wrong-gap, or wrong-heat-range plugs cause misfires that worsen under boost. Plugs are a top cause of 'tune' misfires on the N54."
 ---
-
 
 # Spark Plug Issues
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (behavior). Gap/heat-range specs — verify by VIN/ROM ID.
 
-## What it is
+## What the symptom means
 
-Spark plug issues (wear, wrong gap, wrong heat range) cause misfires that worsen under boost.
+Spark plugs ignite the mixture. As they wear, the gap opens and the spark gets harder to maintain — and higher cylinder pressure under boost makes that worse. The classic result is a misfire that appears or worsens **under load**. Tuned N54s commonly run a colder heat range and a **smaller gap** to keep spark stable; the exact spec depends on the build. **Verify gap/heat range by source.**
 
-## Why it matters
+## Common causes
 
-Plugs are a top cause of "tune" misfires; correct gap is critical as boost rises.
+- **Worn plugs** (gap opened over time).
+- **Wrong gap** for the boost level (too large → spark blowout under load).
+- **Wrong heat range** for the application.
+- Plugs stressed by a **weak coil** (check coils too).
 
-## How it works
+## What to log
 
-A worn or over-gapped plug cannot maintain spark under high cylinder pressure.
+- Misfire counters **per cylinder**
+- [Timing corrections](/wiki/logging/timing-corrections)
+- RPM, gear, load
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Misfire under boost
-- Power loss at the top
+- Misfire counters near zero through the pull.
+- No cylinder standing out under boost.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- Misfire counters
-- Timing corrections
+- **Misfire that appears/worsens as boost climbs** → spark blowout from worn/over-gapped plugs.
+- Several cylinders misfiring under boost after a while since last service → plugs due.
+- One cylinder only → could be that plug or that coil (swap-test to separate).
+
+_Media placeholder: misfire-under-boost log screenshot._
 
 ## Mechanical checks first
 
-Inspect, re-gap, or replace plugs to spec before tuning. Verify gap by source.
+1. **Inspect plugs** for wear/condition.
+2. **Verify gap** to the spec for the build (Source needed for exact value).
+3. Confirm correct **heat range**.
+4. **Swap-test coils** to separate plug vs coil.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-_No verified codes listed yet. Source needed._
+Plug condition is maintenance, not a tuning value. Do not pull timing in the calibration to stop a misfire caused by worn or over-gapped plugs — replace/re-gap the plugs.
+
+## When to stop tuning
+
+Stop if misfires appear under boost. Service the plugs (correct gap/heat range) before further tuning.
 
 ## Related pages
 
-- [Spark plugs](/wiki/ignition/spark-plugs)
-- [Plug gaps](/wiki/ignition/plug-gaps)
-- [Parts: spark plugs](/wiki/parts/spark-plugs)
+- [Misfire](/wiki/diagnostics/misfire)
+- [Coil Failure](/wiki/diagnostics/coil-failure)
+- [Rough Idle](/wiki/diagnostics/rough-idle)
+- [Injector Failure](/wiki/diagnostics/injector-failure)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Spark Plugs](/wiki/ignition/spark-plugs)
+- [Plug Gaps](/wiki/ignition/plug-gaps)
+- [Parts: Spark Plugs](/wiki/parts/spark-plugs)
+- [Logging: Timing Corrections](/wiki/logging/timing-corrections)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Exact gap/heat-range for tuned N54 — Source needed. Verify by VIN/ROM ID and build._
+- _N54 plug-under-boost references — Source needed._

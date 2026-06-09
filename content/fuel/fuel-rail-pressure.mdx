@@ -1,0 +1,51 @@
+---
+title: Fuel Rail Pressure
+description: "Fuel rail pressure is the high-side pressure at the injectors. The DME targets a value and the HPFP works to maintain it."
+---
+
+
+# Fuel Rail Pressure
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Fuel rail pressure is the high-side pressure at the injectors. The DME targets a value and the HPFP works to maintain it.
+
+## Why it matters
+
+Rail pressure holding its target under load is a core health and safety signal. Dropping below target under load indicates a fueling limit.
+
+## How it works
+
+The DME commands a target rail pressure; sensors report actual. The gap between target and actual reveals pump/supply capacity.
+
+## Common symptoms or failure modes
+
+- Actual rail pressure falling below target at high load
+- Power loss, fault codes
+
+## What to check in logs
+
+- Fuel rail pressure target vs actual
+- LPFP pressure
+- Load and timing for context
+
+## Mechanical checks first
+
+Verify pump health and supply before assuming the tune. Mechanical fuel-system wear mimics tuning problems.
+
+## Related codes or fault patterns
+
+- Fuel pressure faults (e.g. 29DC) — verify by scan.
+
+## Related pages
+
+- [HPFP](/wiki/fuel/hpfp)
+- [LPFP](/wiki/fuel/lpfp)
+- [Map: fuel pressure target](/wiki/maps/fuel-pressure-target)
+- [Fuel pressure crash](/wiki/diagnostics/fuel-pressure-crash)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

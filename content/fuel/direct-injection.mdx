@@ -1,0 +1,58 @@
+---
+title: Direct Injection (Fuel)
+description: "The N54 uses direct injection: a low-pressure pump feeds a high-pressure pump that supplies injectors firing directly into the cylinders."
+---
+
+
+# Direct Injection (Fuel)
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+The N54 uses direct injection: a low-pressure pump feeds a high-pressure pump that supplies injectors firing directly into the cylinders.
+
+## Why it matters
+
+The two-stage pump architecture creates specific failure and limit points — especially HPFP capacity and rail pressure hold under load.
+
+## How it works
+
+LPFP lifts fuel from the tank to the HPFP; the HPFP raises it to high rail pressure; the DME targets a rail pressure and commands injector pulse.
+
+## Common symptoms or failure modes
+
+- Long crank
+- Rail pressure drop under load
+- Carbon buildup on intake valves
+
+## What to check in logs
+
+- Fuel rail pressure target vs actual
+- LPFP pressure/duty
+- Fuel trims
+
+## Mechanical checks first
+
+Check pump and injector health before assuming a tuning cause.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Media
+
+- _Media placeholder: HPFP photo_
+- _Media placeholder: LPFP bucket photo_
+
+## Related pages
+
+- [HPFP](/wiki/fuel/hpfp)
+- [LPFP](/wiki/fuel/lpfp)
+- [Fuel rail pressure](/wiki/fuel/fuel-rail-pressure)
+- [Fuel diagnostics](/wiki/diagnostics/fuel-pressure-crash)
+- [Logging: HPFP pressure](/wiki/logging/hpfp-pressure)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

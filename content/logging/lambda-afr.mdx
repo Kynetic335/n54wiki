@@ -1,50 +1,64 @@
 ---
 title: Logging Lambda / AFR
-description: "Lambda/AFR channels show the air-fuel mixture. Lambda is fuel-agnostic; AFR is fuel-specific."
+description: "Lambda/AFR shows the air-fuel mixture. Lambda is fuel-agnostic; AFR is fuel-specific. Lean under boost is the dangerous reading to watch for."
 ---
-
 
 # Logging Lambda / AFR
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Target values — verify by VIN/ROM ID.
 
-## What it is
+## What the channel means
 
-Lambda/AFR channels show the air-fuel mixture. Lambda is fuel-agnostic; AFR is fuel-specific.
+This channel reports the air-fuel mixture. **Lambda** is normalized: 1.0 = exactly stoichiometric for whatever fuel is burning, below 1.0 = rich, above 1.0 = lean. **AFR** is the same idea expressed for a specific fuel (so the stoichiometric AFR number changes with fuel). Lambda is the safer way to talk mixture across gasoline and ethanol blends because it does not depend on the fuel. On the N54 the source may be the factory oxygen sensors and/or an added wideband — confirm what your tool reads. **Verify by VIN/ROM ID.**
 
 ## Why it matters
 
-Mixture under load reveals lean (dangerous) or rich conditions and confirms whether fueling matches the target.
+Mixture under load is a primary safety reading. The N54 typically commands a richer (below 1.0) mixture under boost for knock and thermal safety. A mixture that goes **lean under boost** raises knock and damage risk fast, so lambda is something you watch live, not just review later.
 
-## How it works
+## What normal behavior generally looks like
 
-Oxygen/wideband sensing reports mixture; the DME targets a lambda under load.
+- Lambda sits at the commanded target through the pull (commonly richer under boost).
+- Smooth, plausible response — not stuck or noisy.
+- Banks read similarly.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Lean under load (high lambda)
-- Rich (low lambda)
+- **Lean under boost** → fuel-supply limit ([Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)), wrong ethanol blend, or a leak; **stop**.
+- **Rich beyond target** → leaking injector or sensor error ([Rich Condition](/wiki/diagnostics/rich-condition)).
+- **Stuck / slow / implausible lambda** → suspect the [O2 sensor](/wiki/diagnostics/o2-sensor-faults), not the fueling.
+- One bank off vs the other → injector or sensor on that bank.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- Lambda/AFR
-- STFT/LTFT
-- Fuel rail pressure
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)
+- [Misfire](/wiki/diagnostics/misfire)
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Confirm sensor health and actual ethanol blend before judging fueling.
+- Comparing **AFR numbers across different fuels** — use lambda to stay fuel-agnostic.
+- Trusting lambda from a **lazy/failed O2 sensor**.
+- Reading lambda **without rail pressure** — you miss whether a lean spike was a fuel-supply crash.
+- Reacting to one noisy sample instead of a trend.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+TODO: add real lambda/AFR log screenshot (healthy vs lean-under-load; own/license-safe image only).
 
 ## Related pages
 
+- [STFT / LTFT](/wiki/logging/stft-ltft)
+- [HPFP Pressure](/wiki/logging/hpfp-pressure)
+- [Fuel Limits](/wiki/logging/fuel-limits)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
+- [Rich Condition](/wiki/diagnostics/rich-condition)
+- [O2 Sensor Faults](/wiki/diagnostics/o2-sensor-faults)
 - [Lambda vs AFR](/wiki/fuel/lambda-vs-afr)
-- [Lean condition](/wiki/diagnostics/lean-condition)
-- [Map: lambda target](/wiki/maps/lambda-target)
+- [Map: Lambda Target](/wiki/maps/lambda-target)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- **Bosch — *Gasoline Engine Management* / *Bosch Automotive Handbook*:** definition of lambda (λ = 1.0 at stoichiometric), and oxygen / wideband (LSU) sensor fundamentals.
+- **BMW service information (ISTA / TIS):** commanded-lambda and fuel-control behavior for the specific DME. _Verify by VIN/ROM ID._
+- _Community/owner references: practical lean/rich interpretation experience only — not the sole source for hard specs._
+- _Lambda targets are car/tune specific — Verify by VIN/ROM ID._

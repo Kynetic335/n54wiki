@@ -1,0 +1,64 @@
+---
+title: Main Ignition Timing
+description: "The main ignition timing map sets base spark advance across load and rpm. Corrections subtract from it when knock is detected."
+---
+
+
+# Main Ignition Timing
+
+> **Source confidence:** Needs validation
+
+> Educational reference only. This page does not publish tune values.
+
+## What this map controls
+
+The main ignition timing map sets base spark advance across load and rpm. Corrections subtract from it when knock is detected.
+
+## Why it matters
+
+Timing makes power up to the knock limit. Too much advance for the fuel/conditions causes knock and timing pull.
+
+## Related log channels
+
+- Timing corrections
+- IAT
+- Lambda/AFR
+
+## What changes are visible in logs
+
+Changes show as different base advance and, if too aggressive, increased knock pull.
+
+## What can go wrong if changed blindly
+
+- Knock/detonation
+- Timing pull negating the change
+- Engine damage if ignored
+
+## Mechanical problems that can look like a tuning problem
+
+- Bad fuel/blend
+- Heat soak
+- Worn plugs/coils causing apparent timing issues
+
+## Educational example
+
+_Placeholder: generic table/axes concept (e.g. load on one axis, rpm on the other). No real tune values shown._
+
+## Safe verification notes
+
+Validate any change with a datalog on a healthy car. Verify by log.
+
+## Media
+
+- _Media placeholder: generic tuning table concept image_
+- _Media placeholder: timing correction log screenshot_
+
+## Related pages
+
+- [Timing advance](/wiki/ignition/timing-advance)
+- [Map: timing correction](/wiki/maps/timing-correction)
+- [Logging: timing corrections](/wiki/logging/timing-corrections)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by scan/log._

@@ -1,0 +1,49 @@
+---
+title: Driver Demand
+description: "Driver demand maps the accelerator pedal position to a requested torque. It shapes how the pedal feels and how aggressively torque is requested."
+---
+
+
+# Driver Demand
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Driver demand maps the accelerator pedal position to a requested torque. It shapes how the pedal feels and how aggressively torque is requested.
+
+## Why it matters
+
+Driver demand affects throttle response and how quickly the car asks for load/boost.
+
+## How it works
+
+A pedal map converts pedal angle (and rpm) into a torque request that feeds the rest of the model.
+
+## Common symptoms or failure modes
+
+- Lazy or overly aggressive pedal feel
+
+## What to check in logs
+
+- Pedal position
+- Torque request
+- Throttle angle
+
+## Mechanical checks first
+
+Pedal feel changes are calibration, not hardware.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [Torque request](/wiki/load-torque/torque-request)
+- [Map: driver demand](/wiki/maps/driver-demand)
+- [Throttle closures](/wiki/load-torque/throttle-closures)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

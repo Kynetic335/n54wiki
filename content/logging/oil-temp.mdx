@@ -1,47 +1,57 @@
 ---
 title: Logging Oil Temp
-description: "Oil temperature reflects how hard the engine is working and cooling adequacy. Sustained high oil temps reduce protection."
+description: "Oil temperature reflects how hard the engine is working and how well oil cooling keeps up. Sustained high oil temps reduce protection."
 ---
-
 
 # Logging Oil Temp
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Specific thresholds — verify by VIN/ROM ID.
 
-## What it is
+## What the channel means
 
-Oil temperature reflects how hard the engine is working and cooling adequacy. Sustained high oil temps reduce protection.
+Oil temperature is the temperature of the engine oil. It rises with sustained load and tracks how well the oil cooling system is keeping up. Oil protects bearings, the HPFP drive, and the VANOS system, so its temperature is both a health signal and a context channel for hard or repeated use.
 
 ## Why it matters
 
-Oil temp context matters for hard/track use and deciding on cooling upgrades.
+Oil temp matters most for sustained and track use. Very high oil temps thin the oil and reduce protection, and they signal that the engine is working hard or that oil cooling is inadequate. It is a key input for deciding whether a cooling upgrade is needed and when to back off.
 
-## How it works
+## What normal behavior generally looks like
 
-A sensor reports oil temp; it climbs with sustained load.
+- Oil temp warms to operating range and stays in a reasonable band.
+- Climbs gradually under sustained load, not alarmingly.
+- Recovers with cooldown.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- High oil temps under sustained use
+- **High/climbing oil temps under sustained or track use** → oil cooling at its limit; consider an [oil cooler](/wiki/cooling-oil/oil-cooler) upgrade and back off.
+- Oil temp far above coolant temp under load → cooling/oil-system stress.
+- Combined with high [coolant temp](/wiki/logging/coolant-temp) → general heat problem.
 
-## What to check in logs
+## Which diagnostics use this channel
 
-- Oil temp
+- Heat-related power loss and protection (context for [Timing Corrections](/wiki/diagnostics/timing-corrections) and [Limp Mode](/wiki/diagnostics/limp-mode))
+- VANOS issues linked to oil condition/temperature (context for [VANOS Codes](/wiki/diagnostics/vanos-codes))
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Ensure correct oil and cooling capacity for the intended use.
+- Confusing oil temp with [coolant temp](/wiki/logging/coolant-temp) — they move differently.
+- Doing back-to-back hard pulls with oil temp already high.
+- Ignoring oil temp on track and blaming power loss on the tune.
+- Expecting one fixed "safe number" without use-case context.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
+_Media placeholder: oil-temp log screenshot (sustained-load climb)._
 
 ## Related pages
 
-- [Oil temps](/wiki/cooling-oil/oil-temps)
-- [Oil cooler](/wiki/cooling-oil/oil-cooler)
-- [Heat soak](/wiki/cooling-oil/heat-soak)
+- [Coolant Temp](/wiki/logging/coolant-temp)
+- [IAT](/wiki/logging/iat)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Oil Temps](/wiki/cooling-oil/oil-temps)
+- [Oil Cooler](/wiki/cooling-oil/oil-cooler)
+- [Heat Soak](/wiki/cooling-oil/heat-soak)
+- [VANOS Codes](/wiki/diagnostics/vanos-codes)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Oil-temp limits are use-case/car specific — Verify by VIN/ROM ID._
+- _N54 oil-system references — Source needed._

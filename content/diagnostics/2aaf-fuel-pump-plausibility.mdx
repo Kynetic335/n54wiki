@@ -1,49 +1,71 @@
 ---
 title: 2AAF Fuel Pump Plausibility
-description: "2AAF is a commonly referenced N54 fuel-pump plausibility fault. Confirm the exact definition by scanning your car."
+description: "2AAF is a commonly referenced N54 fuel-pump plausibility fault. It usually relates to the low-side (LPFP) supply not meeting expected behavior."
 ---
-
 
 # 2AAF Fuel Pump Plausibility
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (commonly reported). Exact code text — verify by scan / VIN/ROM ID.
 
-## What it is
+## What the code means
 
-2AAF is a commonly referenced N54 fuel-pump plausibility fault. Confirm the exact definition by scanning your car.
+2AAF is a frequently reported N54 **fuel-pump plausibility** fault. "Plausibility" means the DME compared expected fuel-supply behavior against what it measured and found them inconsistent. In practice it is commonly associated with the **low-side / LPFP** supply not delivering what the system expects relative to demand. Confirm the exact wording — **verify by scan.**
 
-## Why it matters
+## Common causes
 
-It often relates to low-side supply (LPFP) not meeting expectations relative to demand.
+- **Weak / failing LPFP** or undersized for the power/ethanol level.
+- **Wiring / connector / control** issue on the low-pressure pump circuit.
+- Fuel-level sender / strainer / supply restriction.
+- A demand the low side cannot meet (high-ethanol/high-power builds).
 
-## How it works
+## What to log / scan
 
-The DME compares expected vs actual fuel-supply behavior and flags implausibility.
+- **Scan to confirm 2AAF** and read freeze-frame.
+- [LPFP pressure](/wiki/logging/lpfp-pressure) under load
+- [HPFP / rail pressure](/wiki/logging/hpfp-pressure) (downstream effect)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
 
-## Common symptoms or failure modes
+## What a healthy pattern looks like
 
-- Fuel pressure issues under load
-- Possible limp mode
+- Low-side pressure steady; rail pressure tracks target; lambda at target.
+- No plausibility code stored.
 
-## What to check in logs
+## What a bad pattern can suggest
 
-- LPFP pressure
-- Fuel rail pressure target vs actual
+- **Low-side pressure sagging** under load with 2AAF stored → LPFP supply limit ([LPFP Failure](/wiki/diagnostics/lpfp-failure)).
+- Sag followed by **rail-pressure crash** → low side is starving the HPFP ([Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)).
+- Erratic low-side pressure → wiring/pump fault.
+
+_Media placeholder: LPFP pressure log screenshot with 2AAF freeze-frame._
 
 ## Mechanical checks first
 
-Test LPFP/low-side supply; verify wiring/connector.
+1. Test **low-side supply** under demand.
+2. Inspect **wiring / connector** and pump operation.
+3. Confirm **ethanol blend** vs build capacity.
+4. Upgrade/replace the LPFP if it cannot keep up.
 
-## Related codes or fault patterns
+## Tuning-related causes second
 
-- 2AAF — verify exact meaning by scan.
+2AAF is a fuel-supply/hardware fault, not a tuning value. Do not clear it or mask it; address the low-side capacity.
+
+## When to stop tuning
+
+**Stop** if 2AAF appears with low-side sag and a rail-pressure crash under boost. Upgrade/repair the fuel supply first.
 
 ## Related pages
 
-- [LPFP failure](/wiki/diagnostics/lpfp-failure)
+- [LPFP Failure](/wiki/diagnostics/lpfp-failure)
+- [Fuel Pressure Crash](/wiki/diagnostics/fuel-pressure-crash)
+- [HPFP Failure](/wiki/diagnostics/hpfp-failure)
+- [Long Crank](/wiki/diagnostics/long-crank)
+- [No Start](/wiki/diagnostics/no-start)
+- [29DC Fuel Pressure](/wiki/diagnostics/29dc-fuel-pressure)
 - [LPFP](/wiki/fuel/lpfp)
-- [Common codes](/wiki/diagnostics/common-codes)
+- [Logging: LPFP Pressure](/wiki/logging/lpfp-pressure)
+- [Logging: HPFP Pressure](/wiki/logging/hpfp-pressure)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/VIN._
+- _Exact 2AAF definition — Source needed. Verify by scan / VIN/ROM ID._
+- _N54 LPFP plausibility references — Source needed._

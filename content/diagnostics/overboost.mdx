@@ -38,7 +38,7 @@ A short, small spike above target during fast spool can be normal transient beha
 - WGDC behavior inconsistent with the result (e.g. commanding the wastegate open but boost still climbing → mechanical wastegate problem).
 - A power cut / limp event right after the spike.
 
-_Media placeholder: overboost spike log screenshot._
+TODO: add real MHD log screenshot showing an overboost spike (boost actual above target + WGDC; own/license-safe image only).
 
 ## Mechanical checks first
 
@@ -73,4 +73,8 @@ Stop immediately if you see sustained overboost or repeated overboost-triggered 
 
 ## Sources
 
-- _Exact overboost thresholds and protection behavior — Source needed. Verify by VIN/ROM ID._
+- **BMW service information (ISTA / TIS):** authoritative source for overboost fault definitions, protection behavior, and thresholds. _Verify the specific code text by scan / by VIN/ROM ID._
+- **Bosch — *Gasoline Engine Management* / *Bosch Automotive Handbook*:** charge-pressure (boost) control and wastegate operation fundamentals.
+- **BMW repair/component documentation** for the wastegate, charge-pressure actuator, and boost-control solenoid on the specific chassis. _Verify by VIN._
+- _Community/owner references: practical overboost experience only — not the sole source for hard specs._
+- _Exact overboost protection thresholds — Source needed (BMW service data)._

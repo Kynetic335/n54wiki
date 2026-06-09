@@ -1,0 +1,56 @@
+---
+title: Throttle Closures
+description: "Throttle closures are torque interventions where the DME closes the throttle to reduce output — for protection, limiting, or smoothing."
+---
+
+
+# Throttle Closures
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Throttle closures are torque interventions where the DME closes the throttle to reduce output — for protection, limiting, or smoothing.
+
+## Why it matters
+
+Unexpected throttle closures during a pull are a key diagnostic clue: a limiter or fault is capping torque.
+
+## How it works
+
+When the torque model or a protection routine demands less torque, the DME closes the throttle even if the pedal is down.
+
+## Common symptoms or failure modes
+
+- Throttle angle dropping mid-pull while pedal is flat
+- Power surges/cuts
+
+## What to check in logs
+
+- Throttle angle
+- Pedal position
+- Torque request
+- Requested vs actual load
+
+## Mechanical checks first
+
+Distinguish protective closures (heat, knock, fueling) from limiter closures.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Media
+
+- _Media placeholder: good log vs bad log screenshot_
+
+## Related pages
+
+- [Logging: throttle angle](/wiki/logging/throttle-angle)
+- [Diagnostics: throttle closures](/wiki/diagnostics/throttle-closures)
+- [Map: throttle torque intervention](/wiki/maps/throttle-torque-intervention)
+- [Torque limiters](/wiki/load-torque/torque-limiters)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM/VIN._

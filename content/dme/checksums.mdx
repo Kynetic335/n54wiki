@@ -1,0 +1,47 @@
+---
+title: Checksums
+description: "Checksums are integrity values stored in the ROM so the DME can verify the calibration has not been corrupted. This wiki explains the concept; it does"
+---
+
+
+# Checksums
+
+> **Source confidence:** Needs validation
+
+## What it is
+
+Checksums are integrity values stored in the ROM so the DME can verify the calibration has not been corrupted. This wiki explains the concept; it does not provide checksum-correction steps.
+
+## Why it matters
+
+Checksums are part of why ROM matching and careful handling matter. A mismatched or corrupted image can fail validation.
+
+## How it works
+
+The DME computes a value over regions of the ROM and compares it to stored values. Mismatch indicates corruption or modification.
+
+## Common symptoms or failure modes
+
+- N/A — concept page
+
+## What to check in logs
+
+- N/A
+
+## Mechanical checks first
+
+This wiki does not cover performing checksum correction. Educational concept only.
+
+## Related codes or fault patterns
+
+_No verified codes listed yet. Source needed._
+
+## Related pages
+
+- [BIN files](/wiki/dme/bin-files)
+- [ROM matching](/wiki/dme/rom-matching)
+- [XDFs and definitions](/wiki/dme/xd-fs-and-definitions)
+
+## Sources
+
+- _Source needed. Verify against trusted public references or by ROM ID._

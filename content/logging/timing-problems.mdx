@@ -1,54 +1,63 @@
 ---
 title: Logging Timing Problems
-description: "Timing problems show up as negative timing corrections (knock pull) under load, sometimes localized to one cylinder."
+description: "Timing problems show up as negative timing corrections (knock pull) under load, sometimes on one cylinder. They signal fuel, heat, plug, or mechanical issues."
 ---
-
 
 # Logging Timing Problems
 
-> **Source confidence:** Needs validation
+> **Source confidence:** High confidence (concept). Acceptable amounts — verify by VIN/ROM ID.
 
-## What it is
+## What the channel/topic means
 
-Timing problems show up as negative timing corrections (knock pull) under load, sometimes localized to one cylinder.
+Timing problems are read from the [timing-correction](/wiki/logging/timing-corrections) channels: how much advance the DME is pulling (negative) in response to knock detection, ideally **per cylinder**. This page is about interpreting that pull — what causes it and how to tell a whole-engine cause from a single-cylinder one.
 
 ## Why it matters
 
-Persistent timing pull risks damage and signals fuel quality, heat, plug, or mechanical issues.
+Knock is destructive. Timing pull is the engine protecting itself, and reading it correctly is how you keep a pull safe and find the real cause. Sustained or growing pull means the fuel/heat/hardware/tune combination is at or past its limit.
 
-## How it works
+## What normal behavior generally looks like
 
-Knock detection retards timing; the log shows how much and on which cylinders.
+- Little to no timing pulled under load.
+- Any small corrections are brief and recover.
+- All cylinders behave similarly.
 
-## Common symptoms or failure modes
+## What abnormal behavior can suggest
 
-- Negative corrections under load
-- One cylinder worse than others
+- **Sustained negative corrections** under load → knock; check fuel grade, ethanol content, heat.
+- **Pull growing with [IAT](/wiki/logging/iat)** → heat-driven ([Heat Soak](/wiki/cooling-oil/heat-soak)).
+- **One cylinder pulling much more** → cylinder-specific hardware (plug, coil, injector), not the whole tune.
+- Pull alongside **lean [lambda](/wiki/logging/lambda-afr) / [rail-pressure crash](/wiki/logging/hpfp-pressure)** → fuel-supply-driven knock.
 
-## What to check in logs
+## Which diagnostics use this concept
 
-- Timing corrections by cylinder
-- IAT
-- Lambda/AFR
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Misfire](/wiki/diagnostics/misfire)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
+- [Coil Failure](/wiki/diagnostics/coil-failure)
+- [Lean Condition](/wiki/diagnostics/lean-condition)
 
-## Mechanical checks first
+## Common interpretation mistakes
 
-Check fuel/blend, heat, plugs, and coils; a single-cylinder issue often means hardware.
+- Reacting to one tiny brief correction vs a repeatable trend.
+- Reading averaged timing instead of **per-cylinder** — you miss a single bad cylinder.
+- Ignoring **IAT and fuel** context, then blaming the base tune for heat- or fuel-driven knock.
+- Pulling timing in the calibration to mask knock from bad plugs or bad fuel — that hides the real fault.
 
-## Related codes or fault patterns
-
-_No verified codes listed yet. Source needed._
-
-## Media
-
-- _Media placeholder: timing correction log screenshot_
+_Media placeholder: per-cylinder timing-correction log screenshot._
 
 ## Related pages
 
-- [Ignition: timing corrections](/wiki/ignition/timing-corrections)
-- [Knock detection](/wiki/ignition/knock-detection)
-- [Unsafe logs](/wiki/logging/unsafe-logs)
+- [Timing Corrections](/wiki/logging/timing-corrections)
+- [IAT](/wiki/logging/iat)
+- [Lambda / AFR](/wiki/logging/lambda-afr)
+- [Unsafe Logs](/wiki/logging/unsafe-logs)
+- [Timing Corrections (Diagnosis)](/wiki/diagnostics/timing-corrections)
+- [Spark Plug Issues](/wiki/diagnostics/spark-plug-issues)
+- [Coil Failure](/wiki/diagnostics/coil-failure)
+- [Knock Detection](/wiki/ignition/knock-detection)
+- [Map: Timing Correction](/wiki/maps/timing-correction)
 
 ## Sources
 
-- _Source needed. Verify against trusted public references or by scan/log._
+- _Acceptable timing-pull amounts are car/fuel/tune specific — Verify by VIN/ROM ID._
+- _N54 knock-behavior references — Source needed._
