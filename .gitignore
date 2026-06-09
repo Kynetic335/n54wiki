@@ -35,9 +35,21 @@ PRIVATE_*.md
 tsconfig.tsbuildinfo
 build-packages-result.json
 
-# Keep private unless intentionally public
-data/tune-program/patch-packages/
-public/tune-program/
+# Keep package trees private except explicitly approved app-safe IKM0S JSON.
+data/tune-program/patch-packages/*
+!data/tune-program/patch-packages/manifest.ts
+!data/tune-program/patch-packages/manifest.json
+!data/tune-program/patch-packages/ikm0s/
+data/tune-program/patch-packages/ikm0s/*
+!data/tune-program/patch-packages/ikm0s/*.json
+
+public/tune-program/*
+!public/tune-program/patch-packages/
+public/tune-program/patch-packages/*
+!public/tune-program/patch-packages/manifest.json
+!public/tune-program/patch-packages/ikm0s/
+public/tune-program/patch-packages/ikm0s/*
+!public/tune-program/patch-packages/ikm0s/*.json
 
 # Local-only tune program artifacts
 N54_TUNE_PROGRAM_PROMPT.txt
